@@ -1,0 +1,15 @@
+$theme-colors: (
+    "black": #000000,
+    "purple": #14213d,
+    "orange": #fca311,
+    "slate": #e5e5e5,
+    "white": #ffffff,
+    "background": #14213d,
+    "text": #ffffff,
+    "primary": #fca311,
+    "secondary": #e5e5e5,
+);
+
+$border-radius: 10rem;
+
+@import 'bootstrap/scss/bootstrap';
