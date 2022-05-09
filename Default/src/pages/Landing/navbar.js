@@ -2,12 +2,18 @@ import React, { useState, useEffect } from "react";
 import { Collapse, Container, NavbarToggler, NavLink } from "reactstrap";
 import Scrollspy from "react-scrollspy";
 import { Link } from "react-router-dom";
+import { useEthers } from "@usedapp/core"
+import { AnalyticEventTracker } from "../../Components/Common/AnalyticEventTracker";
+import Web3Wallet from "../../Components/Common/Web3Wallet";
+
 
 // Import Images
 import logodark from "../../assets/images/logo-dark.png";
 import logolight from "../../assets/images/logo-light.png";
 
 const Navbar = () => {
+    const gaEventTracker = AnalyticEventTracker('Navigation');
+
     const [isOpenMenu, setisOpenMenu] = useState(false);
     const [navClass, setnavClass] = useState("");
 
@@ -25,17 +31,18 @@ const Navbar = () => {
             setnavClass("");
         }
     }
+    const { account } = useEthers()
 
     return (
         <React.Fragment>
             <nav className={"navbar navbar-expand-lg navbar-landing fixed-top " + navClass} id="navbar">
                 <Container>
-                    <Link className="navbar-brand" to="/index">
+                    <Link className="navbar-brand" to="/" onClick={()=>gaEventTracker('button_navbarLogo')}>
                         <img src={logodark} className="card-logo card-logo-dark" alt="logo dark" height="17" />
                         <img src={logolight} className="card-logo card-logo-light" alt="logo light" height="17" />
                     </Link>
 
-                    <NavbarToggler className="navbar-toggler py-0 fs-20 text-body" onClick={toggle} type="button" data-bs-toggle="collapse"
+                    <NavbarToggler className="navbar-toggler py-0 fs-20 text-body" onClick={()=>{toggle(); gaEventTracker('button_toggleNavigationBar')}} type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                         <i className="mdi mdi-menu"></i>
@@ -52,8 +59,6 @@ const Navbar = () => {
                                 "hero",
                                 "services",
                                 "features",
-                                "plans",
-                                "reviews",
                                 "team",
                                 "contact",
                             ]}
@@ -71,12 +76,6 @@ const Navbar = () => {
                                 <NavLink href="#features">Features</NavLink>
                             </li>
                             <li className="nav-item">
-                                <NavLink href="#plans">Plans</NavLink>
-                            </li>
-                            <li className="nav-item">
-                                <NavLink href="#reviews">Reviews</NavLink>
-                            </li>
-                            <li className="nav-item">
                                 <NavLink href="#team">Team</NavLink>
                             </li>
                             <li className="nav-item">
@@ -85,9 +84,9 @@ const Navbar = () => {
                         </Scrollspy>
 
                         <div className="">
-                            <Link to="/login" className="btn btn-link fw-medium text-decoration-none text-dark">Sign
-                                in</Link>
-                            <Link to="/register" className="btn btn-primary">Sign Up</Link>
+                            <Link className="btn btn-link fw-medium text-decoration-none text-dark" to="#">
+                                <Web3Wallet />
+                            </Link>
                         </div>
                     </Collapse>
                 </Container>

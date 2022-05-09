@@ -22,10 +22,11 @@ import {
   leftSidebarViewTypes
 } from "../../Components/constants/layout";
 
+
 const INIT_STATE = {
   layoutType: layoutTypes.VERTICAL,
   leftSidebarType: leftSidebarTypes.DARK,
-  layoutModeType: layoutModeTypes.LIGHTMODE,
+  layoutModeType: layoutModeTypes.DARKMODE,
   layoutWidthType: layoutWidthTypes.FLUID,
   layoutPositionType: layoutPositionTypes.FIXED,
   topbarThemeType: topbarThemeTypes.LIGHT,

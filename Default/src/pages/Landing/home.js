@@ -1,6 +1,7 @@
 import React from 'react';
 import { Col, Container, Row } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import Web3Wallet from '../../Components/Common/Web3Wallet';
 
 // Import Swiper styles
 import "swiper/css";
@@ -32,13 +33,13 @@ const Home = () => {
                     <Row className="justify-content-center">
                         <Col lg={8} sm={10}>
                             <div className="text-center mt-lg-5 pt-5">
-                                <h1 className="display-6 fw-semibold mb-3 lh-base">The better way to manage your website with <span
-                                    className="text-success">Velzon </span></h1>
-                                <p className="lead text-muted lh-base">Velzon is a fully responsive, multipurpose and premium Bootstrap 5 Admin & Dashboard Template built in multiple frameworks.</p>
+                                <h1 className="display-6 fw-semibold mb-3 lh-base">Providing a marketplace for trustless work with  <span
+                                    className="text-success">Block-Ops </span></h1>
+                                <p className="lead text-muted lh-base">Block-Ops changes the way developers work by allowing everyone to contribute and rewarding those with the best solution.</p>
 
                                 <div className="d-flex gap-2 justify-content-center mt-4">
-                                    <Link to="/register" className="btn btn-primary">Get Started <i className="ri-arrow-right-line align-middle ms-1"></i></Link>
-                                    <Link to="/pages-pricing" className="btn btn-danger">View Plans <i className="ri-eye-line align-middle ms-1"></i></Link>
+                                    <Link to="#"><Web3Wallet /></Link>
+                                    <Link to="/dashboard" className="btn btn-primary">Enter App <i className="ri-eye-line align-middle ms-1"></i></Link>
                                 </div>
                             </div>
 

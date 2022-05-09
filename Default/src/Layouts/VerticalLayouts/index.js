@@ -114,7 +114,6 @@ const Layout = (props) => {
                     <Footer />
                 </div>
             </div>
-            <RightSidebar />
         </React.Fragment>
 
     );

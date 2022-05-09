@@ -13,7 +13,7 @@ import TopSellers from "./TopSellers";
 
 
 const DashboardEcommerce = () => {
-  document.title ="Dashboard | Velzon - React Admin & Dashboard Template";
+  document.title ="Dashboard | Block-Ops";
   return (
     <React.Fragment>
       <div className="page-content">
