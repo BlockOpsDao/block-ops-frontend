@@ -1,4 +1,5 @@
-import { useEthers } from "@usedapp/core";
+import React, { useEffect, useState } from 'react'
+import { useEthers, shortenAddress, useLookupAddress } from '@usedapp/core'
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import CoinbaseWalletSDK from '@coinbase/wallet-sdk';
 import Web3Modal from "web3modal";
@@ -8,7 +9,25 @@ const Web3Wallet = () => {
     const gaEventTracker = AnalyticEventTracker('Web3Wallet');
     const { account, activate, deactivate } = useEthers()
     const isConnected = account !== undefined
+    const ens = useLookupAddress()
+    const [showModal, setShowModal] = useState(false)
+    const [activateError, setActivateError] = useState('')
+    const { error } = useEthers()
+
+    useEffect(() => {
+      if (error) {
+        setActivateError(error.message)
+      }
+    }, [error])
+  
     const providerOptions = {
+        injected: {
+          display: {
+            name: 'Metamask',
+            description: 'Connect with the provider in your Browser',
+          },
+          package: null,
+        },
         walletconnect: {
             package: WalletConnectProvider, // required
             options: {
@@ -24,30 +43,30 @@ const Web3Wallet = () => {
             }
         }
     };
-      
-    const web3Modal = new Web3Modal({
-        network: "mainnet",
-        cacheProvider: true, 
-        theme: "dark",
-        providerOptions 
-    });
-      
-    async function onConnect() {
+ 
+    const activateProvider = async () => {
+        const web3Modal = new Web3Modal({
+            network: "mainnet",
+            cacheProvider: true, 
+            theme: "dark",
+            providerOptions 
+        });
         try {
-            const provider = await web3Modal.connect();
-            activate(provider)
+            const provider = await web3Modal.connect()
+            await activate(provider)
+            setActivateError('')
         } catch (error) {
-            console.error(error)
+            setActivateError(error.message)
         }
     }
-
+    //activateProvider
     return (<>
         {isConnected ? (
             <button className="btn btn-primary" onClick={() => {deactivate(); gaEventTracker('button_deactivateBrowserWallet')}}>
-                Disconnect { account.slice(0, 5) }...{ account.slice(-4) }
+                Disconnect {ens ?? shortenAddress(account)}
             </button>
         ) : (
-            <button className="btn btn-danger" onClick={() => {onConnect(); gaEventTracker('button_activateBrowserWallet')}}>
+            <button className="btn btn-danger" onClick={() => {activateProvider(); gaEventTracker('button_activateBrowserWallet')}}>
                 Connect Wallet
             </button>
         )}

@@ -2,6 +2,7 @@ import React from 'react';
 import { Col, Container, Row } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import Web3Wallet from '../../Components/Common/Web3Wallet';
+import EnterApp from '../../Components/Common/EnterApp';
 
 // Import Swiper styles
 import "swiper/css";
@@ -39,7 +40,7 @@ const Home = () => {
 
                                 <div className="d-flex gap-2 justify-content-center mt-4">
                                     <Link to="#"><Web3Wallet /></Link>
-                                    <Link to="/dashboard" className="btn btn-primary">Enter App <i className="ri-eye-line align-middle ms-1"></i></Link>
+                                    <Link to="/dashboard"><EnterApp /></Link>
                                 </div>
                             </div>
 
@@ -50,7 +51,10 @@ const Home = () => {
                                 <div className="demo-img-patten-bottom d-none d-sm-block">
                                     <img src={imgpattern} className="d-block img-fluid" alt="..." />
                                 </div>
-                                <Swiper
+                                <br />
+                                <br />
+                                <br />
+                                {/* <Swiper
                                     spaceBetween={30}
                                     effect={"fade"}
                                     loop={true}
@@ -82,7 +86,7 @@ const Home = () => {
                                     <SwiperSlide className="carousel-inner shadow-lg p-2 bg-white rounded">
                                         <img src={interactiveDemo} className="d-block w-100" alt="..." />
                                     </SwiperSlide>
-                                </Swiper>
+                                </Swiper> */}
                             </div>
                         </Col>
                     </Row>

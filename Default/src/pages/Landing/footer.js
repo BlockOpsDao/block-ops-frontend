@@ -4,6 +4,7 @@ import { Col, Container, Row } from 'reactstrap';
 
 // Import Images
 import logolight from "../../assets/images/logo-light.png";
+import imagelogo from "../../assets/images/svg/block-ops/block-ops-icon-2048.svg";
 
 const Footer = () => {
     return (
@@ -14,7 +15,7 @@ const Footer = () => {
                         <Col lg={4} className="mt-4">
                             <div>
                                 <div>
-                                    <img src={logolight} alt="logo light" height="17" />
+                                    <img src={imagelogo}  alt="logo dark" height="55" /> Block-Ops
                                 </div>
                                 <div className="mt-4">
                                     <p>Premium Multipurpose Admin & Dashboard Template</p>
@@ -27,25 +28,11 @@ const Footer = () => {
                         <Col lg={7} className="ms-lg-auto">
                             <Row>
                                 <Col sm={4} className="mt-4">
-                                    <h5 className="text-white mb-0">Company</h5>
+                                    <h5 className="text-white mb-0">Block-Ops</h5>
                                     <div className="text-muted mt-3">
                                         <ul className="list-unstyled ff-secondary footer-list">
                                             <li><Link to="/pages-profile">About Us</Link></li>
-                                            <li><Link to="/pages-gallery">Gallery</Link></li>
-                                            <li><Link to="/apps-projects-overview">Projects</Link></li>
                                             <li><Link to="/pages-timeline">Timeline</Link></li>
-                                        </ul>
-                                    </div>
-                                </Col>
-                                <Col sm={4} className="mt-4">
-                                    <h5 className="text-white mb-0">Apps Pages</h5>
-                                    <div className="text-muted mt-3">
-                                        <ul className="list-unstyled ff-secondary footer-list">
-                                            <li><Link to="/pages-pricing">Calendar</Link></li>
-                                            <li><Link to="/apps-mailbox">Mailbox</Link></li>
-                                            <li><Link to="/apps-chat">Chat</Link></li>
-                                            <li><Link to="/apps-crm-deals">Deals</Link></li>
-                                            <li><Link to="/apps-tasks-kanban">Kanban Board</Link></li>
                                         </ul>
                                     </div>
                                 </Col>
@@ -53,8 +40,8 @@ const Footer = () => {
                                     <h5 className="text-white mb-0">Support</h5>
                                     <div className="text-muted mt-3">
                                         <ul className="list-unstyled ff-secondary footer-list">
-                                            <li><Link to="/pages-faqs">FAQ</Link></li>
-                                            <li><Link to="/pages-faqs">Contact</Link></li>
+                                            <li><Link to="https://block-ops.xyz/landing#faqs">FAQ</Link></li>
+                                            <li><Link to="https://block-ops.xyz/landing#contact">Contact</Link></li>
                                         </ul>
                                     </div>
                                 </Col>

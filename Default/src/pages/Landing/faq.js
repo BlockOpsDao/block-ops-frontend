@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Col, Container, Row, Collapse } from 'reactstrap';
 import classnames from "classnames";
+import TwitterTweet from '../../Components/Common/TwitterTweet';
+import EmailUs from '../../Components/Common/EmailUs';
 
 const Faqs = () => {
 
@@ -78,7 +80,7 @@ const Faqs = () => {
 
     return (
         <React.Fragment>
-            <section className="section">
+            <section className="section" id="faqs">
                 <Container>
                     <Row className="justify-content-center">
                         <Col lg={8}>
@@ -88,8 +90,8 @@ const Faqs = () => {
                                     always contact us or email us. We will answer you shortly!</p>
 
                                 <div className="">
-                                    <button type="button" className="btn btn-primary btn-label rounded-pill me-1"><i className="ri-mail-line label-icon align-middle rounded-pill fs-16 me-2"></i> Email Us</button>
-                                    <button type="button" className="btn btn-info btn-label rounded-pill"><i className="ri-twitter-line label-icon align-middle rounded-pill fs-16 me-2"></i> Send Us Tweet</button>
+                                    <EmailUs />
+                                    <TwitterTweet />
                                 </div>
                             </div>
                         </Col>

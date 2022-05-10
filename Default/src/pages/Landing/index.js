@@ -22,17 +22,10 @@ document.title =" Block Ops";
             <div className="layout-wrapper landing">
                 <Navbar />
                 <Home />
-                <Client />
                 <Services />
-                <Features />
-                <Plans />
                 <Faqs />
-                <Reviews />
-                <Counter />
-                <WorkProcess />
                 <Team />
                 <Contact />
-                <Cta />
                 <Footer />
             </div>
         </React.Fragment>

@@ -5,15 +5,16 @@ import { Link } from "react-router-dom";
 import { useEthers } from "@usedapp/core"
 import { AnalyticEventTracker } from "../../Components/Common/AnalyticEventTracker";
 import Web3Wallet from "../../Components/Common/Web3Wallet";
+import EnterApp from "../../Components/Common/EnterApp";
 
 
 // Import Images
 import logodark from "../../assets/images/logo-dark.png";
 import logolight from "../../assets/images/logo-light.png";
+import imagelogo from "../../assets/images/svg/block-ops/block-ops-icon-2048.svg";
 
 const Navbar = () => {
     const gaEventTracker = AnalyticEventTracker('Navigation');
-
     const [isOpenMenu, setisOpenMenu] = useState(false);
     const [navClass, setnavClass] = useState("");
 
@@ -32,14 +33,17 @@ const Navbar = () => {
         }
     }
     const { account } = useEthers()
+    const isConnected = account !== undefined
 
     return (
         <React.Fragment>
             <nav className={"navbar navbar-expand-lg navbar-landing fixed-top " + navClass} id="navbar">
                 <Container>
                     <Link className="navbar-brand" to="/" onClick={()=>gaEventTracker('button_navbarLogo')}>
-                        <img src={logodark} className="card-logo card-logo-dark" alt="logo dark" height="17" />
-                        <img src={logolight} className="card-logo card-logo-light" alt="logo light" height="17" />
+                        {/* <img src={logodark} className="card-logo card-logo-dark" alt="logo dark" height="17" />
+                        <img src={logolight} className="card-logo card-logo-light" alt="logo light" height="17" /> */}
+                        
+                        <img src={imagelogo}  alt="logo dark" height="55" /> Block-Ops
                     </Link>
 
                     <NavbarToggler className="navbar-toggler py-0 fs-20 text-body" onClick={()=>{toggle(); gaEventTracker('button_toggleNavigationBar')}} type="button" data-bs-toggle="collapse"
@@ -58,7 +62,7 @@ const Navbar = () => {
                             items={[
                                 "hero",
                                 "services",
-                                "features",
+                                "faqs",
                                 "team",
                                 "contact",
                             ]}
@@ -73,7 +77,7 @@ const Navbar = () => {
                                 <NavLink href="#services">Services</NavLink>
                             </li>
                             <li className="nav-item">
-                                <NavLink href="#features">Features</NavLink>
+                                <NavLink href="#faqs">FAQs</NavLink>
                             </li>
                             <li className="nav-item">
                                 <NavLink href="#team">Team</NavLink>
@@ -84,9 +88,8 @@ const Navbar = () => {
                         </Scrollspy>
 
                         <div className="">
-                            <Link className="btn btn-link fw-medium text-decoration-none text-dark" to="#">
-                                <Web3Wallet />
-                            </Link>
+                            <Link to="#" className="p-2"><Web3Wallet /></Link>
+                            <Link to="#" className=""><EnterApp /></Link>
                         </div>
                     </Collapse>
                 </Container>
