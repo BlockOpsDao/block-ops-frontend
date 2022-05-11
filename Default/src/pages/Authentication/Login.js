@@ -80,7 +80,7 @@ const Login = (props) => {
         signIn(response, "facebook");
     };
 
-document.title="Basic SignIn | Velzon - React Admin & Dashboard Template";
+document.title="";
     return (
         <React.Fragment>
             <ParticlesAuth>

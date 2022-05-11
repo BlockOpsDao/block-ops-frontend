@@ -1,6 +1,5 @@
 import React from 'react';
 import { Col, Container, Row } from 'reactstrap';
-import { Link } from 'react-router-dom';
 import Web3Wallet from '../../Components/Common/Web3Wallet';
 import EnterApp from '../../Components/Common/EnterApp';
 
@@ -39,8 +38,8 @@ const Home = () => {
                                 <p className="lead text-muted lh-base">Block-Ops changes the way developers work by allowing everyone to contribute and rewarding those with the best solution.</p>
 
                                 <div className="d-flex gap-2 justify-content-center mt-4">
-                                    <Link to="#"><Web3Wallet /></Link>
-                                    <Link to="/dashboard"><EnterApp /></Link>
+                                    <Web3Wallet />
+                                    <EnterApp />
                                 </div>
                             </div>
 

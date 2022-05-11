@@ -5,6 +5,7 @@ import CoinbaseWalletSDK from '@coinbase/wallet-sdk';
 import Web3Modal from "web3modal";
 import { AnalyticEventTracker } from "./AnalyticEventTracker";
 
+
 const Web3Wallet = () => {
     const gaEventTracker = AnalyticEventTracker('Web3Wallet');
     const { account, activate, deactivate } = useEthers()
@@ -59,7 +60,8 @@ const Web3Wallet = () => {
             setActivateError(error.message)
         }
     }
-    //activateProvider
+
+
     return (<>
         {isConnected ? (
             <button className="btn btn-primary" onClick={() => {deactivate(); gaEventTracker('button_deactivateBrowserWallet')}}>

@@ -39,12 +39,12 @@ const Navbar = () => {
         <React.Fragment>
             <nav className={"navbar navbar-expand-lg navbar-landing fixed-top " + navClass} id="navbar">
                 <Container>
-                    <Link className="navbar-brand" to="/" onClick={()=>gaEventTracker('button_navbarLogo')}>
+                    <a className="navbar-brand" href="/" onClick={()=>gaEventTracker('button_navbarLogo')}>
                         {/* <img src={logodark} className="card-logo card-logo-dark" alt="logo dark" height="17" />
                         <img src={logolight} className="card-logo card-logo-light" alt="logo light" height="17" /> */}
                         
-                        <img src={imagelogo}  alt="logo dark" height="55" /> Block-Ops
-                    </Link>
+                        <img src={imagelogo}  alt="logo dark" height="55" />
+                    </a>
 
                     <NavbarToggler className="navbar-toggler py-0 fs-20 text-body" onClick={()=>{toggle(); gaEventTracker('button_toggleNavigationBar')}} type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -62,6 +62,7 @@ const Navbar = () => {
                             items={[
                                 "hero",
                                 "services",
+                                "timeline",
                                 "faqs",
                                 "team",
                                 "contact",
@@ -77,6 +78,9 @@ const Navbar = () => {
                                 <NavLink href="#services">Services</NavLink>
                             </li>
                             <li className="nav-item">
+                                <NavLink href="#timeline">Timeline</NavLink>
+                            </li>
+                            <li className="nav-item">
                                 <NavLink href="#faqs">FAQs</NavLink>
                             </li>
                             <li className="nav-item">
@@ -87,9 +91,9 @@ const Navbar = () => {
                             </li>
                         </Scrollspy>
 
-                        <div className="">
-                            <Link to="#" className="p-2"><Web3Wallet /></Link>
-                            <Link to="#" className=""><EnterApp /></Link>
+                        <div className="d-flex gap-2 justify-content-center mt-4">
+                            <Web3Wallet />
+                            <EnterApp />
                         </div>
                     </Collapse>
                 </Container>

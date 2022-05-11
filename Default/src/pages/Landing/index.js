@@ -14,6 +14,7 @@ import Team from './team';
 import Contact from './contact';
 import Cta from './cta';
 import Footer from './footer';
+import ProjectTimeline from '../../Components/Common/ProjectTimeline';
 
 const Index = () => {
 document.title =" Block Ops";
@@ -23,6 +24,7 @@ document.title =" Block Ops";
                 <Navbar />
                 <Home />
                 <Services />
+                <ProjectTimeline />
                 <Faqs />
                 <Team />
                 <Contact />

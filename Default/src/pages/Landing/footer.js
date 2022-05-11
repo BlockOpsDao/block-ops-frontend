@@ -18,9 +18,8 @@ const Footer = () => {
                                     <img src={imagelogo}  alt="logo dark" height="55" /> Block-Ops
                                 </div>
                                 <div className="mt-4">
-                                    <p>Premium Multipurpose Admin & Dashboard Template</p>
-                                    <p className="ff-secondary">You can build any type of web application like eCommerce, CRM, CMS, Project
-                                        management apps, Admin Panels, etc using Velzon.</p>
+                                    <p>Block-Ops</p>
+                                    <p className="ff-secondary">A decentralized marketplace connecting do-ers with what needs to be done.</p>
                                 </div>
                             </div>
                         </Col>
@@ -31,8 +30,8 @@ const Footer = () => {
                                     <h5 className="text-white mb-0">Block-Ops</h5>
                                     <div className="text-muted mt-3">
                                         <ul className="list-unstyled ff-secondary footer-list">
-                                            <li><Link to="/pages-profile">About Us</Link></li>
-                                            <li><Link to="/pages-timeline">Timeline</Link></li>
+                                            <li><a href="#team">About Us</a></li>
+                                            <li><a href="#timeline">Timeline</a></li>
                                         </ul>
                                     </div>
                                 </Col>
@@ -40,8 +39,8 @@ const Footer = () => {
                                     <h5 className="text-white mb-0">Support</h5>
                                     <div className="text-muted mt-3">
                                         <ul className="list-unstyled ff-secondary footer-list">
-                                            <li><Link to="https://block-ops.xyz/landing#faqs">FAQ</Link></li>
-                                            <li><Link to="https://block-ops.xyz/landing#contact">Contact</Link></li>
+                                            <li><a href="#faqs">FAQ</a></li>
+                                            <li><a href="#contact">Contact</a></li>
                                         </ul>
                                     </div>
                                 </Col>
@@ -55,7 +54,7 @@ const Footer = () => {
 
                             <div>
                                 <p className="copy-rights mb-0">
-                                    {new Date().getFullYear()} © Velzon - Themesbrand
+                                    {new Date().getFullYear()} © BlockOpsDao
                                 </p>
                             </div>
                         </Col>
@@ -63,39 +62,18 @@ const Footer = () => {
                             <div className="text-sm-end mt-3 mt-sm-0">
                                 <ul className="list-inline mb-0 footer-social-link">
                                     <li className="list-inline-item">
-                                        <Link to="#" className="avatar-xs d-block">
-                                            <div className="avatar-title rounded-circle">
-                                                <i className="ri-facebook-fill"></i>
-                                            </div>
-                                        </Link>
-                                    </li>
-                                    <li className="list-inline-item">
-                                        <Link to="#" className="avatar-xs d-block">
+                                        <a href="https://github.com/BlockOpsDao" className="avatar-xs d-block">
                                             <div className="avatar-title rounded-circle">
                                                 <i className="ri-github-fill"></i>
                                             </div>
-                                        </Link>
+                                        </a>
                                     </li>
                                     <li className="list-inline-item">
-                                        <Link to="#" className="avatar-xs d-block">
+                                        <a href="https://twitter.com/dao_block" className="avatar-xs d-block">
                                             <div className="avatar-title rounded-circle">
-                                                <i className="ri-linkedin-fill"></i>
+                                                <i className="ri-twitter-line"></i>
                                             </div>
-                                        </Link>
-                                    </li>
-                                    <li className="list-inline-item">
-                                        <Link to="#" className="avatar-xs d-block">
-                                            <div className="avatar-title rounded-circle">
-                                                <i className="ri-google-fill"></i>
-                                            </div>
-                                        </Link>
-                                    </li>
-                                    <li className="list-inline-item">
-                                        <Link to="#" className="avatar-xs d-block">
-                                            <div className="avatar-title rounded-circle">
-                                                <i className="ri-dribbble-line"></i>
-                                            </div>
-                                        </Link>
+                                        </a>
                                     </li>
                                 </ul>
                             </div>

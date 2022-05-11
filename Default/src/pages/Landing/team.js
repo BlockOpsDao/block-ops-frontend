@@ -1,16 +1,7 @@
 import React from 'react';
 import { Card, CardBody, Col, Container, Row } from 'reactstrap';
 import { Link } from 'react-router-dom';
-
-// Import Images
-import avatar2 from "../../assets/images/users/avatar-2.jpg";
-import avatar3 from "../../assets/images/users/avatar-3.jpg";
-import avatar4 from "../../assets/images/users/avatar-4.jpg";
-import avatar5 from "../../assets/images/users/avatar-5.jpg";
-import avatar6 from "../../assets/images/users/avatar-6.jpg";
-import avatar7 from "../../assets/images/users/avatar-7.jpg";
-import avatar8 from "../../assets/images/users/avatar-8.jpg";
-import avatar10 from "../../assets/images/users/avatar-10.jpg";
+import { Icon } from '@iconify/react';
 import zachbloss from "../../assets/images/team/zach-bloss.jpeg";
 
 
@@ -35,12 +26,17 @@ const Team = () => {
                                 <CardBody className="text-center p-4">
                                     <div className="avatar-xl mx-auto mb-4 position-relative">
                                         <img src={zachbloss} alt="" className="img-fluid rounded-circle" />
-                                        <Link to="mailto:zacharybloss@gmail.com"
+                                        <a href="mailto:zacharybloss@gmail.com"
                                             className="btn btn-success btn-sm position-absolute bottom-0 end-0 rounded-circle avatar-xs">
                                             <div className="avatar-title bg-transparent">
                                                 <i className="ri-mail-fill align-bottom"></i>
                                             </div>
-                                        </Link>
+                                        </a>
+                                        <a href="https://www.linkedin.com/in/zachary-bloss/" className="btn btn-primary bottom-0 start-50 btn-sm position-absolute rounded-circle avatar-xs">
+                                            <div className='avatar-title bg-transparent'>
+                                                <Icon icon="ri:linkedin-box-fill" className="align-bottom" />
+                                            </div>
+                                        </a>
                                     </div>
 
                                     {/* <!-- end card body --> */}
