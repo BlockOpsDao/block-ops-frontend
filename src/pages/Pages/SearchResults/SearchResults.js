@@ -301,7 +301,7 @@ const SearchResults = () => {
         setDropdownOpen(!dropdownOpen);
     };
 
-document.title="Search Results | Velzon - React Admin & Dashboard Template";
+document.title="Search Results | Block Ops";
 
     return (
         <React.Fragment>

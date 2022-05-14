@@ -6,7 +6,7 @@ import AuthSlider from '../authCarousel';
 
 
 const CoverSignUp = () => {
-    document.title="Cover SignUp | Velzon - React Admin & Dashboard Template";
+    document.title="Cover SignUp | Block Ops";
     return (
         <React.Fragment>
             <div className="auth-page-wrapper auth-bg-cover py-5 d-flex justify-content-center align-items-center min-vh-100">

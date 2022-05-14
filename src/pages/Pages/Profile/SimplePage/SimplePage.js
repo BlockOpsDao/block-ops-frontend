@@ -374,7 +374,7 @@ const SimplePage = () => {
         }
     };
 
-    document.title="Profile | Velzon - React Admin & Dashboard Template";
+    document.title="Profile | Block Ops";
 
     return (
         <React.Fragment>

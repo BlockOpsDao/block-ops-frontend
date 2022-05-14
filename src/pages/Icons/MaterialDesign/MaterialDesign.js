@@ -29323,7 +29323,7 @@ const Materialdesign = () => {
     })();
   }, []);
 
-document.title ="Material Design Icons | Velzon - React Admin & Dashboard Template";
+document.title ="Material Design Icons | Block Ops";
   return (
     <React.Fragment>
     <div className="page-content">

@@ -6,7 +6,7 @@ import ParticlesAuth from "../ParticlesAuth";
 //import images
 import logoLight from "../../../assets/images/logo-light.png";
 
-document.title="Log Out | Velzon - React Admin & Dashboard Template";
+document.title="Log Out | Block Ops";
 
 const BasicLogout = () => {
     return (

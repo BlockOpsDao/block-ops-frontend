@@ -7,7 +7,7 @@ import { Redirect } from "react-router-dom";
 // import DashboardEcommerce from "../pages/DashboardEcommerce";
 
 // import DashboardCrypto from "../pages/DashboardCrypto";
-// import DashboardProject from "../pages/DashboardProject";
+import DashboardProject from "../pages/DashboardProject";
 
 // //Calendar
 // // Email box
@@ -138,7 +138,7 @@ import { Redirect } from "react-router-dom";
 // import BasicPasswReset from '../pages/AuthenticationInner/PasswordReset/BasicPasswReset';
 // //pages
 // import Starter from '../pages/Pages/Starter/Starter';
-// import SimplePage from '../pages/Pages/Profile/SimplePage/SimplePage';
+import SimplePage from '../pages/Pages/Profile/SimplePage/SimplePage';
 // import Settings from '../pages/Pages/Profile/Settings/Settings';
 // import Team from '../pages/Pages/Team/Team';
 // import Timeline from '../pages/Pages/Timeline/Timeline';
@@ -199,7 +199,7 @@ const authProtectedRoutes = [
   // { path: "/dashboard-crm", component: DashboardCrm },
   // { path: "/dashboard", component: DashboardEcommerce  },
   // { path: "/dashboard-crypto", component: DashboardCrypto },
-  // { path: "/dashboard-projects", component: DashboardProject },
+  { path: "/dashboard", component: DashboardProject },
   // { path: "/apps-calendar", component: Calendar },
   // { path: "/apps-ecommerce-products", component: EcommerceProducts },
   // { path: "/apps-ecommerce-product-details", component: EcommerceProductDetail },
@@ -342,7 +342,7 @@ const authProtectedRoutes = [
 
   // //Pages
   // { path: "/pages-starter", component: Starter },
-  // { path: "/pages-profile", component: SimplePage },
+  { path: "/pages-profile", component: SimplePage },
   // { path: "/pages-profile-settings", component: Settings },
   // { path: "/pages-team", component: Team },
   // { path: "/pages-timeline", component: Timeline },

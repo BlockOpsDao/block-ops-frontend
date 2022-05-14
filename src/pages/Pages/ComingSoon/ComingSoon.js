@@ -43,7 +43,7 @@ const ComingSoon = () => {
 
         return (<>
             {isConnected ? (
-                <button className="btn btn-danger" onClick={() => {gaEventTracker('button_iWasHere'); alert("Thank You!")}}>
+                <button className="btn btn-danger" onClick={() => {gaEventTracker('button_iWasHere', account); alert("Thank You!")}}>
                     {ens ?? shortenAddress(account)} Was Here
                 </button>
             ) : (

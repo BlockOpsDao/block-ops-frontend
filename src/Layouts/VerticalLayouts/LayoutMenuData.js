@@ -174,168 +174,168 @@ const Navdata = () => {
                 },
             ],
         },
-        {
-            id: "apps",
-            label: "Apps",
-            icon: "ri-apps-2-line",
-            link: "/#",
-            click: function (e) {
-                e.preventDefault();
-                setIsApps(!isApps);
-                setIscurrentState('Apps');
-                updateIconSidebar(e);
-            },
-            stateVariables: isApps,
-            subItems: [
-                {
-                    id: "calendar",
-                    label: "Calendar",
-                    link: "/apps-calendar",
-                    parentId: "apps",
-                },
-                {
-                    id: "chat",
-                    label: "Chat",
-                    link: "/apps-chat",
-                    parentId: "apps",
-                },
-                {
-                    id: "mailbox",
-                    label: "Mailbox",
-                    link: "/apps-mailbox",
-                    parentId: "apps",
-                },
-                {
-                    id: "appsecommerce",
-                    label: "Ecommerce",
-                    link: "/#",
-                    isChildItem: true,
-                    click: function (e) {
-                        e.preventDefault();
-                        setIsEcommerce(!isEcommerce);
-                    },
-                    parentId: "apps",
-                    stateVariables: isEcommerce,
-                    childItems: [
-                        { id: 1, label: "Products", link: "/apps-ecommerce-products", parentId: "apps" },
-                        { id: 2, label: "Product Details", link: "/apps-ecommerce-product-details", parentId: "apps" },
-                        { id: 3, label: "Create Product", link: "/apps-ecommerce-add-product", parentId: "apps" },
-                        { id: 4, label: "Orders", link: "/apps-ecommerce-orders", parentId: "apps" },
-                        { id: 5, label: "Order Details", link: "/apps-ecommerce-order-details", parentId: "apps" },
-                        { id: 6, label: "Customers", link: "/apps-ecommerce-customers", parentId: "apps" },
-                        { id: 7, label: "Shopping Cart", link: "/apps-ecommerce-cart", parentId: "apps" },
-                        { id: 8, label: "Checkout", link: "/apps-ecommerce-checkout", parentId: "apps" },
-                        { id: 9, label: "Sellers", link: "/apps-ecommerce-sellers", parentId: "apps" },
-                        { id: 10, label: "Seller Details", link: "/apps-ecommerce-seller-details", parentId: "apps" },
-                    ]
-                },
-                {
-                    id: "appsprojects",
-                    label: "Projects",
-                    link: "/#",
-                    isChildItem: true,
-                    click: function (e) {
-                        e.preventDefault();
-                        setIsProjects(!isProjects);
-                    },
-                    parentId: "apps",
-                    stateVariables: isProjects,
-                    childItems: [
-                        { id: 1, label: "List", link: "/apps-projects-list", parentId: "apps", },
-                        { id: 2, label: "Overview", link: "/apps-projects-overview", parentId: "apps", },
-                        { id: 3, label: "Create Project", link: "/apps-projects-create", parentId: "apps", },
-                    ]
-                },
-                {
-                    id: "tasks",
-                    label: "Tasks",
-                    link: "/#",
-                    isChildItem: true,
-                    click: function (e) {
-                        e.preventDefault();
-                        setIsTasks(!isTasks);
-                    },
-                    parentId: "apps",
-                    stateVariables: isTasks,
-                    childItems: [
-                        { id: 1, label: "Kanban Board", link: "/apps-tasks-kanban", parentId: "apps", },
-                        { id: 2, label: "List View", link: "/apps-tasks-list-view", parentId: "apps", },
-                        { id: 3, label: "Task Details", link: "/apps-tasks-details", parentId: "apps", },
-                    ]
-                },
-                {
-                    id: "appscrm",
-                    label: "CRM",
-                    link: "/#",
-                    isChildItem: true,
-                    click: function (e) {
-                        e.preventDefault();
-                        setIsCRM(!isCRM);
-                    },
-                    parentId: "apps",
-                    stateVariables: isCRM,
-                    childItems: [
-                        { id: 1, label: "Contacts", link: "/apps-crm-contacts" },
-                        { id: 2, label: "Companies", link: "/apps-crm-companies" },
-                        { id: 3, label: "Deals", link: "/apps-crm-deals" },
-                        { id: 4, label: "Leads", link: "/apps-crm-leads" },
-                    ]
-                },
-                {
-                    id: "appscrypto",
-                    label: "Crypto",
-                    link: "/#",
-                    isChildItem: true,
-                    click: function (e) {
-                        e.preventDefault();
-                        setIsCrypto(!isCrypto);
-                    },
-                    parentId: "apps",
-                    stateVariables: isCrypto,
-                    childItems: [
-                        { id: 1, label: "Transactions", link: "/apps-crypto-transactions" },
-                        { id: 2, label: "Buy & Sell", link: "/apps-crypto-buy-sell" },
-                        { id: 3, label: "Orders", link: "/apps-crypto-orders" },
-                        { id: 4, label: "My Wallet", link: "/apps-crypto-wallet" },
-                        { id: 5, label: "ICO List", link: "/apps-crypto-ico" },
-                        { id: 6, label: "KYC Application", link: "/apps-crypto-kyc" },
-                    ]
-                },
-                {
-                    id: "invoices",
-                    label: "Invoices",
-                    link: "/#",
-                    isChildItem: true,
-                    click: function (e) {
-                        e.preventDefault();
-                        setIsInvoices(!isInvoices);
-                    },
-                    parentId: "apps",
-                    stateVariables: isInvoices,
-                    childItems: [
-                        { id: 1, label: "List View", link: "/apps-invoices-list" },
-                        { id: 2, label: "Details", link: "/apps-invoices-details" },
-                        { id: 3, label: "Create Invoice", link: "/apps-invoices-create" },
-                    ]
-                },
-                {
-                    id: "supportTickets",
-                    label: "Support Tickets",
-                    link: "/#",
-                    isChildItem: true,
-                    click: function (e) {
-                        e.preventDefault();
-                        setIsSupportTickets(!isSupportTickets);
-                    },
-                    parentId: "apps",
-                    stateVariables: isSupportTickets,
-                    childItems: [
-                        { id: 1, label: "List View", link: "/apps-tickets-list" },
-                        { id: 2, label: "Ticket Details", link: "/apps-tickets-details" },
-                    ]
-                }
-            ],
-        },
+        // {
+        //     id: "apps",
+        //     label: "Apps",
+        //     icon: "ri-apps-2-line",
+        //     link: "/#",
+        //     click: function (e) {
+        //         e.preventDefault();
+        //         setIsApps(!isApps);
+        //         setIscurrentState('Apps');
+        //         updateIconSidebar(e);
+        //     },
+        //     stateVariables: isApps,
+        //     subItems: [
+        //         {
+        //             id: "calendar",
+        //             label: "Calendar",
+        //             link: "/apps-calendar",
+        //             parentId: "apps",
+        //         },
+        //         {
+        //             id: "chat",
+        //             label: "Chat",
+        //             link: "/apps-chat",
+        //             parentId: "apps",
+        //         },
+        //         {
+        //             id: "mailbox",
+        //             label: "Mailbox",
+        //             link: "/apps-mailbox",
+        //             parentId: "apps",
+        //         },
+        //         {
+        //             id: "appsecommerce",
+        //             label: "Ecommerce",
+        //             link: "/#",
+        //             isChildItem: true,
+        //             click: function (e) {
+        //                 e.preventDefault();
+        //                 setIsEcommerce(!isEcommerce);
+        //             },
+        //             parentId: "apps",
+        //             stateVariables: isEcommerce,
+        //             childItems: [
+        //                 { id: 1, label: "Products", link: "/apps-ecommerce-products", parentId: "apps" },
+        //                 { id: 2, label: "Product Details", link: "/apps-ecommerce-product-details", parentId: "apps" },
+        //                 { id: 3, label: "Create Product", link: "/apps-ecommerce-add-product", parentId: "apps" },
+        //                 { id: 4, label: "Orders", link: "/apps-ecommerce-orders", parentId: "apps" },
+        //                 { id: 5, label: "Order Details", link: "/apps-ecommerce-order-details", parentId: "apps" },
+        //                 { id: 6, label: "Customers", link: "/apps-ecommerce-customers", parentId: "apps" },
+        //                 { id: 7, label: "Shopping Cart", link: "/apps-ecommerce-cart", parentId: "apps" },
+        //                 { id: 8, label: "Checkout", link: "/apps-ecommerce-checkout", parentId: "apps" },
+        //                 { id: 9, label: "Sellers", link: "/apps-ecommerce-sellers", parentId: "apps" },
+        //                 { id: 10, label: "Seller Details", link: "/apps-ecommerce-seller-details", parentId: "apps" },
+        //             ]
+        //         },
+        //         {
+        //             id: "appsprojects",
+        //             label: "Projects",
+        //             link: "/#",
+        //             isChildItem: true,
+        //             click: function (e) {
+        //                 e.preventDefault();
+        //                 setIsProjects(!isProjects);
+        //             },
+        //             parentId: "apps",
+        //             stateVariables: isProjects,
+        //             childItems: [
+        //                 { id: 1, label: "List", link: "/apps-projects-list", parentId: "apps", },
+        //                 { id: 2, label: "Overview", link: "/apps-projects-overview", parentId: "apps", },
+        //                 { id: 3, label: "Create Project", link: "/apps-projects-create", parentId: "apps", },
+        //             ]
+        //         },
+        //         {
+        //             id: "tasks",
+        //             label: "Tasks",
+        //             link: "/#",
+        //             isChildItem: true,
+        //             click: function (e) {
+        //                 e.preventDefault();
+        //                 setIsTasks(!isTasks);
+        //             },
+        //             parentId: "apps",
+        //             stateVariables: isTasks,
+        //             childItems: [
+        //                 { id: 1, label: "Kanban Board", link: "/apps-tasks-kanban", parentId: "apps", },
+        //                 { id: 2, label: "List View", link: "/apps-tasks-list-view", parentId: "apps", },
+        //                 { id: 3, label: "Task Details", link: "/apps-tasks-details", parentId: "apps", },
+        //             ]
+        //         },
+        //         {
+        //             id: "appscrm",
+        //             label: "CRM",
+        //             link: "/#",
+        //             isChildItem: true,
+        //             click: function (e) {
+        //                 e.preventDefault();
+        //                 setIsCRM(!isCRM);
+        //             },
+        //             parentId: "apps",
+        //             stateVariables: isCRM,
+        //             childItems: [
+        //                 { id: 1, label: "Contacts", link: "/apps-crm-contacts" },
+        //                 { id: 2, label: "Companies", link: "/apps-crm-companies" },
+        //                 { id: 3, label: "Deals", link: "/apps-crm-deals" },
+        //                 { id: 4, label: "Leads", link: "/apps-crm-leads" },
+        //             ]
+        //         },
+        //         {
+        //             id: "appscrypto",
+        //             label: "Crypto",
+        //             link: "/#",
+        //             isChildItem: true,
+        //             click: function (e) {
+        //                 e.preventDefault();
+        //                 setIsCrypto(!isCrypto);
+        //             },
+        //             parentId: "apps",
+        //             stateVariables: isCrypto,
+        //             childItems: [
+        //                 { id: 1, label: "Transactions", link: "/apps-crypto-transactions" },
+        //                 { id: 2, label: "Buy & Sell", link: "/apps-crypto-buy-sell" },
+        //                 { id: 3, label: "Orders", link: "/apps-crypto-orders" },
+        //                 { id: 4, label: "My Wallet", link: "/apps-crypto-wallet" },
+        //                 { id: 5, label: "ICO List", link: "/apps-crypto-ico" },
+        //                 { id: 6, label: "KYC Application", link: "/apps-crypto-kyc" },
+        //             ]
+        //         },
+        //         {
+        //             id: "invoices",
+        //             label: "Invoices",
+        //             link: "/#",
+        //             isChildItem: true,
+        //             click: function (e) {
+        //                 e.preventDefault();
+        //                 setIsInvoices(!isInvoices);
+        //             },
+        //             parentId: "apps",
+        //             stateVariables: isInvoices,
+        //             childItems: [
+        //                 { id: 1, label: "List View", link: "/apps-invoices-list" },
+        //                 { id: 2, label: "Details", link: "/apps-invoices-details" },
+        //                 { id: 3, label: "Create Invoice", link: "/apps-invoices-create" },
+        //             ]
+        //         },
+        //         {
+        //             id: "supportTickets",
+        //             label: "Support Tickets",
+        //             link: "/#",
+        //             isChildItem: true,
+        //             click: function (e) {
+        //                 e.preventDefault();
+        //                 setIsSupportTickets(!isSupportTickets);
+        //             },
+        //             parentId: "apps",
+        //             stateVariables: isSupportTickets,
+        //             childItems: [
+        //                 { id: 1, label: "List View", link: "/apps-tickets-list" },
+        //                 { id: 2, label: "Ticket Details", link: "/apps-tickets-details" },
+        //             ]
+        //         }
+        //     ],
+        // },
         {
             label: "pages",
             isHeader: true,

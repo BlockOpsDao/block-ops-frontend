@@ -207,7 +207,7 @@ const toggleTab = (tab) => {
     }
 };
 
-document.title="Pricing | Velzon - React Admin & Dashboard Template";
+document.title="Pricing | Block Ops";
 
   return (
     <React.Fragment>

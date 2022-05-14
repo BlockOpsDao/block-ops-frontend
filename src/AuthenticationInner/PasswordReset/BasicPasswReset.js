@@ -6,7 +6,7 @@ import logoLight from "../../../assets/images/logo-light.png";
 
 
 const BasicPasswReset = () => {
-    document.title="Reset Password | Velzon - React Admin & Dashboard Template";
+    document.title="Reset Password | Block Ops";
     return (
         <ParticlesAuth>
             <div className="auth-page-content">

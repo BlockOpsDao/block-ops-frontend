@@ -5,7 +5,7 @@ import { Button, Card, Col, Container, Row } from 'reactstrap';
 import AuthSlider from '../authCarousel';
 
 const CoverPasswReset = () => {
-    document.title ="Reset Password | Velzon - React Admin & Dashboard Template";
+    document.title ="Reset Password | Block Ops";
     return (
         <React.Fragment>
             

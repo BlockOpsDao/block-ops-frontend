@@ -144,7 +144,7 @@ const Gallery = () => {
 
 ]
 
-document.title ="Gallery | Velzon - React Admin & Dashboard Template";
+document.title ="Gallery | Block Ops";
 
   return (
     <React.Fragment>

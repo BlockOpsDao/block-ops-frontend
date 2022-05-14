@@ -210,7 +210,7 @@ const Team = () => {
 
     ];
 
-document.title="Team | Velzon - React Admin & Dashboard Template";
+document.title="Team | Block Ops";
 
     return (
         <React.Fragment>

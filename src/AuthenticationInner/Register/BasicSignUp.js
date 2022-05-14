@@ -8,7 +8,7 @@ import logoLight from "../../../assets/images/logo-light.png";
 
 
 const BasicSignUp = () => {
-    document.title="Basic SignUp | Velzon - React Admin & Dashboard Template";
+    document.title="Basic SignUp | Block Ops";
     return (
         <React.Fragment>
             <ParticlesAuth>

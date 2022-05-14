@@ -17,7 +17,7 @@ const CryproOrder = () => {
         dispatch(getOrderList());
     }, [dispatch]);
 
-    document.title="Orders | Velzon - React Admin & Dashboard Template";
+    document.title="Orders | Block Ops";
 
     return (
         <React.Fragment>

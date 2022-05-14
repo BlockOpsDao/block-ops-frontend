@@ -51,7 +51,7 @@ const IconBoxicons = (props) => {
     document.getElementById("regularIcon").innerHTML = regularIcon;
   });
 
-document.title ="Box Icons | Velzon - React Admin & Dashboard Template";
+document.title ="Box Icons | Block Ops";
   return (
     <React.Fragment>    
     <div className="page-content">

@@ -9,8 +9,6 @@ import EnterApp from "../../Components/Common/EnterApp";
 
 
 // Import Images
-import logodark from "../../assets/images/logo-dark.png";
-import logolight from "../../assets/images/logo-light.png";
 import imagelogo from "../../assets/images/svg/block-ops/block-ops-icon-2048.svg";
 
 const Navbar = () => {

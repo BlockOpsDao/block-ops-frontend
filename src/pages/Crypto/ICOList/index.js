@@ -6,7 +6,7 @@ import ICO from './ICO';
 
 
 const ICOList = () => {
-    document.title="ICO LIST | Velzon - React Admin & Dashboard Template";
+    document.title="ICO LIST | Block Ops";
     return (
         <React.Fragment>
             <div className="page-content">

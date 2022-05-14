@@ -6,7 +6,7 @@ import ParticlesAuth from "../../../pages/AuthenticationInner/ParticlesAuth";
 //images import
 import maintenanceImg from '../../../assets/images/maintenance.png';
 
-document.title ="Maintenance | Velzon - React Admin & Dashboard Template";
+document.title ="Maintenance | Block Ops";
 const Maintenance = () => {
     return (
         <React.Fragment>            

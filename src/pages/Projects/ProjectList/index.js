@@ -19,7 +19,7 @@ const ProjectList = () => {
         dispatch(getProjectList());
     }, [dispatch]);
 
-document.title="Project List | Velzon - React Admin & Dashboard Template";
+document.title="Project List | Block Ops";
 
     return (
         <React.Fragment>
