@@ -12,7 +12,7 @@ import { configureStore } from "./store";
 import ReactGA from 'react-ga4';
 
 // Web3 imports
-import { Kovan, Mainnet, DAppProvider } from "@usedapp/core"
+import { Rinkeby, Kovan, Mainnet, DAppProvider } from "@usedapp/core"
 
 const TRACKING_ID = "G-DVWFQ1738R";
 ReactGA.initialize(TRACKING_ID);
@@ -20,10 +20,11 @@ ReactGA.initialize(TRACKING_ID);
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <DAppProvider config={{
-    networks: [Kovan, Mainnet],
+    networks: [Mainnet, Kovan, Rinkeby],
     readOnlyUrls: {
       [Mainnet.chainId]: 'https://mainnet.infura.io/v3/a6d7ef14145a4908b1018e8d8452fffb',
       [Kovan.chainId]: 'https://kovan.infura.io/v3/a6d7ef14145a4908b1018e8d8452fffb',
+      [Rinkeby.chainId]: 'https://rinkeby.infura.io/v3/a6d7ef14145a4908b1018e8d8452fffb'
     },
     notifications: {
       expirationPeriod: 1000,

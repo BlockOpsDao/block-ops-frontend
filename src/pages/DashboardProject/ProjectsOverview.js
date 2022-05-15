@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, CardBody, CardHeader, Col, Row } from 'reactstrap';
 import CountUp from "react-countup";
 import { ProjectsOverviewCharts } from './DashboardProjectCharts';
+import GetTotalBountyAmount from '../../Components/Common/GetTotalBountyAmount';
 
 const ProjectsOverview = () => {
     
@@ -54,6 +55,20 @@ const ProjectsOverview = () => {
                                             />
                                         </span></h5>
                                         <p className="text-muted mb-0">Active Projects</p>
+                                    </div>
+                                </Col>
+                                <Col xs={6} sm={3}>
+                                    <div className="p-3 border border-dashed border-start-0">
+                                        {/* <h5 className="mb-1"><span className="counter-value">
+                                            <CountUp
+                                                start={0}
+                                                end={1026}
+                                                separator={","}
+                                                duration={4}
+                                            />
+                                        </span></h5> */}
+                                        <GetTotalBountyAmount />
+                                        <p className="text-muted mb-0">Zach Projects</p>
                                     </div>
                                 </Col>
                                 <Col xs={6} sm={3}>
