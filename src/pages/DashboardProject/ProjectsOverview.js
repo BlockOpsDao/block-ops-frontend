@@ -2,9 +2,16 @@ import React from 'react';
 import { Card, CardBody, CardHeader, Col, Row } from 'reactstrap';
 import CountUp from "react-countup";
 import { ProjectsOverviewCharts } from './DashboardProjectCharts';
-import GetTotalBountyAmount from '../../Components/Common/GetTotalBountyAmount';
+import CallOpsNFT from '../../Components/Common/CallOpsNFT';
+import { Icon } from '@iconify/react';
+
+import ethCoin from "../../assets/images/svg/crypto-icons/eth.svg";
 
 const ProjectsOverview = () => {
+
+    const getTotalEthPaidOut = CallOpsNFT("getTotalEthPaidOut") ?? undefined
+    const getTotalBountyAvailable = CallOpsNFT("totalBountyAmount") ?? undefined
+    const totalSupply = CallOpsNFT("totalSupply") ?? undefined
     
     return (
         <React.Fragment>
@@ -31,12 +38,12 @@ const ProjectsOverview = () => {
 
                         <CardHeader className="p-0 border-0 bg-soft-light">
                             <Row className="g-0 text-center">
-                                <Col xs={6} sm={3}>
+                                <Col xs={6} sm={4}>
                                     <div className="p-3 border border-dashed border-start-0">
                                         <h5 className="mb-1"><span className="counter-value" data-target="9851">
                                             <CountUp
                                                 start={0}
-                                                end={9851}
+                                                end={totalSupply}
                                                 separator={","}
                                                 duration={4}
                                             />
@@ -44,57 +51,30 @@ const ProjectsOverview = () => {
                                         <p className="text-muted mb-0">Number of Projects</p>
                                     </div>
                                 </Col>
-                                <Col xs={6} sm={3}>
+                                <Col xs={6} sm={4}>
                                     <div className="p-3 border border-dashed border-start-0">
                                         <h5 className="mb-1"><span className="counter-value">
                                             <CountUp
                                                 start={0}
-                                                end={1026}
+                                                end={getTotalEthPaidOut}
                                                 separator={","}
                                                 duration={4}
                                             />
-                                        </span></h5>
-                                        <p className="text-muted mb-0">Active Projects</p>
+                                        </span><Icon icon="ph:currency-eth" width="17" /> </h5>
+                                        <p className="text-muted mb-1">Total ETH Paid Out</p>
                                     </div>
                                 </Col>
-                                <Col xs={6} sm={3}>
+                                <Col xs={6} sm={4}>
                                     <div className="p-3 border border-dashed border-start-0">
-                                        {/* <h5 className="mb-1"><span className="counter-value">
+                                        <h5 className="mb-1"><span className="counter-value" data-target="228.89">
                                             <CountUp
                                                 start={0}
-                                                end={1026}
-                                                separator={","}
-                                                duration={4}
-                                            />
-                                        </span></h5> */}
-                                        <GetTotalBountyAmount />
-                                        <p className="text-muted mb-0">Zach Projects</p>
-                                    </div>
-                                </Col>
-                                <Col xs={6} sm={3}>
-                                    <div className="p-3 border border-dashed border-start-0">
-                                        <h5 className="mb-1">$<span className="counter-value" data-target="228.89">
-                                            <CountUp
-                                                start={0}
-                                                end={228.89}
+                                                end={getTotalBountyAvailable}
                                                 decimals={2}
                                                 duration={4}
                                             />
-                                        </span>k</h5>
-                                        <p className="text-muted mb-0">Revenue</p>
-                                    </div>
-                                </Col>
-                                <Col xs={6} sm={3}>
-                                    <div className="p-3 border border-dashed border-start-0 border-end-0">
-                                        <h5 className="mb-1 text-success"><span className="counter-value" data-target="10589">
-                                            <CountUp
-                                                start={0}
-                                                end={10589}
-                                                separator={","}
-                                                duration={4}
-                                            />
-                                        </span>h</h5>
-                                        <p className="text-muted mb-0">Working Hours</p>
+                                        </span><Icon icon="ph:currency-eth" width="17" /></h5>
+                                        <p className="text-muted mb-0">Total Bounty Available</p>
                                     </div>
                                 </Col>
                             </Row>

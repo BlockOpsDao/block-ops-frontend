@@ -26,7 +26,7 @@ const CreateProject = () => {
     const [selectedMulti, setselectedMulti] = useState(null);
 
     function handleMulti(selectedMulti) {
-    setselectedMulti(selectedMulti);
+        setselectedMulti(selectedMulti);
     }  
     
     //Dropzone file upload
@@ -58,11 +58,17 @@ const CreateProject = () => {
 
 document.title="Create Project | Block Ops";
 
+    const [projectTitle, setProjectTitle] = useState("");
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        alert(`The projectTitle you entered was: ${projectTitle}`)
+        console.log('The projectTitle you entered was: ', projectTitle)
+      }
+
     return (
         <React.Fragment>
             <div className="page-content">
                 <Container fluid>
-                    <BreadCrumb title="Create Project" pageTitle="Projects" />
                     <Row>
                         <Col lg={8}>
                             <Card>
@@ -70,7 +76,7 @@ document.title="Create Project | Block Ops";
                                     <div className="mb-3">
                                         <Label className="form-label" htmlFor="project-title-input">Project Title</Label>
                                         <Input type="text" className="form-control" id="project-title-input"
-                                            placeholder="Enter project title" />
+                                            placeholder="Enter project title" value={projectTitle} onChange={(e) => setProjectTitle(e.target.value)} />
                                     </div>
 
                                     <div className="mb-3">
@@ -200,108 +206,10 @@ document.title="Create Project | Block Ops";
                             </Card>
 
                             <div className="text-end mb-4">
-                                <button type="submit" className="btn btn-danger w-sm me-1">Delete</button>
-                                <button type="submit" className="btn btn-secondary w-sm me-1">Draft</button>
-                                <button type="submit" className="btn btn-success w-sm">Create</button>
+                                <button type="submit" className="btn btn-success w-sm" onClick={handleSubmit}>Create</button>
                             </div>
                         </Col>
 
-                        <Col lg={4}>
-                            <div className="card">
-                                <div className="card-header">
-                                    <h5 className="card-title mb-0">Privacy</h5>
-                                </div>
-                                <CardBody>
-                                    <div>
-                                        <Label htmlFor="choices-privacy-status-input" className="form-label">Status</Label>
-                                        <select className="form-select" data-choices data-choices-search-false
-                                            id="choices-privacy-status-input">
-                                            <option defaultValue="Private">Private</option>
-                                            <option value="Team">Team</option>
-                                            <option value="Public">Public</option>
-                                        </select>
-                                    </div>
-                                </CardBody>
-                            </div>
-
-                            <div className="card">
-                                <div className="card-header">
-                                    <h5 className="card-title mb-0">Tags</h5>
-                                </div>
-                                <CardBody>
-                                    <div className="mb-3">
-                                        <Label htmlFor="choices-categories-input" className="form-label">Categories</Label>
-                                        <select className="form-select" data-choices data-choices-search-false
-                                            id="choices-categories-input">
-                                            <option defaultValue="Designing">Designing</option>
-                                            <option value="Development">Development</option>
-                                        </select>
-                                    </div>
-
-                                    <div>
-                                        <Label htmlFor="choices-text-input" className="form-label">Skills</Label>
-                                        <Select
-                                            value={selectedMulti}
-                                            isMulti={true}                                                            
-                                            onChange={() => {
-                                                handleMulti();
-                                            }}
-                                            options={SingleOptions}
-                                        />
-                                    </div>
-                                </CardBody>
-                            </div>
-
-                            <Card>
-                                <CardHeader>
-                                    <h5 className="card-title mb-0">Members</h5>
-                                </CardHeader>
-                                <CardBody>
-                                    <div className="mb-3">
-                                        <Label htmlFor="choices-lead-input" className="form-label">Team Lead</Label>
-                                        <select className="form-select" data-choices data-choices-search-false
-                                            id="choices-lead-input">
-                                            <option defaultValue="Brent Gonzalez">Brent Gonzalez</option>
-                                            <option value="Darline Williams">Darline Williams</option>
-                                            <option value="Sylvia Wright">Sylvia Wright</option>
-                                            <option value="Ellen Smith">Ellen Smith</option>
-                                            <option value="Jeffrey Salazar">Jeffrey Salazar</option>
-                                            <option value="Mark Williams">Mark Williams</option>
-                                        </select>
-                                    </div>
-
-                                    <div>
-                                        <Label className="form-label">Team Members</Label>
-                                        <div className="avatar-group">
-                                            <Link to="#" className="avatar-group-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Brent Gonzalez">
-                                                <div className="avatar-xs">
-                                                    <img src={avatar3} alt="" className="rounded-circle img-fluid" />
-                                                </div>
-                                            </Link>
-                                            <Link to="#" className="avatar-group-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Sylvia Wright">
-                                                <div className="avatar-xs">
-                                                    <div className="avatar-title rounded-circle bg-secondary">
-                                                        S
-                                                    </div>
-                                                </div>
-                                            </Link>
-                                            <Link to="#" className="avatar-group-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Ellen Smith">
-                                                <div className="avatar-xs">
-                                                    <img src={avatar4} alt="" className="rounded-circle img-fluid" />
-                                                </div>
-                                            </Link>
-                                            <Link to="#" className="avatar-group-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Add Members">
-                                                <div className="avatar-xs" data-bs-toggle="modal" data-bs-target="#inviteMembersModal">
-                                                    <div className="avatar-title fs-16 rounded-circle bg-light border-dashed border text-primary">
-                                                        +
-                                                    </div>
-                                                </div>
-                                            </Link>
-                                        </div>
-                                    </div>
-                                </CardBody>
-                            </Card>
-                        </Col>
                     </Row>
                 </Container>
             </div>

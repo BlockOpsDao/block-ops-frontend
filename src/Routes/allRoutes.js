@@ -20,7 +20,7 @@ import DashboardProject from "../pages/DashboardProject";
 // // Project
 // import ProjectList from "../pages/Projects/ProjectList";
 // import ProjectOverview from "../pages/Projects/ProjectOverview";
-// import CreateProject from "../pages/Projects/CreateProject";
+import CreateProject from "../pages/Projects/CreateProject";
 
 // //Task
 // import TaskDetails from "../pages/Tasks/TaskDetails";
@@ -200,6 +200,7 @@ const authProtectedRoutes = [
   // { path: "/dashboard", component: DashboardEcommerce  },
   // { path: "/dashboard-crypto", component: DashboardCrypto },
   { path: "/dashboard", component: DashboardProject },
+  { path: "/create-project", component: CreateProject },
   // { path: "/apps-calendar", component: Calendar },
   // { path: "/apps-ecommerce-products", component: EcommerceProducts },
   // { path: "/apps-ecommerce-product-details", component: EcommerceProductDetail },

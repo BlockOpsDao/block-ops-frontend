@@ -3,9 +3,8 @@ import { useEthers, shortenAddress, useLookupAddress } from '@usedapp/core'
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import CoinbaseWalletSDK from '@coinbase/wallet-sdk';
 import Web3Modal from "web3modal";
-import { ethers, BigNumber } from 'ethers';
+import { ethers } from 'ethers';
 import { AnalyticEventTracker } from "./AnalyticEventTracker";
-import CallOpsNFT from './CallOpsNFT';
 
 const Web3Wallet = () => {
 
@@ -20,7 +19,6 @@ const Web3Wallet = () => {
 
     const [provider, setProvider] = useState();
     const [library, setLibrary] = useState();
-    const [signature, setSignature] = useState("");
     const [chainId, setChainId] = useState();
     const [network, setNework] = useState();
 
@@ -56,7 +54,7 @@ const Web3Wallet = () => {
  
     const activateProvider = async () => {
         const web3Modal = new Web3Modal({
-            cacheProvider: false, 
+            cacheProvider: true, 
             theme: "dark",
             providerOptions 
         });
@@ -75,7 +73,6 @@ const Web3Wallet = () => {
         }
     }
 
-    let getTotalEthPaidOut = CallOpsNFT("getTotalEthPaidOut") ?? undefined
 
 
     return (<>
@@ -83,8 +80,6 @@ const Web3Wallet = () => {
             <button className="btn btn-primary" onClick={() => {deactivate(); gaEventTracker('button_deactivateBrowserWallet')}}>
                 Disconnect {ens ?? shortenAddress(account)}
             </button>
-
-            <p>Total ETH Paid Out: {String(getTotalEthPaidOut)}</p>
         </>) : (
             <button className="btn btn-danger" onClick={() => {activateProvider(); gaEventTracker('button_activateBrowserWallet')}}>
                 Connect Wallet
