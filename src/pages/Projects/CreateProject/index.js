@@ -1,21 +1,9 @@
 import React,{useState} from 'react';
-import { Link } from 'react-router-dom';
-import { Card, CardBody, CardHeader, Col, Container, Input, Label, Row } from 'reactstrap';
-import BreadCrumb from '../../../Components/Common/BreadCrumb';
+import { Card, CardBody, Col, Container, Input, Label, Row } from 'reactstrap';
 //Import Flatepicker
 import Flatpickr from "react-flatpickr";
-import Select from "react-select";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-
-import Dropzone from "react-dropzone";
-
-//Import Images
-import avatar3 from "../../../assets/images/users/avatar-3.jpg";
-import avatar4 from "../../../assets/images/users/avatar-4.jpg";
-import { NFTStorage, File } from 'nft.storage'
-
-
 
 const CreateProject = () => {
     //const nftStorageClient = new NFTStorage({ token: process.env.REACT_APP_NFT_STORAGE_KEY })
@@ -37,24 +25,7 @@ const CreateProject = () => {
     const [selectedFiles, setselectedFiles] = useState([]);
     const [files, setFiles] = useState([]);
 
-    // async function uploadToIPFS(name, description, image) {
-    //     const metadata = await client.store({
-    //       name: name,
-    //       description: description,
-    //       image: new File(
-    //         [
-    //           image
-    //         ],
-    //         'pinpie.jpg',
-    //         { type: 'image/jpg' }
-    //       ),
-    //     })
-    //     console.log(metadata.url)
-    //     return metadata
-    //     // ipfs://bafyreib4pff766vhpbxbhjbqqnsh5emeznvujayjj4z2iu533cprgbz23m/metadata.json
-    //   }
-      
-  
+
     function handleAcceptedFiles(files) {
       files.map(file =>
         Object.assign(file, {
@@ -82,12 +53,13 @@ document.title="Create Project | Block Ops";
 
     const [projectTitle, setProjectTitle] = useState("");
     const [projectDescription, setProjectDescription] = useState("");
-    const [projectImageUri, setProjectImageUri] = useState("");
     const [projectPriority, setProjectPriority] = useState("");
     const [projectDeadline, setProjectDeadline] = useState("");
     const [projectSkill, setProjectSkill] = useState("");
     const [projectSkills, setProjectSkills] = useState([]);
     const [projectImage, setProjectImage] = useState();
+    const [ipfsResponse, setIpfsResponse] = useState(null);
+    const ipfsDefined = ipfsResponse !== null
 
     const handleEnter = (event) => {
         if (event.key === 'Enter') {
@@ -96,30 +68,42 @@ document.title="Create Project | Block Ops";
         }
     }
 
+    const uploadToIPFS = (ipfsData) => {
+        const header = {
+            "Authorization": "Bearer " + process.env.REACT_APP_NFT_STORAGE_KEY
+        }
+        fetch('https://api.nft.storage/store', {
+            method: 'POST',
+            body: ipfsData,
+            headers: {
+                "Authorization": "Bearer " + process.env.REACT_APP_NFT_STORAGE_KEY
+            }
+        })
+        .then(r => r.json())
+        .then(data => {
+            setIpfsResponse(data);
+        })
+    }
+
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        //setProjectPriority(document.getElementById("choices-priority-input"))
-        console.log('projectTitle: ', projectTitle)
-        console.log('projectImageUri: ', projectImageUri)
-        console.log('projectDescription: ', projectDescription)
-        console.log('projectPriority: ', projectPriority)
-        console.log('projectDeadline: ', projectDeadline)
-        console.log('projectSkills: ', projectSkills)
-
-        console.log('selectedFiles: ', selectedFiles)
-        console.log('projectImage: ', projectImage)
-        // const jsonData = {
-        //     "projectTitle",
-        // }
-        // const fileData = JSON.stringify(jsonData);
-        // const blob = new Blob([fileData], {type: "text/plain"});
-        // const url = URL.createObjectURL(blob);
-        // const link = document.createElement('a');
-        // link.download = `${filename}.json`;
-        // link.href = url;
-        // link.click();
-
+        const jsonData = {
+            "name": projectTitle,
+            "description": projectDescription,
+            "image": undefined,
+            "properties": {
+                "skills": projectSkills,
+                "priority": projectPriority,
+                "deadline": projectDeadline,
+                "videoClip": undefined
+            }
+        }
+        
+        let ipfsData = new FormData();
+        ipfsData.set("meta", JSON.stringify(jsonData))
+        ipfsData.set("image", projectImage)
+        uploadToIPFS(ipfsData)
       }
 
     return (
@@ -143,7 +127,6 @@ document.title="Create Project | Block Ops";
                                             type="file" 
                                             accept="image/png, image/gif, image/jpeg" 
                                             onChange={(event) => {
-                                                console.log(event.target.files[0]);
                                                 setProjectImage(event.target.files[0]);
                                             }}
                                         />
@@ -224,6 +207,14 @@ document.title="Create Project | Block Ops";
                                                 
                                             </div>
                                         </Col>
+                                        <Col>
+                                        {ipfsDefined ?
+                                            <div className='mb-3 mb-lg-0'>
+                                                <h5 className="mb-1">Metadata uploaded to: <span className="text-danger">{ipfsResponse.value.url}</span></h5>
+                                            </div>
+                                        : <></>
+                                        }
+                                        </Col>
 
                                     </Row>
                                 </CardBody>
@@ -231,8 +222,8 @@ document.title="Create Project | Block Ops";
                             <div className="text-end mb-4">
                                 <button type="submit" className="btn btn-success w-sm" onClick={handleSubmit}>Create</button>
                             </div>
-                        </Col>
-
+                            
+                        </Col>                        
                     </Row>
                 </Container>
             </div>
