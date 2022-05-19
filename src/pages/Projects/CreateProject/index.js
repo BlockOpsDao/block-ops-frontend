@@ -57,9 +57,10 @@ document.title="Create Project | Block Ops";
     const [projectDeadline, setProjectDeadline] = useState("");
     const [projectSkill, setProjectSkill] = useState("");
     const [projectSkills, setProjectSkills] = useState([]);
-    const [projectImage, setProjectImage] = useState();
+    const [projectImage, setProjectImage] = useState(null);
     const [ipfsResponse, setIpfsResponse] = useState(null);
     const ipfsDefined = ipfsResponse !== null
+    const projectImageDefined = projectImage !== null
 
     const handleEnter = (event) => {
         if (event.key === 'Enter') {
@@ -88,6 +89,7 @@ document.title="Create Project | Block Ops";
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        
         const jsonData = {
             "name": projectTitle,
             "description": projectDescription,
@@ -102,8 +104,11 @@ document.title="Create Project | Block Ops";
         
         let ipfsData = new FormData();
         ipfsData.set("meta", JSON.stringify(jsonData))
-        ipfsData.set("image", projectImage)
+        if (projectImageDefined) {
+            ipfsData.set("image", projectImage)
+        }
         uploadToIPFS(ipfsData)
+        console.log(ipfsResponse)
       }
 
     return (
@@ -130,25 +135,19 @@ document.title="Create Project | Block Ops";
                                                 setProjectImage(event.target.files[0]);
                                             }}
                                         />
-
-                                        {/* <Label className='form-label' htmlFor="project-image-uri">Image URL</Label>
-                                        <Input type="text" className="form-control" id="project-image-uri"
-                                            placeholder="Enter URL to your image." value={projectImageUri} onChange={(e) => setProjectImageUri(e.target.value)} /> */}
                                     </div>
 
                                     <div className="mb-3">
                                         <Label className="form-label">Project Description</Label>
                                         <CKEditor
+                                            id='project-description-ckeditor'
                                             editor={ClassicEditor}
-                                            data="<p>Enter a project description here.</p>"
-                                            onReady={(editor) => {
-                                                // You can store the "editor" and use when it is needed.
-                                                setProjectDescription(editor.getData());
-                                                
-                                            }}
-                                            onChange={(editor) => {
-                                                
-                                            }}
+                                            placeholder="<p>Enter a project description here.</p>"
+                                            onChange={ ( event, editor ) => {
+                                                const data = editor.getData();
+                                                setProjectDescription(data);
+                                            } }
+                        
                                             />
                                     </div>
 
