@@ -59,6 +59,8 @@ document.title="Create Project | Block Ops";
     const [projectSkills, setProjectSkills] = useState([]);
     const [projectImage, setProjectImage] = useState(null);
     const [ipfsResponse, setIpfsResponse] = useState(null);
+    const [submitButtonState, setSubmitButtonState] = useState("ready");
+    const [buttonText, setButtonText] = useState();
     const ipfsDefined = ipfsResponse !== null
     const projectImageDefined = projectImage !== null
 
@@ -82,14 +84,39 @@ document.title="Create Project | Block Ops";
         })
         .then(r => r.json())
         .then(data => {
-            setIpfsResponse(data);
+            console.log("ipfs response: ", data)
+            if (data.ok) {
+                setSubmitButtonState("success");
+                changeSubmitButton();
+                setIpfsResponse(data);
+            }
+            else {
+                setSubmitButtonState("failed");
+                changeSubmitButton();
+            }
         })
     }
 
+    const changeSubmitButton = () => {
+        if (submitButtonState === "ready") {
+            console.log("ready")
+            return <span><p>Create</p></span>
+        } else if (submitButtonState === "pending") {
+            console.log("pending")
+            return <span><p>Uploading...</p> <i className="mdi mdi-loading mdi-spin fs-20 align-middle me-2"></i></span>
+        } else if (submitButtonState === "success") {
+            console.log("success")
+            return <span><p>Success!</p></span>
+        } else {
+            console.log("error")
+            return <span><p>Failed</p></span>
+        }
+    }
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        
+        setSubmitButtonState("pending")
+        changeSubmitButton();
         const jsonData = {
             "name": projectTitle,
             "description": projectDescription,
@@ -108,8 +135,8 @@ document.title="Create Project | Block Ops";
             ipfsData.set("image", projectImage)
         }
         uploadToIPFS(ipfsData)
-        console.log(ipfsResponse)
-      }
+
+    }
 
     return (
         <React.Fragment>
@@ -219,7 +246,9 @@ document.title="Create Project | Block Ops";
                                 </CardBody>
                             </Card>
                             <div className="text-end mb-4">
-                                <button type="submit" className="btn btn-success w-sm" onClick={handleSubmit}>Create</button>
+                                <button type="submit" className="btn btn-success w-sm" onClick={handleSubmit}>
+                                    {changeSubmitButton()}   
+                                </button>
                             </div>
                             
                         </Col>                        
