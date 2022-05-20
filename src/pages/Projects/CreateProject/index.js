@@ -4,9 +4,16 @@ import { Card, CardBody, Col, Container, Input, Label, Row } from 'reactstrap';
 import Flatpickr from "react-flatpickr";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { utils } from 'ethers'
+import { Contract } from '@ethersproject/contracts'
+import { useContractFunction } from "@usedapp/core";
+import map from "../../../build/deployments/map.json";
+import OpsNFTKovan from "../../../build/deployments/42/0x072Cc7F9aBb95780fE3B4Fa4f0333DDf22308E98.json"
+import { Icon } from '@iconify/react';
+
 
 const CreateProject = () => {
-    //const nftStorageClient = new NFTStorage({ token: process.env.REACT_APP_NFT_STORAGE_KEY })
+
     const SingleOptions = [
         { value: 'Watches', label: 'Watches' },
         { value: 'Headset', label: 'Headset' },
@@ -60,9 +67,22 @@ document.title="Create Project | Block Ops";
     const [projectImage, setProjectImage] = useState(null);
     const [ipfsResponse, setIpfsResponse] = useState(null);
     const [submitButtonState, setSubmitButtonState] = useState("ready");
-    const [buttonText, setButtonText] = useState();
+    const [ethAmount, setEthAmount] = useState();
     const ipfsDefined = ipfsResponse !== null
     const projectImageDefined = projectImage !== null
+
+    const abi = OpsNFTKovan['abi']
+    const opsNFTContractAddress = map[42]["OpsNFT"][0]
+    const opsNFTInterface = new utils.Interface(abi);
+    const contract = new Contract(opsNFTContractAddress, opsNFTInterface);
+    const { state, send, events } = useContractFunction(contract, 'safeMint')
+    const { status, receipt } = state
+
+    const callSafeMint = (tokenMetadataURI) => {
+      void send(tokenMetadataURI, { 
+          value: utils.parseEther(ethAmount) 
+        })
+    }
 
     const handleEnter = (event) => {
         if (event.key === 'Enter') {
@@ -84,11 +104,11 @@ document.title="Create Project | Block Ops";
         })
         .then(r => r.json())
         .then(data => {
-            console.log("ipfs response: ", data)
             if (data.ok) {
+                setIpfsResponse(data);
+                callSafeMint(data.value.url);
                 setSubmitButtonState("success");
                 changeSubmitButton();
-                setIpfsResponse(data);
             }
             else {
                 setSubmitButtonState("failed");
@@ -99,16 +119,12 @@ document.title="Create Project | Block Ops";
 
     const changeSubmitButton = () => {
         if (submitButtonState === "ready") {
-            console.log("ready")
             return <span><p>Create</p></span>
-        } else if (submitButtonState === "pending") {
-            console.log("pending")
+        } else if (submitButtonState === "pending" | status === "Mining" | status === "PendingSignature") {
             return <span><p>Uploading...</p> <i className="mdi mdi-loading mdi-spin fs-20 align-middle me-2"></i></span>
-        } else if (submitButtonState === "success") {
-            console.log("success")
+        } else if (submitButtonState === "success" & status === "Success") {
             return <span><p>Success!</p></span>
         } else {
-            console.log("error")
             return <span><p>Failed</p></span>
         }
     }
@@ -135,7 +151,36 @@ document.title="Create Project | Block Ops";
             ipfsData.set("image", projectImage)
         }
         uploadToIPFS(ipfsData)
+    }
 
+    const receiptTable = () => {
+        return (
+            <table className="table table-nowrap">
+            <thead>
+                <tr>
+                    <th scope="col">to</th>
+                    <th scope="col">from</th>
+                    <th scope="col">address</th>
+                    <th scope="col">transactionIndex</th>
+                    <th scope="col">effectiveGasPrice</th>
+                </tr>
+            </thead>
+            <tbody>
+                    
+
+            {events.map((e) => { return ( <>
+                <tr key={e + "-event" + "-"+Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5) }>
+                    <th className="fw-semibold">{e.to}</th>
+                    <th className="fw-semibold">{e.from}</th>
+                    <th className="fw-semibold">{e.contractAddress}</th>
+                    <th className="fw-semibold">{e.transactionIndex}</th>
+                    <th className="fw-semibold">{e.effectiveGasPrice}</th>
+                </tr>
+                </>
+            ) } ) }
+                </tbody>
+            </table>
+        )
     }
 
     return (
@@ -204,6 +249,15 @@ document.title="Create Project | Block Ops";
                                                 />
                                             </div>
                                         </Col>
+                                        <Col lg={6}>
+                                            <div className="mb-3">
+                                                <br />
+                                                <Label className="form-label" >Bounty Amount <Icon icon="ph:currency-eth" width="17" /></Label>
+                                                <Input type="text" className="form-control"
+                                                    placeholder="Enter bounty amount in ETH" value={ethAmount} onChange={(e) => setEthAmount(e.target.value)} />
+                                            </div>
+                                        
+                                        </Col>
                                     </Row>
                                     <Row>
                                         <Col>
@@ -233,22 +287,17 @@ document.title="Create Project | Block Ops";
                                                 
                                             </div>
                                         </Col>
-                                        <Col>
-                                        {ipfsDefined ?
-                                            <div className='mb-3 mb-lg-0'>
-                                                <h5 className="mb-1">Metadata uploaded to: <span className="text-danger">{ipfsResponse.value.url}</span></h5>
-                                            </div>
-                                        : <></>
-                                        }
-                                        </Col>
-
                                     </Row>
                                 </CardBody>
                             </Card>
                             <div className="text-end mb-4">
                                 <button type="submit" className="btn btn-success w-sm" onClick={handleSubmit}>
-                                    {changeSubmitButton()}   
+                                    {changeSubmitButton()}
                                 </button>
+                            </div>
+
+                            <div className="text-end mb-4">
+                                {receipt !== undefined ? receiptTable() : <p>No receipt</p>}
                             </div>
                             
                         </Col>                        
