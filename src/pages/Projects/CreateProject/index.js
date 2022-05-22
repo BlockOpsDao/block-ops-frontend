@@ -6,22 +6,14 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { utils } from 'ethers'
 import { Contract } from '@ethersproject/contracts'
-import { useContractFunction, useTransactions } from "@usedapp/core";
+import { useContractFunction } from "@usedapp/core";
 import map from "../../../build/deployments/map.json";
 import OpsNFTKovan from "../../../build/deployments/42/0x072Cc7F9aBb95780fE3B4Fa4f0333DDf22308E98.json"
 import { Icon } from '@iconify/react';
 import DisplayNFT from '../../../Components/Common/DisplayNFT';
 
 const CreateProject = () => {
-    const { transactions } = useTransactions()
-    const SingleOptions = [
-        { value: 'Watches', label: 'Watches' },
-        { value: 'Headset', label: 'Headset' },
-        { value: 'Sweatshirt', label: 'Sweatshirt' },
-        { value: '20% off', label: '20% off' },
-        { value: '4 star', label: '4 star' },
-      ];
-
+    
     const [selectedMulti, setselectedMulti] = useState(null);
 
     function handleMulti(selectedMulti) {
@@ -73,6 +65,7 @@ document.title="Create Project | Block Ops";
     const [nftMintedMetadata, setNftMintedMetadata] = useState();
     const [nftMintedValue, setNftMintedValue] = useState();
     const [nftMintedTokenId, setNftMintedTokenId] = useState(null);
+    const [eventTableFinished, setEventTableFinished] = useState(false);
 
     const ipfsDefined = ipfsResponse !== null
     const projectImageDefined = projectImage !== null
@@ -166,6 +159,7 @@ document.title="Create Project | Block Ops";
                 setNftMintedMetadata(e.args[1])
                 setNftMintedValue(utils.formatEther(e.args[2]))
                 setNftMintedTokenId(e.args._tokenId.toNumber())
+                setEventTableFinished(true);
             }
         } ) 
     }
@@ -285,7 +279,7 @@ document.title="Create Project | Block Ops";
 
                             <div className="text-end mb-4">
                                 {receipt !== undefined ? eventsTable() : <></>}
-                                {receipt !== undefined ? 
+                                {eventTableFinished ? 
                                 <DisplayNFT 
                                     owner={nftMintedOwner} 
                                     ipfsMetadata={nftMintedMetadata} 

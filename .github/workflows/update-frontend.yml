@@ -19,6 +19,8 @@ jobs:
         cache-dependency-path: '**/package-lock.json'
     - run: npm ci
     - run: echo "REACT_APP_NFT_STORAGE_KEY=${{ secrets.REACT_APP_NFT_STORAGE_KEY }}" >> .env
+    - run: echo "REACT_APP_INFURA_IPFS_PROJECT_ID=${{ secrets.REACT_APP_INFURA_IPFS_PROJECT_ID }}" >> .env
+    - run: echo "REACT_APP_INFURA_IPFS_PROJECT_SECRET=${{ secrets.REACT_APP_INFURA_IPFS_PROJECT_SECRET }}" >> .env
     - run: npm run build
     - name: Assume IAM Role
       uses: aws-actions/configure-aws-credentials@v1
