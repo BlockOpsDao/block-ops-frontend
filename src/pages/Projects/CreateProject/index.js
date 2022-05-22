@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React, {useState} from 'react';
 import { Card, CardBody, Col, Container, Input, Label, Row } from 'reactstrap';
 //Import Flatepicker
 import Flatpickr from "react-flatpickr";
@@ -6,14 +6,14 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { utils } from 'ethers'
 import { Contract } from '@ethersproject/contracts'
-import { useContractFunction } from "@usedapp/core";
+import { useContractFunction, useTransactions } from "@usedapp/core";
 import map from "../../../build/deployments/map.json";
 import OpsNFTKovan from "../../../build/deployments/42/0x072Cc7F9aBb95780fE3B4Fa4f0333DDf22308E98.json"
 import { Icon } from '@iconify/react';
-
+import DisplayNFT from '../../../Components/Common/DisplayNFT';
 
 const CreateProject = () => {
-
+    const { transactions } = useTransactions()
     const SingleOptions = [
         { value: 'Watches', label: 'Watches' },
         { value: 'Headset', label: 'Headset' },
@@ -68,6 +68,12 @@ document.title="Create Project | Block Ops";
     const [ipfsResponse, setIpfsResponse] = useState(null);
     const [submitButtonState, setSubmitButtonState] = useState("ready");
     const [ethAmount, setEthAmount] = useState();
+
+    const [nftMintedOwner, setNftMintedOwner] = useState();
+    const [nftMintedMetadata, setNftMintedMetadata] = useState();
+    const [nftMintedValue, setNftMintedValue] = useState();
+    const [nftMintedTokenId, setNftMintedTokenId] = useState(null);
+
     const ipfsDefined = ipfsResponse !== null
     const projectImageDefined = projectImage !== null
 
@@ -149,38 +155,19 @@ document.title="Create Project | Block Ops";
         ipfsData.set("meta", JSON.stringify(jsonData))
         if (projectImageDefined) {
             ipfsData.set("image", projectImage)
-        }
+        } 
         uploadToIPFS(ipfsData)
     }
 
-    const receiptTable = () => {
-        return (
-            <table className="table table-nowrap">
-            <thead>
-                <tr>
-                    <th scope="col">to</th>
-                    <th scope="col">from</th>
-                    <th scope="col">address</th>
-                    <th scope="col">transactionIndex</th>
-                    <th scope="col">effectiveGasPrice</th>
-                </tr>
-            </thead>
-            <tbody>
-                    
-
-            {events.map((e) => { return ( <>
-                <tr key={e + "-event" + "-"+Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5) }>
-                    <th className="fw-semibold">{e.to}</th>
-                    <th className="fw-semibold">{e.from}</th>
-                    <th className="fw-semibold">{e.contractAddress}</th>
-                    <th className="fw-semibold">{e.transactionIndex}</th>
-                    <th className="fw-semibold">{e.effectiveGasPrice}</th>
-                </tr>
-                </>
-            ) } ) }
-                </tbody>
-            </table>
-        )
+    const eventsTable = () => {
+        events.map((e) => { 
+            if (e.name === "NFTMinted" & nftMintedMetadata === undefined) {
+                setNftMintedOwner(e.args[0])
+                setNftMintedMetadata(e.args[1])
+                setNftMintedValue(utils.formatEther(e.args[2]))
+                setNftMintedTokenId(e.args._tokenId.toNumber())
+            }
+        } ) 
     }
 
     return (
@@ -297,7 +284,14 @@ document.title="Create Project | Block Ops";
                             </div>
 
                             <div className="text-end mb-4">
-                                {receipt !== undefined ? receiptTable() : <p>No receipt</p>}
+                                {receipt !== undefined ? eventsTable() : <></>}
+                                {receipt !== undefined ? 
+                                <DisplayNFT 
+                                    owner={nftMintedOwner} 
+                                    ipfsMetadata={nftMintedMetadata} 
+                                    valueInETH={nftMintedValue} 
+                                    tokenId={nftMintedTokenId} 
+                                />     : <h2>Waiting on eventsTable()...</h2>}
                             </div>
                             
                         </Col>                        
