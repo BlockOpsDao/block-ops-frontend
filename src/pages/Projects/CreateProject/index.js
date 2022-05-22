@@ -13,7 +13,6 @@ import { Icon } from '@iconify/react';
 import DisplayNFT from '../../../Components/Common/DisplayNFT';
 
 const CreateProject = () => {
-    
     const [selectedMulti, setselectedMulti] = useState(null);
 
     function handleMulti(selectedMulti) {

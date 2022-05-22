@@ -147,6 +147,7 @@ import SimplePage from '../pages/Pages/Profile/SimplePage/SimplePage';
 // import Gallery from '../pages/Pages/Gallery/Gallery';
 // import Maintenance from '../pages/Pages/Maintenance/Maintenance';
 import ComingSoon from '../pages/Pages/ComingSoon/ComingSoon';
+import ListProjectsPage from "../pages/Pages/ListProjectsPage/ListProjectsPage";
 // import SiteMap from '../pages/Pages/SiteMap/SiteMap';
 // import SearchResults from '../pages/Pages/SearchResults/SearchResults';
 
@@ -201,6 +202,7 @@ const authProtectedRoutes = [
   // { path: "/dashboard-crypto", component: DashboardCrypto },
   { path: "/dashboard", component: DashboardProject },
   { path: "/create-project", component: CreateProject },
+  { path: "/list-projects", component: ListProjectsPage },
   // { path: "/apps-calendar", component: Calendar },
   // { path: "/apps-ecommerce-products", component: EcommerceProducts },
   // { path: "/apps-ecommerce-product-details", component: EcommerceProductDetail },

@@ -6,7 +6,6 @@ import DOMPurify from "dompurify";
 
 
 const DisplayNFT = (owner) => {
-
     const [nftOwner, setNftOwner] = useState();
     const [nftIpfsMetadata, setNftIpfsMetadata] = useState();
     const [nftValueInEth, setNftValueInEth] = useState();
@@ -19,8 +18,6 @@ const DisplayNFT = (owner) => {
     const [projectSkills, setProjectSkills] = useState();
     const [projectDeadline, setProjectDeadline] = useState();
     const [metadata, setMetadata] = useState();
-    
-    const ipfsCID = owner['ipfsMetadata'].replace("ipfs://", "")
     const ipfsBase = "https://block-ops.infura-ipfs.io/ipfs/"
 
     async function fetchFromIPFS(owner) {
