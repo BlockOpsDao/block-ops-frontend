@@ -5,7 +5,7 @@ import map from "../../build/deployments/map.json";
 import OpsNFTRinkeby from "../../build/deployments/4/0x869989d09bE0C9CB96eEcf70f1ae92f3aD450ad6.json"
 import OpsNFTKovan from "../../build/deployments/42/0x072Cc7F9aBb95780fE3B4Fa4f0333DDf22308E98.json"
 
-const CallOpsNFT = (functionName) => {
+const CallOpsNFT = (functionName, args) => {
 
     const { chainId } = useEthers() ?? 42
     const abi = OpsNFTKovan['abi']
@@ -16,14 +16,13 @@ const CallOpsNFT = (functionName) => {
     let { value, error } = useCall({
         contract: contract,
         method: functionName,
-        args: []
+        args: args
     }) ?? {}
     if(error) {
-        console.error(error.message)
+        console.error("error in CallOpsNFT: ", error.message)
         return undefined
     }
 
-    return value?.[0]
-    
+    return value ? value : undefined
 }
 export default CallOpsNFT;

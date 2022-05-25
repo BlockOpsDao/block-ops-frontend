@@ -20,38 +20,32 @@ const DisplayNFT = (owner) => {
     const [metadata, setMetadata] = useState();
     const ipfsBase = "https://block-ops.infura-ipfs.io/ipfs/"
 
-    async function fetchFromIPFS(owner) {
-        console.log("owner: ", owner)
+    function fetchFromIPFS(owner) {
         setNftOwner(owner['owner'])
         setNftIpfsMetadata(owner['ipfsMetadata'].replace("ipfs://", ipfsBase))
         setNftValueInEth(owner['valueInETH'])
         setNftTokenId(owner['tokenId'])
 
-        console.log("nftIpfsMetadata: ", nftIpfsMetadata)
-        const response = await fetch(nftIpfsMetadata, {
+        const response = fetch(owner['ipfsMetadata'].replace("ipfs://", ipfsBase), {
             headers: {
-                // 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             }
-        });
-        
-        if (response.status === 200) {
-            setMetadata(await response.json());        
-            setProjectName(metadata["name"])
-            setProjectDescription(DOMPurify.sanitize(metadata["description"], { USE_PROFILES: { html: true } }))
-            setProjectPriorty(metadata["properties"]["priority"])
-            setProjectSkills(metadata["properties"]["skills"])
-            setProjectDeadline(metadata["properties"]["deadline"])
+        })
+        .then(r => r.json())
+        .then(data => {
+            setMetadata(data);        
+            setProjectName(data["name"])
+            setProjectDescription(DOMPurify.sanitize(data["description"], { USE_PROFILES: { html: true } }))
+            setProjectPriorty(data["properties"]["priority"])
+            setProjectSkills(data["properties"]["skills"])
+            setProjectDeadline(data["properties"]["deadline"])
             try {
-                setProjectImageURI(metadata["image"].replace("ipfs://", "https://block-ops.infura-ipfs.io/ipfs/"))
+                setProjectImageURI(data["image"].replace("ipfs://", "https://block-ops.infura-ipfs.io/ipfs/"))
             } catch (error) {
                 setProjectImageURI("https://block-ops.infura-ipfs.io/ipfs/bafkreieybp7cct3rtlgeiy2gz5duzq65pgsxlgspbmajcvsnj7etlsls6u")
                 console.log("No image submitted for this NFT. ", error)
             }
-            return metadata;
-        } else {
-            console.log("response: ", response)
-        }
+        })
     }
 
     useEffect(() => {
@@ -62,16 +56,8 @@ const DisplayNFT = (owner) => {
     }, []);
     
     if (metadata !== undefined) {
-        console.log("projectName: ", projectName)
-        console.log("projectDescription: ", projectDescription)
-        console.log("projectPriorty: ", projectPriorty)
-        console.log("projectSkills: ", projectSkills)
-        console.log("projectDeadline: ", projectDeadline)
-        console.log("projectImageURI: ", projectImageURI)
         return (
-            <Container>
-                <Row className="justify-content-center">
-                <Col lg={8}>
+            
             <Card>
                 <CardBody>
                     <div className='d-flex'>
@@ -109,7 +95,6 @@ const DisplayNFT = (owner) => {
                                     <td>
                                     <ul className="list-inline d-flex align-items-center g-3 text-muted fs-14 mb-0">
                                         {projectSkills.map((ps, i) => {
-                                            console.log("ps, i: ", ps, i)
                                             return (
                                                 <li key={i} className="list-inline-item me-3">
                                                     {ps},
@@ -129,10 +114,9 @@ const DisplayNFT = (owner) => {
                     
                 </CardBody>
             </Card>
-            </Col>
-            </Row>
-            </Container>
         )
+    } else {
+        return <i className="mdi mdi-loading mdi-spin fs-20 align-middle me-2"></i>;
     }
 
 }

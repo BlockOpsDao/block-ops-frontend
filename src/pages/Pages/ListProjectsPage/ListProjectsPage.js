@@ -12,7 +12,6 @@ const ListProjectsPage = () => {
     const ens = useLookupAddress()
 
 document.title ="List Projects | Block-Ops";
-    console.log("Inside ListProjectsPage")
     return (
         <React.Fragment>
         <div className="page-content">

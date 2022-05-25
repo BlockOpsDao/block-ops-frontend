@@ -76,6 +76,7 @@ document.title="Create Project | Block Ops";
     const { state, send, events } = useContractFunction(contract, 'safeMint')
     const { status, receipt } = state
 
+
     const callSafeMint = (tokenMetadataURI) => {
       void send(tokenMetadataURI, { 
           value: utils.parseEther(ethAmount) 

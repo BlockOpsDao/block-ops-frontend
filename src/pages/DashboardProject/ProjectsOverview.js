@@ -5,8 +5,6 @@ import { ProjectsOverviewCharts } from './DashboardProjectCharts';
 import CallOpsNFT from '../../Components/Common/CallOpsNFT';
 import { Icon } from '@iconify/react';
 
-import ethCoin from "../../assets/images/svg/crypto-icons/eth.svg";
-
 const ProjectsOverview = () => {
 
     const getTotalEthPaidOut = CallOpsNFT("getTotalEthPaidOut") ?? undefined
