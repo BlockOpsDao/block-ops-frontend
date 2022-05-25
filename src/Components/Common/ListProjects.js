@@ -25,34 +25,20 @@ const ListProjects = () => {
     // const opsNFTInterface = new utils.Interface(abi);
     // const contract = new Contract(opsNFTContractAddress, opsNFTInterface);
     // const { state, send, events } = useContractFunction(contract, 'tokenDetails')
-    // const { status } = state
-
-
-    // useEffect(async () => {
-    //     try {
-    //       // set loading to true before calling API
-    //       setLoading(true);
-    //       const data = await fetchData();
-    //       setData(data);
-    //       // switch loading to false after fetch is complete
-    //       setLoading(false);
-    //     } catch (error) {
-    //       // add error handling here
-    //       setLoading(false);
-    //       console.log(error);
-    //     }
-    //  }, []);
-
-     
+    // const { status } = state   
 
     const totalSupply = CallOpsNFT("totalSupply") ?? undefined
 
     const [tokenId, setTokenId] = useState(0);
+    const [creatorsNFTs, setCreatorsNFTs] = useState();
+
     const tokenDetails = CallOpsNFT("tokenDetails", [tokenId]) ?? undefined
     const tokenOwner = tokenDetails ? tokenDetails[0] : undefined
     const tokenMetadataURI = tokenDetails ? tokenDetails[1] : undefined
     const tokenBounty = tokenDetails ? utils.formatEther(tokenDetails[2]) : undefined
     const tokenCreator = tokenDetails ? tokenDetails[3] : undefined
+
+    const arrayOfNFTsFromCreator = CallOpsNFT("getArrayOfNFTsFromCreator", [account]) ?? undefined
 
     const getTotalSupply = () => {
         console.log("totalSupply: ", totalSupply[0].toNumber())
@@ -62,16 +48,13 @@ const ListProjects = () => {
         console.log("tokenDetails: ", tokenOwner, tokenMetadataURI, tokenBounty, tokenCreator)
     }
 
-    const prepareDisplayNFTInput = () => {
-        setLoading(true);
-        const nft = <DisplayNFT 
-                        owner={tokenOwner}
-                        ipfsMetadata={tokenMetadataURI} 
-                        valueInETH={tokenBounty} 
-                        tokenId={tokenId} 
-                        />;
-        setLoading(false);
-        return nft
+    const getOwnersNFTs = () => {
+        let tmpNFTArray = []
+        for (let i = 0; i < arrayOfNFTsFromCreator[0].length; i++) {
+            tmpNFTArray.push(arrayOfNFTsFromCreator[0][i].toNumber())
+            
+        }
+        setCreatorsNFTs(tmpNFTArray)
     }
 
     return (
@@ -97,9 +80,14 @@ const ListProjects = () => {
                 </Col>
             </Row>
             <Row>
-                <Col>
+                <Col lg={12}>
                     <button className="btn btn-primary" onClick={getTokenDetails}>
-                        Get Token Details
+                        Log Token Details
+                    </button>
+                </Col>
+                <Col lg={12}>
+                    <button className="btn btn-primary" onClick={getOwnersNFTs}>
+                        Log Creators NFTs
                     </button>
                 </Col>
             </Row>
@@ -118,6 +106,21 @@ const ListProjects = () => {
                     />
                 : <></>
             }
+            </Col>
+        </Row>
+        <Row>
+            {creatorsNFTs ?
+                creatorsNFTs.map((e, i) => {
+                    return (
+                        <Col key={i} lg={4} md={6} sm={12}>
+                            <h3>e - {e}</h3>
+                        </Col>
+                    )
+                })
+
+                : <h4>Nope, try again</h4>
+            }
+            <Col>
             </Col>
         </Row>
         
