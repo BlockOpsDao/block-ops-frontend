@@ -17,12 +17,10 @@ document.title ="List Projects | Block-Ops";
         <div className="page-content">
             <Container>
                 <Row>
-                    <Col lg={12}>
-                        <h3>Test</h3>
+                    <Col sm={12}>
                         {isConnected ? <h1>Hello {shortenAddress(account)}!</h1> : <h1>Not Connected</h1>}
-
                     </Col>
-                    <Col>
+                    <Col sm={12}>
                         {isConnected ? <ListProjects /> : <></>}
                     </Col>
                 </Row>

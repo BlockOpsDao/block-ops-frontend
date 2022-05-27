@@ -1,15 +1,30 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardBody, CardHeader, Col, Row } from 'reactstrap';
 import CountUp from "react-countup";
 import { ProjectsOverviewCharts } from './DashboardProjectCharts';
 import CallOpsNFT from '../../Components/Common/CallOpsNFT';
 import { Icon } from '@iconify/react';
+import { utils } from 'ethers'
+
 
 const ProjectsOverview = () => {
 
-    const getTotalEthPaidOut = CallOpsNFT("getTotalEthPaidOut") ?? undefined
-    const getTotalBountyAvailable = CallOpsNFT("totalBountyAmount") ?? undefined
-    const totalSupply = CallOpsNFT("totalSupply") ?? undefined
+    const [totalEthPaidOut, setTotalEthPaidOut] = useState();
+    const [totalBountyAvailable, setTotalBountyAvailable] = useState();
+    const [totalSupply, setTotalSupply] = useState();
+
+    const getTotalEthPaidOut = CallOpsNFT("getTotalEthPaidOut")
+    const getTotalBountyAvailable = CallOpsNFT("totalBountyAmount")
+    const getTotalSupply = CallOpsNFT("totalSupply")
+
+    useEffect(() => {
+        let isMounted = false;
+        setTotalEthPaidOut(getTotalEthPaidOut ? getTotalEthPaidOut[0] : 1)
+        setTotalBountyAvailable(getTotalBountyAvailable ? utils.formatEther(getTotalBountyAvailable[0]) : 0)
+        setTotalSupply(getTotalSupply ? getTotalSupply[0].toString() : 0)
+        
+        return () => { isMounted = true };
+    }, [getTotalEthPaidOut, getTotalBountyAvailable, getTotalSupply]);
     
     return (
         <React.Fragment>
@@ -54,7 +69,7 @@ const ProjectsOverview = () => {
                                         <h5 className="mb-1"><span className="counter-value">
                                             <CountUp
                                                 start={0}
-                                                end={getTotalEthPaidOut}
+                                                end={totalEthPaidOut}
                                                 separator={","}
                                                 duration={4}
                                             />
@@ -67,7 +82,7 @@ const ProjectsOverview = () => {
                                         <h5 className="mb-1"><span className="counter-value" data-target="228.89">
                                             <CountUp
                                                 start={0}
-                                                end={getTotalBountyAvailable}
+                                                end={totalBountyAvailable}
                                                 decimals={2}
                                                 duration={4}
                                             />

@@ -285,7 +285,7 @@ document.title="Create Project | Block Ops";
                                     ipfsMetadata={nftMintedMetadata} 
                                     valueInETH={nftMintedValue} 
                                     tokenId={nftMintedTokenId} 
-                                />     : <h2>Waiting on eventsTable()...</h2>}
+                                /> : <></>}
                             </div>
                             
                         </Col>                        
