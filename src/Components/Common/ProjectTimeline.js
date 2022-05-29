@@ -67,11 +67,22 @@ const ProjectTimeline = () => {
                                                 <div className="card pt-2 border-0 item-box text-center">
                                                     <div className="timeline-content p-3 rounded">
                                                         <div>
-                                                            <p className="text-muted mb-1">May, 2022</p>
-                                                            <h6 className="mb-0">Major Web3 dApp Upgrade</h6>
+                                                            <p className="text-muted mb-1">March, 2022</p>
+                                                            <h6 className="mb-0">Deploy to Rinkeby</h6>
                                                         </div>
                                                     </div>
-                                                    <div className="time"><Icon icon="carbon:pending-filled" /></div>
+                                                    <div className="time"><Icon icon="bxs:check-circle" /></div>
+                                                </div>
+                                            </SwiperSlide>
+                                            <SwiperSlide>
+                                                <div className="card pt-2 border-0 item-box text-center">
+                                                    <div className="timeline-content p-3 rounded">
+                                                        <div>
+                                                            <p className="text-muted mb-1">May, 2022</p>
+                                                            <h6 className="mb-0">Upgrade Escrow functionality</h6>
+                                                        </div>
+                                                    </div>
+                                                    <div className="time"><Icon icon="bxs:check-circle" /></div>
                                                 </div>
                                             </SwiperSlide>
                                             <SwiperSlide>
@@ -79,7 +90,7 @@ const ProjectTimeline = () => {
                                                     <div className="timeline-content p-3 rounded">
                                                         <div>
                                                             <p className="text-muted mb-1">June, 2022</p>
-                                                            <h6 className="mb-0">zkSync 2.0 Integration</h6>
+                                                            <h6 className="mb-0">Beta-Release on Kovan</h6>
                                                         </div>
                                                     </div>
                                                     <div className="time"><Icon icon="carbon:pending-filled" /></div>
@@ -90,7 +101,7 @@ const ProjectTimeline = () => {
                                                     <div className="timeline-content p-3 rounded">
                                                         <div>
                                                             <p className="text-muted mb-1">July, 2022</p>
-                                                            <h6 className="mb-0">Final Security Audits</h6>
+                                                            <h6 className="mb-0">zkSync 2.0 Deployment</h6>
                                                         </div>
                                                     </div>
                                                     <div className="time"><Icon icon="carbon:pending-filled" /></div>
@@ -101,8 +112,7 @@ const ProjectTimeline = () => {
                                                     <div className="timeline-content p-3 rounded">
                                                         <div>
                                                             <p className="text-muted mb-1">August, 2022</p>
-                                                            <h6 className="mb-0">Testnet Deployment &</h6>
-                                                            <h6 className="mb-0">Mainnet Deployment</h6>
+                                                            <h6 className="mb-0">Block-Ops DAO Token Sale</h6>
                                                         </div>
                                                     </div>
                                                     <div className="time"><Icon icon="carbon:pending-filled" /></div>
@@ -113,8 +123,7 @@ const ProjectTimeline = () => {
                                                     <div className="timeline-content p-3 rounded">
                                                         <div>
                                                             <p className="text-muted mb-1">September, 2022</p>
-                                                            <h6 className="mb-0">Block-Ops DAO</h6>
-                                                            <h6 className="mb-0">ICO</h6>
+                                                            <h6 className="mb-0">Mainnet Deployment</h6>
                                                         </div>
                                                     </div>
                                                     <div className="time"><Icon icon="carbon:pending-filled" /></div>

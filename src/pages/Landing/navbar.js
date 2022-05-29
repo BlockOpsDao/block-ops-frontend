@@ -32,6 +32,8 @@ const Navbar = () => {
     }
     const { account } = useEthers()
     const isConnected = account !== undefined
+    const onHomePage = document.title === " Block Ops"
+    const navLinkHref = onHomePage ? "" : "https://block-ops.xyz/landing"
 
     return (
         <React.Fragment>
@@ -70,22 +72,22 @@ const Navbar = () => {
                             id="navbar-example"
                         >
                             <li className="nav-item">
-                                <NavLink href="#hero">Home</NavLink>
+                                <NavLink href={navLinkHref + "#hero"}>Home</NavLink>
                             </li>
                             <li className="nav-item">
-                                <NavLink href="#services">Services</NavLink>
+                                <NavLink href={navLinkHref + "#services"}>Services</NavLink>
                             </li>
                             <li className="nav-item">
-                                <NavLink href="#timeline">Timeline</NavLink>
+                                <NavLink href={navLinkHref + "#timeline"}>Timeline</NavLink>
                             </li>
                             <li className="nav-item">
-                                <NavLink href="#faqs">FAQs</NavLink>
+                                <NavLink href={navLinkHref + "#faqs"}>FAQs</NavLink>
                             </li>
                             <li className="nav-item">
-                                <NavLink href="#team">Team</NavLink>
+                                <NavLink href={navLinkHref + "#team"}>Team</NavLink>
                             </li>
                             <li className="nav-item">
-                                <NavLink href="#contact">Contact</NavLink>
+                                <NavLink href={navLinkHref + "#contact"}>Contact</NavLink>
                             </li>
                         </Scrollspy>
 
