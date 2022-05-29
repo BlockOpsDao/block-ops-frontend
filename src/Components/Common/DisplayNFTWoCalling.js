@@ -5,59 +5,22 @@ import { TourMethods } from 'react-shepherd';
 import DOMPurify from "dompurify";
 
 
-const DisplayNFT = (owner) => {
-    const [nftOwner, setNftOwner] = useState();
-    const [nftIpfsMetadata, setNftIpfsMetadata] = useState();
-    const [nftValueInEth, setNftValueInEth] = useState();
-    const [nftTokenId, setNftTokenId] = useState();
+const DisplayNFTWoCalling = (args) => {
 
-    const [projectName, setProjectName] = useState();
-    const [projectDescription, setProjectDescription] = useState();
-    const [projectImageURI, setProjectImageURI] = useState("https://block-ops.infura-ipfs.io/ipfs/bafkreieybp7cct3rtlgeiy2gz5duzq65pgsxlgspbmajcvsnj7etlsls6u");
-    const [projectPriorty, setProjectPriorty] = useState();
-    const [projectSkills, setProjectSkills] = useState();
-    const [projectDeadline, setProjectDeadline] = useState();
-    const [metadata, setMetadata] = useState();
-    const ipfsBase = "https://block-ops.infura-ipfs.io/ipfs/"
+    let owner = args['owner']
+    let ipfsMetadata = args['ipfsMetadata']
+    let valueInETH = args['valueInETH']
+    let tokenId = args['tokenId']
+    let projectName = args['projectName']
+    let projectDescription = args['projectDescription']
+    let projectPriority = args['projectPriority']
+    let projectSkills = args['projectSkills']
+    let projectDeadline = args['projectDeadline']
+    let projectImageURI = args['projectImageURI']
 
-    function fetchFromIPFS(owner) {
-        setNftOwner(owner['owner'])
-        setNftIpfsMetadata(owner['ipfsMetadata'].replace("ipfs://", ipfsBase))
-        setNftValueInEth(owner['valueInETH'])
-        setNftTokenId(owner['tokenId'])
-
-        const response = fetch(owner['ipfsMetadata'].replace("ipfs://", ipfsBase), {
-            headers: {
-                'Accept': 'application/json'
-            }
-        })
-        .then(r => r.json())
-        .then(data => {
-            setMetadata(data);        
-            setProjectName(data["name"])
-            setProjectDescription(DOMPurify.sanitize(data["description"], { USE_PROFILES: { html: true } }))
-            setProjectPriorty(data["properties"]["priority"])
-            setProjectSkills(data["properties"]["skills"])
-            setProjectDeadline(data["properties"]["deadline"])
-            try {
-                setProjectImageURI(data["image"].replace("ipfs://", "https://block-ops.infura-ipfs.io/ipfs/"))
-            } catch (error) {
-                setProjectImageURI("https://block-ops.infura-ipfs.io/ipfs/bafkreieybp7cct3rtlgeiy2gz5duzq65pgsxlgspbmajcvsnj7etlsls6u")
-                console.log("No image submitted for this NFT. ", error)
-            }
-        })
-    }
-
-    useEffect(() => {
-        let isMounted = false;
-
-        fetchFromIPFS(owner)
-        return () => { isMounted = true };
-    }, []);
-    
-    if (metadata !== undefined) {
+    if (owner !== undefined) {
         return (
-            <center>
+            
             <Card>
                 <CardBody>
                     <div className='d-flex'>
@@ -76,15 +39,15 @@ const DisplayNFT = (owner) => {
                             <tbody className="border-0">
                                 <tr>
                                     <td>OpsNFT #</td>
-                                    <td>{nftTokenId}</td>
+                                    <td>{tokenId}</td>
                                 </tr>
                                 <tr>
                                     <td>Value (in ETH)</td>
-                                    <td>{nftValueInEth} <Icon icon="ph:currency-eth" width="17" /></td>
+                                    <td>{valueInETH} <Icon icon="ph:currency-eth" width="17" /></td>
                                 </tr>
                                 <tr>
                                     <td>Priority</td>
-                                    <td>{projectPriorty}</td>
+                                    <td>{projectPriority}</td>
                                 </tr>
                                 <tr>
                                     <td>Deadline</td>
@@ -106,7 +69,11 @@ const DisplayNFT = (owner) => {
                                 </tr>
                                 <tr>
                                     <td>Submitter</td>
-                                    <td>{nftOwner}</td>
+                                    <td>{owner}</td>
+                                </tr>
+                                <tr>
+                                    <td>IPFS Hash</td>
+                                    <td>{ipfsMetadata}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -114,11 +81,10 @@ const DisplayNFT = (owner) => {
                     
                 </CardBody>
             </Card>
-            </center>
         )
     } else {
         return <i className="mdi mdi-loading mdi-spin fs-20 align-middle me-2"></i>;
     }
 
 }
-export default DisplayNFT;
+export default DisplayNFTWoCalling;

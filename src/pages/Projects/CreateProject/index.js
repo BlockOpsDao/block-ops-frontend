@@ -8,7 +8,7 @@ import { utils } from 'ethers'
 import { Contract } from '@ethersproject/contracts'
 import { useContractFunction } from "@usedapp/core";
 import map from "../../../build/deployments/map.json";
-import OpsNFTKovan from "../../../build/deployments/42/0x072Cc7F9aBb95780fE3B4Fa4f0333DDf22308E98.json"
+import OpsNFTKovan from "../../../build/deployments/42/0x871DF91D90bccE579A3e7A93f1a6142c2C5Bc14E.json"
 import { Icon } from '@iconify/react';
 import DisplayNFT from '../../../Components/Common/DisplayNFT';
 
@@ -169,7 +169,7 @@ document.title="Create Project | Block Ops";
             <div className="page-content">
                 <Container fluid>
                     <Row>
-                        <Col lg={8}>
+                        <Col lg={12}>
                             <Card>
                                 <CardBody>
                                     <div className="mb-3">

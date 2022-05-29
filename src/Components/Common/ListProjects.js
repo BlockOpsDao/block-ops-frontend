@@ -2,18 +2,17 @@ import { utils } from 'ethers'
 import { Contract } from '@ethersproject/contracts'
 import { useContractFunction, useCall, useCalls } from "@usedapp/core";
 import map from "../../build/deployments/map.json";
-import OpsNFTKovan from "../../build/deployments/42/0x072Cc7F9aBb95780fE3B4Fa4f0333DDf22308E98.json"
+import OpsNFTKovan from "../../build/deployments/42/0x871DF91D90bccE579A3e7A93f1a6142c2C5Bc14E.json"
 import { Icon } from '@iconify/react';
-// import DisplayNFT from './DisplayNFT';
 import { useState, useEffect } from 'react';
 import { AnalyticEventTracker } from './AnalyticEventTracker';
 import CallOpsNFT from "../Common/CallOpsNFT";
-import { Pagination, PaginationItem, PaginationLink, Col, Container, Input, Label, Row } from 'reactstrap';
+import { Pagination, PaginationItem, PaginationLink, Col, Container, Row } from 'reactstrap';
 import { Table } from 'reactstrap';
 
 import { useEthers } from "@usedapp/core";
-import DisplayNFT from './DisplayNFT';
 import DOMPurify from "dompurify";
+import DisplayNFTWoCalling from './DisplayNFTWoCalling';
 
 
 
@@ -28,20 +27,10 @@ const ListProjects = () => {
     const opsNFTContractAddress = map[42]["OpsNFT"][0]
     const opsNFTInterface = new utils.Interface(abi);
     
-    const [tokenId, setTokenId] = useState(0);
-    const tokenDetails = CallOpsNFT("tokenDetails", [tokenId]) ?? undefined
-
     const totalSupply = CallOpsNFT("totalSupply") ?? undefined
-
     const [creatorsNFTs, setCreatorsNFTs] = useState();
     const [bulkTokenDetails, setBulkTokenDetails] = useState();
-
-
     const [selectedTokenId, setSelectedTokenId] = useState(0);
-    const newTokenOwner = bulkTokenDetails !== undefined & selectedTokenId !== undefined ? (bulkTokenDetails.length > Number(selectedTokenId) ? bulkTokenDetails[Number(selectedTokenId)][0] : undefined) : undefined
-    const newTokenMetadataURI = bulkTokenDetails !== undefined & selectedTokenId !== undefined ? (bulkTokenDetails.length > Number(selectedTokenId) ? bulkTokenDetails[Number(selectedTokenId)][1] : undefined) : undefined
-    const newTokenBounty = bulkTokenDetails !== undefined & selectedTokenId !== undefined ? (bulkTokenDetails.length > Number(selectedTokenId) ? utils.formatEther(bulkTokenDetails[Number(selectedTokenId)][2]) : undefined) : undefined
-    const newTokenCreator = bulkTokenDetails !== undefined & selectedTokenId !== undefined ? (bulkTokenDetails.length > Number(selectedTokenId) ? bulkTokenDetails[Number(selectedTokenId)][3] : undefined) : undefined
 
     const arrayOfNFTsFromCreator = CallOpsNFT("getArrayOfNFTsFromCreator", [account]) ?? undefined
     const calls = creatorsNFTs?.map(e => ({
@@ -51,17 +40,40 @@ const ListProjects = () => {
       })) ?? []
     const results = useCalls(calls) ?? []
 
+    const contract = new Contract(opsNFTContractAddress, opsNFTInterface);
+    const { state, send, resetState } = useContractFunction(contract, 'redeemEthFromNFT')
+    const { status, receipt } = state
+
     const [projectTable, setProjectTable] = useState();
     const [currentPage, setCurrentPage] = useState(0);
     const pageSize = 5
     const pagesCount = bulkTokenDetails !== undefined ? bulkTokenDetails.length : undefined
-    const openOrClosed = bulkTokenDetails[selectedTokenId][0] === bulkTokenDetails[selectedTokenId][0] ? "Open" : "Closed"
-    const [tokenMetadata, setTokenMetadata] = useState();
+    const [tokenMetadata, setTokenMetadata] = useState([]);
+    const tmpTokenMetadata = []
 
+    const tokenOwner = tokenMetadata !== undefined & selectedTokenId !== undefined ? (tokenMetadata.length > Number(selectedTokenId) ? tokenMetadata[Number(selectedTokenId)][0] : undefined) : undefined
+    const tokenMetadataURI = tokenMetadata !== undefined & selectedTokenId !== undefined ? (tokenMetadata.length > Number(selectedTokenId) ? tokenMetadata[Number(selectedTokenId)][1] : undefined) : undefined
+    const tokenBounty = tokenMetadata !== undefined & selectedTokenId !== undefined ? (tokenMetadata.length > Number(selectedTokenId) ? utils.formatEther(tokenMetadata[Number(selectedTokenId)][2]) : undefined) : undefined
+    const tokenCreator = tokenMetadata !== undefined & selectedTokenId !== undefined ? (tokenMetadata.length > Number(selectedTokenId) ? tokenMetadata[Number(selectedTokenId)][3] : undefined) : undefined
+
+    const nftTokenId = tokenMetadata !== undefined & selectedTokenId !== undefined ? (tokenMetadata.length > Number(selectedTokenId) ? Number(utils.formatEther(tokenMetadata[Number(selectedTokenId)][4])) : undefined) : undefined
+
+    const projectName = tokenMetadata !== undefined & selectedTokenId !== undefined ? (tokenMetadata.length > Number(selectedTokenId) ? tokenMetadata[Number(selectedTokenId)][6] : undefined) : undefined
+
+    const projectDescription = tokenMetadata !== undefined & selectedTokenId !== undefined ? (tokenMetadata.length > Number(selectedTokenId) ? tokenMetadata[Number(selectedTokenId)][7] : undefined) : undefined
+
+    const projectPriority = tokenMetadata !== undefined & selectedTokenId !== undefined ? (tokenMetadata.length > Number(selectedTokenId) ? tokenMetadata[Number(selectedTokenId)][8] : undefined) : undefined
+
+    const projectSkills = tokenMetadata !== undefined & selectedTokenId !== undefined ? (tokenMetadata.length > Number(selectedTokenId) ? tokenMetadata[Number(selectedTokenId)][9] : undefined) : undefined
+
+    const projectDeadline = tokenMetadata !== undefined & selectedTokenId !== undefined ? (tokenMetadata.length > Number(selectedTokenId) ? tokenMetadata[Number(selectedTokenId)][10] : undefined) : undefined
+
+    const projectImageURI = tokenMetadata !== undefined & selectedTokenId !== undefined ? (tokenMetadata.length > Number(selectedTokenId) ? tokenMetadata[Number(selectedTokenId)][11] : undefined) : undefined
+
+    const loadingIcon = <i className="mdi mdi-loading mdi-spin fs-20 align-middle me-2"></i>
 
     async function fetchFromIPFS(ipfsMetadata) {
-        let url = ipfsMetadata.replace("ipfs://", "https://block-ops.infura-ipfs.io/ipfs/")
-        let response = await fetch(url, {headers: {'Accept': 'application/json'}});
+        let response = await fetch(ipfsMetadata, {headers: {'Accept': 'application/json'}});
         let data = await response.json();
         if (data !== undefined) {
             return [
@@ -74,7 +86,7 @@ const ListProjects = () => {
             ]
         }
     }
-
+   
     useEffect(() => {
         if (arrayOfNFTsFromCreator !== undefined) {
             let tmpNFTArray = []
@@ -84,34 +96,47 @@ const ListProjects = () => {
             }
             setCreatorsNFTs(tmpNFTArray)        
         }
+        const loadTokenMetadata = () => {
+            results.forEach(async function(result, idx) {
+                if(result && result.error) {
+                    console.error(`Error encountered calling 'tokenDetails' on ${calls[idx]?.contract.address}: ${result.error.message}`)
+                } else {
+                    let tmpResult = Object.assign([], result.value)
+                    if (tmpResult !== undefined) {
+                        tmpResult.push(result.value[1].replace("ipfs://", "https://block-ops.infura-ipfs.io/ipfs/"))
+                        let ipfsResults = await fetchFromIPFS(result.value[1].replace("ipfs://", "https://block-ops.infura-ipfs.io/ipfs/"))
+                        ipfsResults.forEach(r => tmpResult.push(r))
+                        tmpTokenMetadata.push(tmpResult)
+                    }
+                }
+            })
+            setTokenMetadata(tmpTokenMetadata)
+            setLoading(false)
+        }
+        setBulkTokenDetails(results.map(r => r?.value))
+        if (tokenMetadata.length === 0) {
+            loadTokenMetadata()
+        }
 
-        results.forEach(async function(result, idx) {
-            if(result && result.error) {
-                console.error(`Error encountered calling 'tokenDetails' on ${calls[idx]?.contract.address}: ${result.error.message}`)
-            }
-        })
-        setBulkTokenDetails(
-            results.map(r => r?.value)
-        )
-
-        let tmpProjectTable = bulkTokenDetails?.slice(
+        let tmpProjectTable = tokenMetadata?.slice(
             currentPage * pageSize,
             (currentPage + 1) * pageSize
           ).map((row, idx) => {
             let key = "project-table-" + idx
             return (
-                <tr key={key} onClick={() => {setSelectedTokenId(idx + currentPage * pageSize)}}>
-                    <th scope="row">{idx + currentPage * pageSize}</th>
-                    <td>{openOrClosed}</td>
+                <tr key={key} onClick={() => {setSelectedTokenId(idx + currentPage * pageSize); gaEventTracker('selectedProjectTable', tokenMetadataURI)}}>
+                    <th scope="row">{row ? Number(utils.formatEther(row[4])) : <p>no token id</p>}</th>
+                    <td>{row ? row[0] === row[3] ? "Open" : "Closed" : "Closed"}</td>
                     <td>{row ? utils.formatEther(row[2]) : <></>}</td>
-                    <td>{row ? row[1] : <></>}</td>
-                    <td>{row ? row[4] : <></>}</td>
+                    <td>{row ? row[6] : <></>}</td>
+                    <td>{row ? row[9].join([', ']) : <></>}</td>
+                    <td>{row ? row[10].replace("T", " ").replace(".000Z", "") : <></>}</td>
                 </tr>
             )
         })
         setProjectTable(tmpProjectTable)
         
-    }, [arrayOfNFTsFromCreator, results,]);
+    }, [arrayOfNFTsFromCreator]);
 
     
 
@@ -167,15 +192,58 @@ const ListProjects = () => {
         console.log("totalSupply: ", totalSupply[0].toNumber())
     }
 
-    const prepareCreatorsNFTsForDisplay = () => {
+    const closeProject = () => {
+        void send(nftTokenId)
+    }
+
+    const closeProjectButton = () => {
+        if (state === undefined) {
+            return (
+                <button className="btn btn-primary" onClick={closeProject}>
+                    Close Project
+                </button>
+            )
+        } else if (state === "Mining" | state === "PendingSignature") {
+            return (
+                <button className="btn btn-info" onClick={closeProject}>
+                    Closing Project... {loadingIcon}
+                </button>
+            )
+        } else if (state === "Success") {
+            return (
+                <button className="btn btn-success" onClick={closeProject}>
+                    Project Closed!
+                </button>
+            )
+        } else {
+            <button className="btn btn-danger" onClick={closeProject}>
+                Failed to Close Project
+            </button>
+
+        }
+        if (state === "Success" | state === "Failed") {
+            setTimeout(3000)
+            resetState()
+        }
+    }
+
+
+    const prepareBetterDisplay = () => {
         return (
             <div key={selectedTokenId}>
-                <DisplayNFT 
-                    owner={newTokenOwner}
-                    ipfsMetadata={newTokenMetadataURI} 
-                    valueInETH={newTokenBounty} 
+                <DisplayNFTWoCalling 
+                    owner={tokenOwner} 
+                    ipfsMetadata={tokenMetadataURI} 
+                    valueInETH={tokenBounty} 
                     tokenId={selectedTokenId} 
-                    />  
+                    projectName={projectName}
+                    projectDescription={projectDescription}
+                    projectPriority={projectPriority}
+                    projectSkills={projectSkills}
+                    projectDeadline={projectDeadline}
+                    projectImageURI={projectImageURI}    
+                />
+                
             </div>
         )
     }
@@ -201,17 +269,19 @@ const ListProjects = () => {
                             <th>Project #</th>    
                             <th>Open/Closed</th>
                             <th>Bounty</th>
-                            <th>Metadata</th>
+                            <th>Title</th>
+                            <th>Skills</th>
+                            <th>Deadline</th>
                         </tr></thead>
 
                         <tbody>
-                        {bulkTokenDetails !== undefined ? projectTable : <></>}
+                        {tokenMetadata !== undefined ? projectTable : <></>}
                         </tbody>
                     </Table>
-                    {bulkTokenDetails === undefined ? <i className="mdi mdi-loading mdi-spin fs-20 align-middle me-2"></i> : <></>}
+                    {tokenMetadata === undefined ? loadingIcon : <></>}
                 </Col>
                 
-                {bulkTokenDetails !== undefined ? 
+                {tokenMetadata !== undefined ? 
                 <>
                     <Col md={3}></Col>
                     <Col sm={12} md={6}>{paginationTable()}</Col>
@@ -231,22 +301,20 @@ const ListProjects = () => {
                 <Col md={1} ></Col>
                 <Col sm={12} md={8}>
                     {
-                        bulkTokenDetails !== undefined &
-                        newTokenOwner !== undefined &
-                        newTokenMetadataURI !== undefined &
-                        newTokenBounty !== undefined &
-                        newTokenCreator !== undefined
-                        ? <Container>{prepareCreatorsNFTsForDisplay()}</Container> : <i className="mdi mdi-loading mdi-spin fs-20 align-middle me-2"></i>
+                        tokenMetadata !== undefined &
+                        tokenOwner !== undefined &
+                        tokenMetadataURI !== undefined &
+                        tokenBounty !== undefined &
+                        tokenCreator !== undefined
+                        ? <Container>{prepareBetterDisplay()}</Container> : loadingIcon
                     }
                 </Col>
                 <Col sm={12} md={2}>
-                    <button className="btn btn-primary" onClick={getTotalSupply}>
-                            Close Project
-                    </button>
+                    {closeProjectButton}
                 </Col>
             </Row>
-            <Row>
-            </Row>
+
+            <Row></Row>
         
     </Container>
         

@@ -10,7 +10,7 @@ const EnterApp = () => {
 
     return (<>
         {isConnected ? (
-            <Link to="/coming-soon">
+            <Link to="/dashboard">
                 <button className="btn btn-danger" onClick={() => {gaEventTracker('button_enterApp')}}>
                     Enter App
                 </button>
