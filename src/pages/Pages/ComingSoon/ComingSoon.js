@@ -75,7 +75,7 @@ document.title ="Coming Soon | Block-Ops";
                                     <div>
                                         <Row className="justify-content-center mt-5">
                                             <Col lg={8}>
-                                                <Countdown date="2022/06/01" renderer={renderer} />
+                                                <Countdown date="2022/06/09" renderer={renderer} />
                                             </Col>
                                         </Row>
 
