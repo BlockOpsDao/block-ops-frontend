@@ -1,9 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { Card, CardBody, Col, Container, Row, CardTitle } from 'reactstrap';
 import { Icon } from '@iconify/react';
-import { TourMethods } from 'react-shepherd';
 import DOMPurify from "dompurify";
-
 
 const DisplayNFT = (owner) => {
     const [nftOwner, setNftOwner] = useState();
@@ -80,7 +78,7 @@ const DisplayNFT = (owner) => {
                                 </tr>
                                 <tr>
                                     <td>Value (in ETH)</td>
-                                    <td>{nftValueInEth} <Icon icon="ph:currency-eth" width="17" /></td>
+                                    <td>{String(nftValueInEth).slice(0, 6)} <Icon icon="ph:currency-eth" width="17" /></td>
                                 </tr>
                                 <tr>
                                     <td>Priority</td>

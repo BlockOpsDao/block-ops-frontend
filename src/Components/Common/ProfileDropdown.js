@@ -47,7 +47,7 @@ const ProfileDropdown = () => {
                         className="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1"></i> <span
                             className="align-middle">Help</span></DropdownItem>
                     <div className="dropdown-divider"></div> */}
-                    <DropdownItem href="/pages-profile"><i
+                    <DropdownItem href="/list-projects"><i
                         className="mdi mdi-wallet text-muted fs-16 align-middle me-1"></i> <span
                             className="align-middle">Balance : <b>{etherBalanceDefined ? formatEther(etherBalance).slice(0, 7) : "Please Connect First"} ETH</b></span></DropdownItem>
                     {/* <DropdownItem href="/pages-profile-settings"><span

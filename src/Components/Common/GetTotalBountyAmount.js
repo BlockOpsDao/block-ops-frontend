@@ -5,17 +5,17 @@ import CallOpsNFT from "./CallOpsNFT";
 import { Contract } from '@ethersproject/contracts'
 import { useEthers, shortenAddress, useLookupAddress, useEtherBalance } from '@usedapp/core';
 import map from "../../build/deployments/map.json";
-import OpsNFTRinkeby from "../../build/deployments/4/0x869989d09bE0C9CB96eEcf70f1ae92f3aD450ad6.json"
+import OpsNFTKovan from "../../build/deployments/42/0xa35cb87Fdd3c0DF1B103247381097E540304f985.json"
 
 const GetTotalAmountOfEth = () => {
-    const { account } = useEthers()
+    const { account, chainId } = useEthers()
     const ens = useLookupAddress()
     const etherBalance = useEtherBalance(account)
     const etherBalanceDefined = etherBalance !== undefined
 
 
-    const abi = OpsNFTRinkeby['abi']
-    const opsNFTContractAddress = map[4]["OpsNFT"][0]
+    const abi = OpsNFTKovan['abi']
+    const opsNFTContractAddress = map[chainId]["OpsNFT"][0]
     const opsNFTInterface = new utils.Interface(abi);
     const contract = new Contract(opsNFTContractAddress, opsNFTInterface);
 

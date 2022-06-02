@@ -148,6 +148,7 @@ import SimplePage from '../pages/Pages/Profile/SimplePage/SimplePage';
 // import Maintenance from '../pages/Pages/Maintenance/Maintenance';
 import ComingSoon from '../pages/Pages/ComingSoon/ComingSoon';
 import ListProjectsPage from "../pages/Pages/ListProjectsPage/ListProjectsPage";
+import SubmitSolution from "../pages/Projects/SubmitSolution";
 // import SiteMap from '../pages/Pages/SiteMap/SiteMap';
 // import SearchResults from '../pages/Pages/SearchResults/SearchResults';
 
@@ -203,6 +204,7 @@ const authProtectedRoutes = [
   { path: "/dashboard", component: DashboardProject },
   { path: "/create-project", component: CreateProject },
   { path: "/list-projects", component: ListProjectsPage },
+  { path: "/submit-solution", component: SubmitSolution},
   // { path: "/apps-calendar", component: Calendar },
   // { path: "/apps-ecommerce-products", component: EcommerceProducts },
   // { path: "/apps-ecommerce-product-details", component: EcommerceProductDetail },

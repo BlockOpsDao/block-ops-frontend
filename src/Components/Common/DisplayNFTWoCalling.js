@@ -11,6 +11,7 @@ const DisplayNFTWoCalling = (args) => {
     let ipfsMetadata = args['ipfsMetadata']
     let valueInETH = args['valueInETH']
     let tokenId = args['tokenId']
+    let projectState = args['projectState']
     let projectName = args['projectName']
     let projectDescription = args['projectDescription']
     let projectPriority = args['projectPriority']
@@ -23,6 +24,7 @@ const DisplayNFTWoCalling = (args) => {
             
             <Card>
                 <CardBody>
+                  <center>
                     <div className='d-flex'>
                         <CardTitle><h1 className="card-title-desc mb-2">{projectName}</h1></CardTitle>
                     </div>
@@ -42,6 +44,10 @@ const DisplayNFTWoCalling = (args) => {
                                     <td>{tokenId}</td>
                                 </tr>
                                 <tr>
+                                    <td>Project State</td>
+                                    <td>{projectState}</td>
+                                </tr>
+                                <tr>
                                     <td>Value (in ETH)</td>
                                     <td>{valueInETH} <Icon icon="ph:currency-eth" width="17" /></td>
                                 </tr>
@@ -57,7 +63,7 @@ const DisplayNFTWoCalling = (args) => {
                                     <td>Required Skills</td>
                                     <td>
                                     <ul className="list-inline d-flex align-items-center g-3 text-muted fs-14 mb-0">
-                                        {projectSkills.map((ps, i) => {
+                                        {projectSkills?.map((ps, i) => {
                                             return (
                                                 <li key={i} className="list-inline-item me-3">
                                                     {ps},
@@ -78,7 +84,7 @@ const DisplayNFTWoCalling = (args) => {
                             </tbody>
                         </table>
                     </div>
-                    
+                  </center>
                 </CardBody>
             </Card>
         )

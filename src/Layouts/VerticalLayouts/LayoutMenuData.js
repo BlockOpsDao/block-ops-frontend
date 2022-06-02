@@ -6,6 +6,7 @@ const Navdata = () => {
     //state data
     const [isDashboard, setIsDashboard] = useState(false);
     const [isListProjectsPage, setIsListProjectsPage] = useState(false);
+    const [isSubmitSolutionPage, setIsSubmitSolutionPage] = useState(false);
     const [isApps, setIsApps] = useState(false);
     const [isAuth, setIsAuth] = useState(false);
     const [isCreateProject, setIsCreateProject] = useState(false);
@@ -70,7 +71,10 @@ const Navdata = () => {
             setIsDashboard(false);
         }
         if (iscurrentState !== 'ListProjectsPage') {
-            setIsListProjectsPage(false)
+            setIsListProjectsPage(false);
+        }
+        if (iscurrentState !== 'SubmitSolutionsPage') {
+            setIsSubmitSolutionPage(false);
         }
         if (iscurrentState !== 'Apps') {
             setIsApps(false);
@@ -120,6 +124,7 @@ const Navdata = () => {
         iscurrentState,
         isDashboard,
         isListProjectsPage,
+        isSubmitSolutionPage,
         isApps,
         isCreateProject,
         isAuth,
@@ -166,8 +171,21 @@ const Navdata = () => {
             stateVariables: isCreateProject,
         },
         {
+            id: "submitsolutionpage",
+            label: "Submit Solution",
+            icon: "ri-check-fill",
+            link: "/submit-solution",
+            click: function (e) {
+                e.preventDefault();
+                setIsAuth(!isSubmitSolutionPage);
+                setIscurrentState('SubmitSolutionPage');
+                updateIconSidebar(e);
+            },
+            stateVariables: isSubmitSolutionPage,
+        },
+        {
             id: "listprojectspage",
-            label: "List Projects",
+            label: "Your Projects",
             icon: "ri-table-line",
             link: "/list-projects",
             click: function (e) {

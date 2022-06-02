@@ -6,14 +6,16 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { utils } from 'ethers'
 import { Contract } from '@ethersproject/contracts'
-import { useContractFunction } from "@usedapp/core";
+import { useContractFunction, useEthers } from "@usedapp/core";
 import map from "../../../build/deployments/map.json";
-import OpsNFTKovan from "../../../build/deployments/42/0x871DF91D90bccE579A3e7A93f1a6142c2C5Bc14E.json"
+import OpsNFTKovan from "../../../build/deployments/42/0xa35cb87Fdd3c0DF1B103247381097E540304f985.json"
 import { Icon } from '@iconify/react';
 import DisplayNFT from '../../../Components/Common/DisplayNFT';
+import TweetProject from '../../../Components/Common/TweetProject';
 
 const CreateProject = () => {
     const [selectedMulti, setselectedMulti] = useState(null);
+    const { chainId } = useEthers();
 
     function handleMulti(selectedMulti) {
         setselectedMulti(selectedMulti);
@@ -70,16 +72,19 @@ document.title="Create Project | Block Ops";
     const projectImageDefined = projectImage !== null
 
     const abi = OpsNFTKovan['abi']
-    const opsNFTContractAddress = map[42]["OpsNFT"][0]
+    const opsNFTContractAddress = map[chainId]["OpsNFT"][0]
     const opsNFTInterface = new utils.Interface(abi);
     const contract = new Contract(opsNFTContractAddress, opsNFTInterface);
-    const { state, send, events } = useContractFunction(contract, 'safeMint')
+    const { state, send, events, resetState } = useContractFunction(contract, 'safeMint')
     const { status, receipt } = state
+    const loadingIcon = <i className="mdi mdi-loading mdi-spin fs-20 align-middle me-2"></i>
+
 
 
     const callSafeMint = (tokenMetadataURI) => {
-      void send(tokenMetadataURI, { 
-          value: utils.parseEther(ethAmount) 
+        let ethAmountWithFees = Number(ethAmount) * (100/99)
+        void send(tokenMetadataURI, { 
+            value: utils.parseEther(String(ethAmountWithFees)) 
         })
     }
 
@@ -162,6 +167,50 @@ document.title="Create Project | Block Ops";
                 setEventTableFinished(true);
             }
         } ) 
+    }
+
+    const submitButton = () => {
+        if (state.status === undefined | state.status === "None") {
+            return (
+                <button className="btn btn-primary" onClick={handleSubmit}>
+                    Create Project
+                </button>
+            )
+        } else if (state.status === "Mining" | state.status === "PendingSignature") {
+            return (
+                <button className="btn btn-info" onClick={handleSubmit}>
+                    Creating Project... {loadingIcon}
+                </button>
+            )
+        } else if (state.status === "Success") {
+            return (
+                <button className="btn btn-success" onClick={handleSubmit}>
+                    Project Created!
+                </button>
+            )
+        } else {
+            <button className="btn btn-danger" onClick={resetState()}>
+                Failed to Close Project
+            </button>
+
+        }
+        if (state.status === "Success" | state.status === "Failed") {
+            setTimeout(3000)
+            resetState()
+        }
+    }
+
+    const tweetOutProject = () => {
+        if (
+            projectSkills !== undefined & 
+            nftMintedTokenId !== undefined &
+            projectSkills !== null & 
+            nftMintedTokenId !== null 
+        ) {
+            return (
+                <TweetProject projectId={nftMintedTokenId} projectSkills={projectSkills} />
+            )
+        }
     }
 
     return (
@@ -258,7 +307,7 @@ document.title="Create Project | Block Ops";
                                                 <tbody>
                                                     
 
-                                            {projectSkills.map((f) => { return (
+                                            {projectSkills?.map((f) => { return (
                                                 <tr key={f + "-skill" + "-"+Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5) }>
                                                     <th className="fw-semibold">{f}</th>
                                                 </tr>
@@ -271,11 +320,23 @@ document.title="Create Project | Block Ops";
                                     </Row>
                                 </CardBody>
                             </Card>
-                            <div className="text-end mb-4">
-                                <button type="submit" className="btn btn-success w-sm" onClick={handleSubmit}>
-                                    {changeSubmitButton()}
-                                </button>
-                            </div>
+
+                            <Row>
+                                <Col md={3} sm={12}></Col>
+                                <Col md={3} sm={12}>
+                                    <div className='text-end mb-4'>
+                                        {tweetOutProject()}
+                                    </div>
+                                </Col>
+
+                                <Col md={3} sm={12}></Col>
+                                <Col md={3} sm={12}>
+                                    <div className="text-end mb-4">
+                                        {submitButton()}
+                                    </div>
+                                </Col>
+                            
+                            </Row>
 
                             <div className="text-end mb-4">
                                 {receipt !== undefined ? eventsTable() : <></>}
