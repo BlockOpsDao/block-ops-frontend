@@ -1,37 +1,26 @@
 import React, {useEffect, useState} from 'react';
 import { Card, CardBody, Col, Container, Input, Label, Row } from 'reactstrap';
 //Import Flatepicker
-import Flatpickr from "react-flatpickr";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { utils } from 'ethers'
 import { Contract } from '@ethersproject/contracts'
 import { useContractFunction, useEthers, useCalls } from "@usedapp/core";
 import map from "../../../build/deployments/map.json";
-import OpsNFTKovan from "../../../build/deployments/42/0xa35cb87Fdd3c0DF1B103247381097E540304f985.json"
-import { Icon } from '@iconify/react';
-import DisplayNFT from "../../../Components/Common/DisplayNFT";
+import OpsNFTKovan from "../../../build/deployments/42/0xD35f33b91cBAf07f1409bc88E5c04256eDdEE955.json"
 import CallOpsNFT from '../../../Components/Common/CallOpsNFT';
 import DOMPurify from "dompurify";
 import DisplayNFTWoCalling from '../../../Components/Common/DisplayNFTWoCalling';
+import TweetSubmission from '../../../Components/Common/TweetSubmission';
 
 const SubmitSolution = () => {
 
 document.title="Submit Solution | Block Ops";
    
-    const { chainId } = useEthers();
+    const { account, chainId } = useEthers();
     const [additionalInstructions, setAdditionalInstructions] = useState("");
     const [zipFile, setZipFile] = useState(null);
     const [ipfsResponse, setIpfsResponse] = useState(null);
-    const [submitButtonState, setSubmitButtonState] = useState("ready");
-
-    const [nftMintedOwner, setNftMintedOwner] = useState();
-    const [nftMintedMetadata, setNftMintedMetadata] = useState();
-    const [nftMintedValue, setNftMintedValue] = useState();
-    const [nftMintedTokenId, setNftMintedTokenId] = useState(null);
-    const [eventTableFinished, setEventTableFinished] = useState(false);
-
-    const ipfsDefined = ipfsResponse !== null
     const zipFileDefined = zipFile !== null
 
     const abi = OpsNFTKovan['abi']
@@ -130,16 +119,11 @@ document.title="Submit Solution | Block Ops";
     }, [totalSupply]);    
 
     const callMakeSubmission = (tokenMetadataURI) => {
-        console.log("inside callMakeSubmission: ", {tokenMetadataURI})
-        console.log(Number(selectedTokenId), String(tokenMetadataURI))
         void send(Number(selectedTokenId), String(tokenMetadataURI))
     }
 
     const uploadToIPFS = (ipfsData) => {
-        const header = {
-            "Authorization": "Bearer " + process.env.REACT_APP_NFT_STORAGE_KEY
-        }
-        fetch('https://api.nft.storage/upload', {
+        fetch('https://api.nft.storage/store', {
             method: 'POST',
             body: ipfsData,
             headers: {
@@ -151,8 +135,8 @@ document.title="Submit Solution | Block Ops";
         })
         .then(data => {
             if (data.ok) {
-                setIpfsResponse(data);
-                callMakeSubmission(data.value.cid);
+                setIpfsResponse(data.value.url);
+                callMakeSubmission(data.value.url);
             }
         })
     }
@@ -161,12 +145,23 @@ document.title="Submit Solution | Block Ops";
     const handleSubmit = (event) => {
         event.preventDefault();
         const jsonData = {
-            "token_id": selectedTokenId,
-            "instructions": additionalInstructions,
+            "name": projectName,
+            "description": projectDescription,
+            "image": undefined,
+            "properties": {
+                "skills": projectSkills,
+                "priority": projectPriority,
+                "deadline": projectDeadline,
+                "instructions": additionalInstructions,
+                "submitter": account,
+                "nftCreator": tokenCreator,
+                "videoClip": undefined
+            }
         }
         
         let ipfsData = new FormData();
         ipfsData.set("meta", JSON.stringify(jsonData))
+        
         if (zipFileDefined) {
             ipfsData.set("file", zipFile)
         } 
@@ -237,6 +232,23 @@ document.title="Submit Solution | Block Ops";
         }
     }
 
+    const tweetOutSubmission = () => {
+
+        if ( 
+            ipfsResponse !== undefined & ipfsResponse !== null
+        ) {
+            let ipfsCid = ipfsResponse.replace("ipfs://", "");
+            let tokenURI = "https://block-ops.infura-ipfs.io/ipfs/" + ipfsCid
+                return (
+                    <TweetSubmission 
+                        projectId={nftTokenId} 
+                        projectName={projectName} 
+                        tokenMetadataURI={tokenURI} 
+                    />
+                )
+        }
+    }
+
     return (
         <React.Fragment>
             <div className="page-content">
@@ -255,7 +267,11 @@ document.title="Submit Solution | Block Ops";
                                                 let nftId = Number(utils.formatEther(row[4]))
                                                 let name = row[8]
                                                 let bounty = utils.formatEther(row[2]).slice(0, 7)
-                                               return (<option key={idx} value={nftId}>#{nftId} - {name} - {bounty} ETH</option>)
+                                                if (row[5] !== 2) {
+                                                    return (
+                                                        <option key={idx} value={nftId}>#{nftId} - {name} - {bounty} ETH</option>
+                                                    )
+                                                }
                                             })}
                                         </select>
                                         </>}
@@ -293,14 +309,30 @@ document.title="Submit Solution | Block Ops";
                                     
                                 </CardBody>
                             </Card>
-                            <div className="text-end mb-4">
-                                    {submitButton()}
-                            </div>
+                            <Row>
+                                <Col md={3} sm={12}></Col>
+                                <Col md={3} sm={12}>
+                                    <div className='text-end mb-4'>
+                                        {tweetOutSubmission()}
+                                    </div>
+                                </Col>
 
-                            <div className="text-end mb-4">
-                                {tokenMetadata === undefined ? loadingIcon : <></>}
-                                {selectedTokenId !== undefined ? prepareBetterDisplay() : <></> }
-                            </div>
+                                <Col md={3} sm={12}></Col>
+                                <Col md={3} sm={12}>
+                                    <div className="text-end mb-4">
+                                        {submitButton()}
+                                    </div>
+                                </Col>
+                            
+                            </Row>
+
+                            <Row>
+                                <Col sm={12}>
+                                    <div className="text-end mb-4">
+                                        {selectedTokenId !== undefined ? prepareBetterDisplay() : <></> }
+                                    </div>
+                                </Col>
+                            </Row>
                             
                         </Col>                        
                     </Row>

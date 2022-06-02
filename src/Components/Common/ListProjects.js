@@ -2,12 +2,11 @@ import { utils } from 'ethers'
 import { Contract } from '@ethersproject/contracts'
 import { useContractFunction, useEthers, useCalls, shortenAddress } from "@usedapp/core";
 import map from "../../build/deployments/map.json";
-import OpsNFTKovan from "../../build/deployments/42/0xa35cb87Fdd3c0DF1B103247381097E540304f985.json"
-import { Icon } from '@iconify/react';
+import OpsNFTKovan from "../../build/deployments/42/0xD35f33b91cBAf07f1409bc88E5c04256eDdEE955.json"
 import { useState, useEffect } from 'react';
 import { AnalyticEventTracker } from './AnalyticEventTracker';
 import CallOpsNFT from "../Common/CallOpsNFT";
-import { Pagination, PaginationItem, PaginationLink, Col, Container, Row } from 'reactstrap';
+import { Pagination, PaginationItem, PaginationLink, Col, Container, Row, Label } from 'reactstrap';
 import { Table } from 'reactstrap';
 import DOMPurify from "dompurify";
 import DisplayNFTWoCalling from './DisplayNFTWoCalling';
@@ -35,7 +34,8 @@ const ListProjects = () => {
     const results = useCalls(calls) ?? []
 
     const contract = new Contract(opsNFTContractAddress, opsNFTInterface);
-    const { state, send, resetState } = useContractFunction(contract, 'redeemEthFromNFT')
+    const { state: RedeemState, send: RedeemSend, resetState: RedeemResetState } = useContractFunction(contract, 'redeemEthFromNFT')
+    const { state: DeclareWinningState, send: DeclareWinningSend, resetState: DeclareWinningResetState } = useContractFunction(contract, 'declareWinningSubmission')
 
     const [projectTable, setProjectTable] = useState();
     const [submissionsTable, setSubmissionsTable] = useState();
@@ -144,7 +144,6 @@ const ListProjects = () => {
             let ipfsUrl = "https://block-ops.infura-ipfs.io/ipfs/" + row[1]
             
             return (<>
-                <thead></thead>
                 <tr key={key} onClick={() => {setSelectedSubmissionId(idx + currentPage * pageSize); gaEventTracker('selectedSubmissionsTable', tokenMetadataURI)}}>
                     <th scope="row">{row ? idx : <p>no token id</p>}</th>
                     <td>{row ? shortenAddress(row[0]) : row[0]}</td>
@@ -217,37 +216,79 @@ const ListProjects = () => {
     }
 
     const closeProject = () => {
-        void send(nftTokenId)
+        void RedeemSend(nftTokenId)
+    }
+
+    const declareWinningSubmission = () => {
+        void DeclareWinningSend(
+            selectedTokenId, 
+            selectedSubmissionId,
+        )
     }
 
     const closeProjectButton = () => {
-        if (state.status === undefined | state.status === "None") {
+        if (RedeemState.status === undefined | RedeemState.status === "None") {
             return (
                 <button className="btn btn-primary" onClick={closeProject}>
-                    Close Project
+                    Cancel Project
                 </button>
             )
-        } else if (state.status === "Mining" | state.status === "PendingSignature") {
+        } else if (RedeemState.status === "Mining" | RedeemState.status === "PendingSignature") {
             return (
                 <button className="btn btn-info" onClick={closeProject}>
-                    Closing Project... {loadingIcon}
+                    Cancelling Project... {loadingIcon}
                 </button>
             )
-        } else if (state.status === "Success") {
+        } else if (RedeemState.status === "Success") {
             return (
                 <button className="btn btn-success" onClick={closeProject}>
-                    Project Closed!
+                    Project Cancelled!
                 </button>
             )
         } else {
-            <button className="btn btn-danger" onClick={closeProject}>
-                Failed to Close Project
-            </button>
+            return (
+                <button className="btn btn-danger" onClick={RedeemResetState}>
+                    Failed to Cancel Project
+                </button>
+            )
+        }
+
+        if (RedeemState.status === "Success" | RedeemState.status === "Failed") {
+            setTimeout(3000)
+            RedeemResetState()
+        }
+    }
+
+    const declareWinnerButton = () => {
+        if (DeclareWinningState.status === undefined | DeclareWinningState.status === "None") {
+            return (
+                <button className="btn btn-danger" onClick={declareWinningSubmission}>
+                    Declare Winner
+                </button>
+            )
+        } else if (DeclareWinningState.status === "Mining" | DeclareWinningState.status === "PendingSignature") {
+            return (
+                <button className="btn btn-info" onClick={declareWinningSubmission}>
+                    Declaring Winner... {loadingIcon}
+                </button>
+            )
+        } else if (DeclareWinningState.status === "Success") {
+            return (
+                <button className="btn btn-success" onClick={declareWinningSubmission}>
+                    Winner Declared!
+                </button>
+            )
+        } else {
+            return (
+                <button className="btn btn-danger" onClick={DeclareWinningResetState}>
+                    Failed to Declare Winner
+                </button>
+            )
 
         }
-        if (state.status === "Success" | state.status === "Failed") {
+        if (DeclareWinningState.status === "Success" | DeclareWinningState.status === "Failed") {
             setTimeout(3000)
-            resetState()
+            DeclareWinningResetState()
         }
     }
 
@@ -273,6 +314,23 @@ const ListProjects = () => {
         )
     }
 
+    const submissionDropdown = () => {
+        if (projectSubmissions !== undefined) {
+            return (<>
+                <Label htmlFor="submission-input" className="form-label">Submission</Label>
+                <select className="form-select" data-choices data-choices-search-false
+                    id="submission-input" onChange={(e) => setSelectedSubmissionId(e.target.value)}>
+                    <option value="None"></option>
+                    {projectSubmissions.map((row, idx) => {
+                        let ipfsUrl = "https://block-ops.infura-ipfs.io/ipfs/" + row[1]
+                        return (<option key={idx} value={idx}>#{idx} - {ipfsUrl}</option>)
+                    })}
+                </select>
+                
+            </>)
+        }
+    }
+
     return (
         <Container>
 
@@ -285,21 +343,22 @@ const ListProjects = () => {
                 <Col sm={12}><h3>Your Projects</h3></Col>
                 <Col sm={12}><br /></Col>
                 <Col sm={12}>
-                    <Table striped size="md" hover={true} responsive={true}>
-                        <thead><tr>
-                            <th>Project #</th>    
-                            <th>Open/Closed</th>
-                            <th>Bounty</th>
-                            <th>Title</th>
-                            <th>Skills</th>
-                            <th>Deadline</th>
-                        </tr></thead>
+                    
+                        {tokenMetadata !== undefined ? <>
+                            <Table striped size="md" hover={true} responsive={true}>
+                                <thead><tr>
+                                    <th>Project #</th>    
+                                    <th>Open/Closed</th>
+                                    <th>Bounty</th>
+                                    <th>Title</th>
+                                    <th>Skills</th>
+                                    <th>Deadline</th>
+                                </tr></thead>
 
-                        <tbody>
-                        {tokenMetadata !== undefined ? projectTable : <></>}
-                        </tbody>
-                    </Table>
-                    {tokenMetadata === undefined ? loadingIcon : <></>}
+                                <tbody>{projectTable}</tbody>
+                        
+                            </Table>
+                        </> : <></>}
                 </Col>
                 
                 {tokenMetadata !== undefined ? 
@@ -328,7 +387,6 @@ const ListProjects = () => {
                 </Col>
 
                 <Col md={4}>
-                    | {closeProjectButton()}
                     <Table striped size="md" hover={true} responsive={true}>
                         <thead><tr>
                             <th>Submission #</th>    
@@ -340,10 +398,16 @@ const ListProjects = () => {
                         {submissionsTable !== undefined ? submissionsTable : <></>}
                         </tbody>
                     </Table>
+                    <Row>
+                        <Col sm={12}>{submissionDropdown()}</Col>
+                        <Col sm={12}><br /></Col>
+                    </Row>
+                    <Row>
+                        <Col md={6} sm={12}>{declareWinnerButton()}</Col>
+                        <Col md={6} sm={12}>{closeProjectButton()}</Col>
+                    </Row>
+                    
                         
-                    </Col>
-                <Col sm={12} md={2}>
-                    {closeProjectButton()}
                 </Col>
             </Row>
 

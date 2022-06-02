@@ -5,7 +5,7 @@ import CallOpsNFT from "./CallOpsNFT";
 import { Contract } from '@ethersproject/contracts'
 import { useEthers, shortenAddress, useLookupAddress, useEtherBalance } from '@usedapp/core';
 import map from "../../build/deployments/map.json";
-import OpsNFTKovan from "../../build/deployments/42/0xa35cb87Fdd3c0DF1B103247381097E540304f985.json"
+import OpsNFTKovan from "../../build/deployments/42/0xD35f33b91cBAf07f1409bc88E5c04256eDdEE955.json"
 
 const GetTotalAmountOfEth = () => {
     const { account, chainId } = useEthers()

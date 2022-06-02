@@ -8,7 +8,7 @@ import { utils } from 'ethers'
 import { Contract } from '@ethersproject/contracts'
 import { useContractFunction, useEthers } from "@usedapp/core";
 import map from "../../../build/deployments/map.json";
-import OpsNFTKovan from "../../../build/deployments/42/0xa35cb87Fdd3c0DF1B103247381097E540304f985.json"
+import OpsNFTKovan from "../../../build/deployments/42/0xD35f33b91cBAf07f1409bc88E5c04256eDdEE955.json"
 import { Icon } from '@iconify/react';
 import DisplayNFT from '../../../Components/Common/DisplayNFT';
 import TweetProject from '../../../Components/Common/TweetProject';
@@ -59,7 +59,6 @@ document.title="Create Project | Block Ops";
     const [projectSkills, setProjectSkills] = useState([]);
     const [projectImage, setProjectImage] = useState(null);
     const [ipfsResponse, setIpfsResponse] = useState(null);
-    const [submitButtonState, setSubmitButtonState] = useState("ready");
     const [ethAmount, setEthAmount] = useState();
 
     const [nftMintedOwner, setNftMintedOwner] = useState();
@@ -111,32 +110,15 @@ document.title="Create Project | Block Ops";
             if (data.ok) {
                 setIpfsResponse(data);
                 callSafeMint(data.value.url);
-                setSubmitButtonState("success");
-                changeSubmitButton();
-            }
-            else {
-                setSubmitButtonState("failed");
-                changeSubmitButton();
             }
         })
     }
 
-    const changeSubmitButton = () => {
-        if (submitButtonState === "ready") {
-            return <span><p>Create</p></span>
-        } else if (submitButtonState === "pending" | status === "Mining" | status === "PendingSignature") {
-            return <span><p>Uploading...</p> <i className="mdi mdi-loading mdi-spin fs-20 align-middle me-2"></i></span>
-        } else if (submitButtonState === "success" & status === "Success") {
-            return <span><p>Success!</p></span>
-        } else {
-            return <span><p>Failed</p></span>
-        }
-    }
+
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        setSubmitButtonState("pending")
-        changeSubmitButton();
+        
         const jsonData = {
             "name": projectTitle,
             "description": projectDescription,

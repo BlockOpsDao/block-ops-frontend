@@ -49,7 +49,7 @@ const DisplayNFTWoCalling = (args) => {
                                 </tr>
                                 <tr>
                                     <td>Value (in ETH)</td>
-                                    <td>{valueInETH} <Icon icon="ph:currency-eth" width="17" /></td>
+                                    <td>{String(valueInETH).slice(0, 7)} <Icon icon="ph:currency-eth" width="17" /></td>
                                 </tr>
                                 <tr>
                                     <td>Priority</td>
