@@ -14,43 +14,10 @@ import DisplayNFT from '../../../Components/Common/DisplayNFT';
 import TweetProject from '../../../Components/Common/TweetProject';
 
 const CreateProject = () => {
-    const [selectedMulti, setselectedMulti] = useState(null);
-    const { chainId } = useEthers();
-
-    function handleMulti(selectedMulti) {
-        setselectedMulti(selectedMulti);
-    }  
-    
-    //Dropzone file upload
-    const [selectedFiles, setselectedFiles] = useState([]);
-    const [files, setFiles] = useState([]);
-
-
-    function handleAcceptedFiles(files) {
-      files.map(file =>
-        Object.assign(file, {
-          preview: URL.createObjectURL(file),
-          formattedSize: formatBytes(file.size),
-        })
-      );
-      setselectedFiles(files);
-    }
-
-        /**
-     * Formats the size
-     */
-    function formatBytes(bytes, decimals = 2) {
-        if (bytes === 0) return "0 Bytes";
-        const k = 1024;
-        const dm = decimals < 0 ? 0 : decimals;
-        const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
-
-        const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
-    }
 
 document.title="Create Project | Block Ops";
 
+    const { chainId } = useEthers();
     const [projectTitle, setProjectTitle] = useState("");
     const [projectDescription, setProjectDescription] = useState("");
     const [projectPriority, setProjectPriority] = useState("");
@@ -66,6 +33,8 @@ document.title="Create Project | Block Ops";
     const [nftMintedValue, setNftMintedValue] = useState();
     const [nftMintedTokenId, setNftMintedTokenId] = useState(null);
     const [eventTableFinished, setEventTableFinished] = useState(false);
+
+    const [loading, setLoading] = useState(false);
 
     const ipfsDefined = ipfsResponse !== null
     const projectImageDefined = projectImage !== null
@@ -151,8 +120,9 @@ document.title="Create Project | Block Ops";
         } ) 
     }
 
+
     const submitButton = () => {
-        if (state.status === undefined | state.status === "None") {
+        if (state.status === undefined | state.status === 'None') {
             return (
                 <button className="btn btn-primary" onClick={handleSubmit}>
                     Create Project

@@ -7,6 +7,7 @@ const Navdata = () => {
     const [isDashboard, setIsDashboard] = useState(false);
     const [isListProjectsPage, setIsListProjectsPage] = useState(false);
     const [isSubmitSolutionPage, setIsSubmitSolutionPage] = useState(false);
+    const [isYourSubmissionsPage, setIsYourSubmissionsPage] = useState(false);
     const [isApps, setIsApps] = useState(false);
     const [isAuth, setIsAuth] = useState(false);
     const [isCreateProject, setIsCreateProject] = useState(false);
@@ -76,6 +77,9 @@ const Navdata = () => {
         if (iscurrentState !== 'SubmitSolutionsPage') {
             setIsSubmitSolutionPage(false);
         }
+        if (iscurrentState !== 'YourSubmissionsPage') {
+            setIsYourSubmissionsPage(false);
+        }
         if (iscurrentState !== 'Apps') {
             setIsApps(false);
         }
@@ -125,6 +129,7 @@ const Navdata = () => {
         isDashboard,
         isListProjectsPage,
         isSubmitSolutionPage,
+        isYourSubmissionsPage,
         isApps,
         isCreateProject,
         isAuth,
@@ -158,6 +163,10 @@ const Navdata = () => {
             },
         },
         {
+            label: "Create",
+            isHeader: true,
+        },
+        {
             id: "createproject",
             label: "Create Project",
             icon: "ri-pages-line",
@@ -184,6 +193,10 @@ const Navdata = () => {
             stateVariables: isSubmitSolutionPage,
         },
         {
+            label: "Review",
+            isHeader: true,
+        },
+        {
             id: "listprojectspage",
             label: "Your Projects",
             icon: "ri-table-line",
@@ -195,6 +208,19 @@ const Navdata = () => {
                 updateIconSidebar(e);
             },
             stateVariables: isListProjectsPage,
+        },
+        {
+            id: "yoursubmissionspage",
+            label: "Your Submissions",
+            icon: "ri-newspaper-fill",
+            link: "/your-submissions",
+            click: function (e) {
+                e.preventDefault();
+                setIsAuth(!isYourSubmissionsPage);
+                setIscurrentState('YourSubmissionsPage');
+                updateIconSidebar(e);
+            },
+            stateVariables: isYourSubmissionsPage,
         },
     ];
     return <React.Fragment>{menuItems}</React.Fragment>;
