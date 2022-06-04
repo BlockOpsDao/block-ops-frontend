@@ -9,22 +9,39 @@ import { utils } from 'ethers'
 
 const ProjectsOverview = () => {
 
-    const [totalEthPaidOut, setTotalEthPaidOut] = useState();
-    const [totalBountyAvailable, setTotalBountyAvailable] = useState();
-    const [totalSupply, setTotalSupply] = useState();
+    const totalEthPaidOut = CallOpsNFT("getTotalEthPaidOut") ?? undefined
+    const totalBountyAvailable = CallOpsNFT("totalBountyAmount") ?? undefined
+    const totalSupply = CallOpsNFT("totalSupply") ?? undefined
 
-    const getTotalEthPaidOut = CallOpsNFT("getTotalEthPaidOut")
-    const getTotalBountyAvailable = CallOpsNFT("totalBountyAmount")
-    const getTotalSupply = CallOpsNFT("totalSupply")
+    const [getTotalEthPaidOut, setGetTotalEthPaidOut] = useState();
+    const [getTotalBountyAvailable, setGetTotalBountyAvailable] = useState();
+    const [getTotalSupply, setGetTotalSupply] = useState();
 
     useEffect(() => {
-        let isMounted = false;
-        setTotalEthPaidOut(getTotalEthPaidOut ? getTotalEthPaidOut[0] : 1)
-        setTotalBountyAvailable(getTotalBountyAvailable ? utils.formatEther(getTotalBountyAvailable[0]) : 0)
-        setTotalSupply(getTotalSupply ? getTotalSupply[0].toString() : 0)
-        
-        return () => { isMounted = true };
-    }, [getTotalEthPaidOut, getTotalBountyAvailable, getTotalSupply]);
+
+
+        if (getTotalEthPaidOut === undefined) {
+            console.log("inside getTotalEthPaidOut")
+            if (totalEthPaidOut !== undefined) {
+                console.log("Number(utils.formatEther(totalEthPaidOut[0])): ", Number(utils.formatEther(totalEthPaidOut[0])))
+                setGetTotalEthPaidOut(Number(utils.formatEther(totalEthPaidOut[0])))
+            }
+        }
+
+        if (getTotalBountyAvailable === undefined) {
+            if (totalBountyAvailable !== undefined) {
+                setGetTotalBountyAvailable(Number(utils.formatEther(totalBountyAvailable[0])))
+            }
+        }
+
+        if (getTotalSupply === undefined) {
+            if (totalSupply !== undefined) {
+                setGetTotalSupply(Number(totalSupply))
+            }
+        }
+       
+    }, [totalSupply]);
+    
     
     return (
         <React.Fragment>
@@ -56,7 +73,7 @@ const ProjectsOverview = () => {
                                         <h5 className="mb-1"><span className="counter-value" data-target="9851">
                                             <CountUp
                                                 start={0}
-                                                end={totalSupply}
+                                                end={getTotalSupply}
                                                 separator={","}
                                                 duration={4}
                                             />
@@ -69,8 +86,9 @@ const ProjectsOverview = () => {
                                         <h5 className="mb-1"><span className="counter-value">
                                             <CountUp
                                                 start={0}
-                                                end={totalEthPaidOut}
+                                                end={getTotalEthPaidOut}
                                                 separator={","}
+                                                decimals={2}
                                                 duration={4}
                                             />
                                         </span><Icon icon="ph:currency-eth" width="17" /> </h5>
@@ -82,7 +100,7 @@ const ProjectsOverview = () => {
                                         <h5 className="mb-1"><span className="counter-value" data-target="228.89">
                                             <CountUp
                                                 start={0}
-                                                end={totalBountyAvailable}
+                                                end={getTotalBountyAvailable}
                                                 decimals={2}
                                                 duration={4}
                                             />
