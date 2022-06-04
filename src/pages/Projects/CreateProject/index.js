@@ -8,7 +8,7 @@ import { utils } from 'ethers'
 import { Contract } from '@ethersproject/contracts'
 import { useContractFunction, useEthers } from "@usedapp/core";
 import map from "../../../build/deployments/map.json";
-import OpsNFTKovan from "../../../build/deployments/42/0xD35f33b91cBAf07f1409bc88E5c04256eDdEE955.json"
+import OpsNFTKovan from "../../../build/deployments/42/0x97C76c926E5bfEE1AA852F4e5986D3554eac5862.json"
 import { Icon } from '@iconify/react';
 import DisplayNFT from '../../../Components/Common/DisplayNFT';
 import TweetProject from '../../../Components/Common/TweetProject';

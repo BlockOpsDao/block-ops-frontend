@@ -7,7 +7,7 @@ import { utils } from 'ethers'
 import { Contract } from '@ethersproject/contracts'
 import { useContractFunction, useEthers, useCalls } from "@usedapp/core";
 import map from "../../../build/deployments/map.json";
-import OpsNFTKovan from "../../../build/deployments/42/0xD35f33b91cBAf07f1409bc88E5c04256eDdEE955.json"
+import OpsNFTKovan from "../../../build/deployments/42/0x97C76c926E5bfEE1AA852F4e5986D3554eac5862.json"
 import CallOpsNFT from '../../../Components/Common/CallOpsNFT';
 import DOMPurify from "dompurify";
 import DisplayNFTWoCalling from '../../../Components/Common/DisplayNFTWoCalling';
@@ -51,7 +51,7 @@ document.title="Submit Solution | Block Ops";
 
     const tokenCreator = tokenMetadata !== undefined & selectedTokenId !== undefined ? (tokenMetadata.length > Number(selectedTokenId) ? tokenMetadata[Number(selectedTokenId)][3] : undefined) : undefined
 
-    const nftTokenId = tokenMetadata !== undefined & selectedTokenId !== undefined ? (tokenMetadata.length > Number(selectedTokenId) ? Number(utils.formatEther(tokenMetadata[Number(selectedTokenId)][4])) : undefined) : undefined
+    const nftTokenId = tokenMetadata !== undefined & selectedTokenId !== undefined ? (tokenMetadata.length > Number(selectedTokenId) ? tokenMetadata[Number(selectedTokenId)][4].toNumber() : undefined) : undefined
 
     const projectState = tokenMetadata !== undefined & selectedTokenId !== undefined ? (tokenMetadata.length > Number(selectedTokenId) ? tokenMetadata[Number(selectedTokenId)][5] : undefined) : undefined
 
@@ -264,7 +264,7 @@ document.title="Submit Solution | Block Ops";
                                             id="project-input" onChange={(e) => setSelectedTokenId(e.target.value)}>
                                             <option value="None"></option>
                                             {tokenMetadata.map((row, idx) => {
-                                                let nftId = Number(utils.formatEther(row[4]))
+                                                let nftId = row[4].toNumber()
                                                 let name = row[8]
                                                 let bounty = utils.formatEther(row[2]).slice(0, 7)
                                                 if (row[5] !== 2) {
@@ -329,7 +329,7 @@ document.title="Submit Solution | Block Ops";
                             <Row>
                                 <Col sm={12}>
                                     <div className="text-end mb-4">
-                                        {selectedTokenId !== undefined ? prepareBetterDisplay() : <></> }
+                                        {status === "Success" ? prepareBetterDisplay() : <></> }
                                     </div>
                                 </Col>
                             </Row>

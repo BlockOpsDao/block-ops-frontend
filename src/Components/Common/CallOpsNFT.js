@@ -2,7 +2,7 @@ import { utils, BigNumber } from 'ethers'
 import { Contract } from '@ethersproject/contracts'
 import { useEthers, useCall } from "@usedapp/core";
 import map from "../../build/deployments/map.json";
-import OpsNFTKovan from "../../build/deployments/42/0xD35f33b91cBAf07f1409bc88E5c04256eDdEE955.json"
+import OpsNFTKovan from "../../build/deployments/42/0x97C76c926E5bfEE1AA852F4e5986D3554eac5862.json"
 
 const CallOpsNFT = (functionName, args) => {
 

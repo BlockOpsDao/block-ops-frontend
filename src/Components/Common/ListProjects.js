@@ -2,7 +2,7 @@ import { utils } from 'ethers'
 import { Contract } from '@ethersproject/contracts'
 import { useContractFunction, useEthers, useCalls, shortenAddress } from "@usedapp/core";
 import map from "../../build/deployments/map.json";
-import OpsNFTKovan from "../../build/deployments/42/0xD35f33b91cBAf07f1409bc88E5c04256eDdEE955.json"
+import OpsNFTKovan from "../../build/deployments/42/0x97C76c926E5bfEE1AA852F4e5986D3554eac5862.json"
 import { useState, useEffect } from 'react';
 import { AnalyticEventTracker } from './AnalyticEventTracker';
 import CallOpsNFT from "../Common/CallOpsNFT";
@@ -53,7 +53,7 @@ const ListProjects = () => {
 
     const tokenCreator = tokenMetadata !== undefined & selectedTokenId !== undefined ? (tokenMetadata.length > Number(selectedTokenId) ? tokenMetadata[Number(selectedTokenId)][3] : undefined) : undefined
 
-    const nftTokenId = tokenMetadata !== undefined & selectedTokenId !== undefined ? (tokenMetadata.length > Number(selectedTokenId) ? Number(utils.formatEther(tokenMetadata[Number(selectedTokenId)][4])) : undefined) : undefined
+    const nftTokenId = tokenMetadata !== undefined & selectedTokenId !== undefined ? (tokenMetadata.length > Number(selectedTokenId) ? tokenMetadata[Number(selectedTokenId)][4].toNumber() : undefined) : undefined
 
     const projectState = tokenMetadata !== undefined & selectedTokenId !== undefined ? (tokenMetadata.length > Number(selectedTokenId) ? tokenMetadata[Number(selectedTokenId)][5] : undefined) : undefined
 
@@ -123,10 +123,16 @@ const ListProjects = () => {
             (currentPage + 1) * pageSize
           ).map((row, idx) => {
             let key = "project-table-" + idx
+            let pState = "Closed"
+            if (row[5] == 0) {
+                pState = "New"
+            } else if (row[5] == 1) {
+                pState = "Active"
+            }
             return (
                 <tr key={key} onClick={() => {setSelectedTokenId(idx + currentPage * pageSize); gaEventTracker('selectedProjectTable', tokenMetadataURI)}}>
-                    <th scope="row">{row ? Number(utils.formatEther(row[4])) : <p>no token id</p>}</th>
-                    <td>{row ? convertProjectState() : "Closed"}</td>
+                    <th scope="row">{row ? row[4].toNumber() : <p>no token id</p>}</th>
+                    <td>{pState}</td>
                     <td>{row ? utils.formatEther(row[2]) : <></>}</td>
                     <td>{row ? row[8] : <></>}</td>
                     <td>{row ? row[11].join([', ']) : <></>}</td>

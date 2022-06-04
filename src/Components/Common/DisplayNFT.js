@@ -4,6 +4,8 @@ import { Icon } from '@iconify/react';
 import DOMPurify from "dompurify";
 
 const DisplayNFT = (owner) => {
+
+
     const [nftOwner, setNftOwner] = useState();
     const [nftIpfsMetadata, setNftIpfsMetadata] = useState();
     const [nftValueInEth, setNftValueInEth] = useState();
@@ -43,6 +45,7 @@ const DisplayNFT = (owner) => {
                 setProjectImageURI("https://block-ops.infura-ipfs.io/ipfs/bafkreieybp7cct3rtlgeiy2gz5duzq65pgsxlgspbmajcvsnj7etlsls6u")
                 console.log("No image submitted for this NFT. ", error)
             }
+            console.log("data: ", data)
         })
     }
 
