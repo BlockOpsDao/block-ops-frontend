@@ -1,7 +1,18 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactApexChart from "react-apexcharts";
+import LoadTokenMetadataByMonth from '../../Components/Common/LoadTokenMetadataByMonth';
+import AllSkills from '../../Components/Common/AllSkills';
+// import LoadTokenMetadata from '../../Components/Common/LoadTokenMetadata';
+
 
 const ProjectsOverviewCharts = () => {
+
+    const tokenMetadataByMonth = LoadTokenMetadataByMonth()
+    const allSkills = AllSkills()
+
+    console.log("tokenMetadataByMonth: ", tokenMetadataByMonth)
+    console.log("allSkills: ", allSkills)
+
     const linechartcustomerColors = ["#405189", "#f7b84b", "#0ab39c"];
     const series = [{
         name: 'Number of Projects',

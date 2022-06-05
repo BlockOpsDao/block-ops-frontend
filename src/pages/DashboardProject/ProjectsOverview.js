@@ -21,9 +21,9 @@ const ProjectsOverview = () => {
 
 
         if (getTotalEthPaidOut === undefined) {
-            console.log("inside getTotalEthPaidOut")
+            
             if (totalEthPaidOut !== undefined) {
-                console.log("Number(utils.formatEther(totalEthPaidOut[0])): ", Number(utils.formatEther(totalEthPaidOut[0])))
+                
                 setGetTotalEthPaidOut(Number(utils.formatEther(totalEthPaidOut[0])))
             }
         }
@@ -50,7 +50,7 @@ const ProjectsOverview = () => {
                     <Card>
                         <CardHeader className="border-0 align-items-center d-flex">
                             <h4 className="card-title mb-0 flex-grow-1">Projects Overview</h4>
-                            <div className="d-flex gap-1">
+                            {/* <div className="d-flex gap-1">
                                 <button type="button" className="btn btn-soft-secondary btn-sm">
                                     ALL
                                 </button>
@@ -63,7 +63,7 @@ const ProjectsOverview = () => {
                                 <button type="button" className="btn btn-soft-primary btn-sm">
                                     1Y
                                 </button>
-                            </div>
+                            </div> */}
                         </CardHeader>
 
                         <CardHeader className="p-0 border-0 bg-soft-light">
