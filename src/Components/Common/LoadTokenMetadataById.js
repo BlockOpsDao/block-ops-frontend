@@ -38,6 +38,7 @@ const LoadTokenMetadataById = () => {
                 let tokenId = row[4].toNumber()
                 let projectState = row[5] === 0 ? "New" : row[5] === 1 ? "Active" : "Closed"
                 let numberOfSubmissions = row[6] !== undefined ? row[6].length : 0
+                let projectSubmissions = row[6]
                 let ipfsURI = row[7]
                 let projectTitle = row[8]
                 let projectDescription = row[9]
@@ -65,6 +66,7 @@ const LoadTokenMetadataById = () => {
                         "projectSkills": projectSkills,
                         "projectDeadline": projectDeadline,
                         "ipfsImageURI": ipfsImageURI,
+                        "projectSubmissions": projectSubmissions,
                         "monthdate": monthdate
                     }
                 }

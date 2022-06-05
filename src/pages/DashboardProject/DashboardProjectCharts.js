@@ -10,8 +10,6 @@ const ProjectsOverviewCharts = () => {
     const tokenMetadataByMonth = LoadTokenMetadataByMonth()
     const allSkills = AllSkills()
 
-    console.log("tokenMetadataByMonth: ", tokenMetadataByMonth)
-    console.log("allSkills: ", allSkills)
 
     const linechartcustomerColors = ["#405189", "#f7b84b", "#0ab39c"];
     const series = [{
