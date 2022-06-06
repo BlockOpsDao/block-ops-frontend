@@ -99,18 +99,6 @@ const ListProjects = () => {
         
     }, [tokenMetadataById, projectSubmissions]);
 
-    const convertProjectState = () => {
-        if (projectState !== undefined) {
-            if (projectState === 0) {
-                return "New"
-            } else if (projectState === 1) {
-                return "Active"
-            } else {
-                return "Closed"
-            }
-        }
-    }    
-
     const handlePaginationClick = (e, index) => {
         e.preventDefault();
         setCurrentPage(index);
