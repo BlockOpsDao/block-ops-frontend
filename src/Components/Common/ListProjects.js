@@ -78,8 +78,6 @@ const ListProjects = () => {
             setProjectTable(tmpProjectTable)
         }
 
-        
-
         let tmpSubmissionsTable = projectSubmissions?.slice(
             currentPage * pageSize,
             (currentPage + 1) * pageSize
