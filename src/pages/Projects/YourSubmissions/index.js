@@ -30,7 +30,7 @@ document.title="Your Submissions | Block Ops";
 
 
     const [currentPage, setCurrentPage] = useState(0);
-    const [redemptionTable, setRedemptionTable] = useState();
+    const [readyToRedeemLoaded, setReadyToRedeemLoaded] = useState();
 
     const [selectedTokenId, setSelectedTokenId] = useState(0);
     const [readyToRedeem, setReadyToRedeem] = useState()
@@ -130,7 +130,11 @@ document.title="Your Submissions | Block Ops";
                     </>)
                 })
                 return (tmpReadyToRedeemTable)
+            } else {
+                return (<h4>You have no submissions at this time</h4>)
             }
+        } else {
+            return (loadingIcon)
         }
     }
 
@@ -186,7 +190,7 @@ document.title="Your Submissions | Block Ops";
     const callRedeemEth = () => {
         void RedeemSend(selectedTokenId ?? 0)
     }
-
+    
     return (
     <React.Fragment>
     <div className="page-content">
@@ -199,28 +203,27 @@ document.title="Your Submissions | Block Ops";
         <Row>
             <Container>
                 <Row>
-                    <Col sm={12}>
-                    {readyToRedeem !== undefined ? <>
-                            <Table striped size="md" hover={true} responsive={true}>
-                                <thead><tr key="header-row">
-                                    <th>Project #</th>    
-                                    <th>Project Title</th>
-                                    <th>Bounty</th>
-                                    <th>Submission</th>
-                                </tr></thead>
-                                
-                                <tbody>{redeemTable()}</tbody>
-                        
-                            </Table>
-                        </> : loadingIcon}
-                    </Col>
-                    {readyToRedeem !== undefined ? 
-                        <>
+                        {
+                            redeemTable().length === 0 ? <h4>You have no submissions at this time</h4> : 
+                            redeemTable().length > 0 ? <>
+                            <Col sm={12}>
+                                <Table striped size="md" hover={true} responsive={true}>
+                                    <thead><tr key="header-row">
+                                        <th>Project #</th>    
+                                        <th>Project Title</th>
+                                        <th>Bounty</th>
+                                        <th>Submission</th>
+                                    </tr></thead>
+                                    
+                                    <tbody>{redeemTable()}</tbody>
+                            
+                                </Table>
+                            </Col>
                             <Col md={3}></Col>
                             <Col sm={12} md={6}>{paginationTable()}</Col>
-                            <Col md={3}></Col>
-                        </> 
-                        : <></>}
+                            <Col md={3}></Col>                            
+                            </> : loadingIcon
+                        }
                 </Row>
                 <Row>
                     <Col md={1}></Col>
@@ -232,9 +235,11 @@ document.title="Your Submissions | Block Ops";
                 <Row>
                     <Col md={3}></Col>
                     <Col sm={12} md={6}>
-                        {readyToRedeem !== undefined ? 
-                            readyToRedeem.length > 0 ? redemptionButton() : 
-                            <h4>No submissions to redeem at this time...</h4> : <h4>No submissions to redeem at this time...</h4>
+                        {
+                            tokenMetadataById !== undefined & readyToRedeem === undefined ? loadingIcon :
+                            tokenMetadataById !== undefined & readyToRedeem !== undefined & readyToRedeem.length === 0 
+                            ? <></> : redemptionButton()
+                            
                         }
                     </Col>
                 </Row>
