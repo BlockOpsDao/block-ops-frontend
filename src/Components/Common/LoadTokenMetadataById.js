@@ -31,8 +31,7 @@ const LoadTokenMetadataById = () => {
 
         if (Object.keys(tokenMetadataById).length === 0) {
             tokenMetadata.forEach(function(row) {
-
-                let owner = row[1]
+                let owner = row[0]
                 let amountOfEthInNFT = row[2] !== undefined ? Number(utils.formatEther(BigNumber.from(row[2]))) : 0
                 let creator = row[3]
                 let tokenId = row[4].toNumber()

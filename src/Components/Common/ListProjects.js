@@ -35,7 +35,6 @@ const ListProjects = () => {
     const pageSize = 5
     const pagesCount = Object.keys(tokenMetadataById).length !== undefined ? Object.keys(tokenMetadataById).length : undefined
     const [tokenMetadata, setTokenMetadata] = useState([]);
-    const tmpTokenMetadata = []
 
     const tokenOwner = Object.keys(tokenMetadataById).length > 0 ? tokenMetadataById[selectedTokenId]['owner'] : undefined
     const tokenMetadataURI = Object.keys(tokenMetadataById).length > 0 ? tokenMetadataById[selectedTokenId]['ipfsURI'] : undefined
@@ -56,59 +55,49 @@ const ListProjects = () => {
     useEffect(() => {
 
         if (Object.keys(tokenMetadataById).length > 0 & projectTable === undefined) {
-            console.log("tokenMetadataById: ", tokenMetadataById)
-
-            for (const [key, value] of Object.entries(tokenMetadataById)) {
-                console.log()
-            }
 
             let tmpProjectTable = Object.entries(tokenMetadataById).slice(
                 currentPage * pageSize,
                 (currentPage + 1) * pageSize
               ).map((row, idx) => {
                 let key = "project-table-" + idx
-                // let pState = "Closed"
-                // if (row[5] == 0) {
-                //     pState = "New"
-                // } else if (row[5] == 1) {
-                //     pState = "Active"
-                // }
-                console.log(key, " | row: ", row[1])
-                return (
-                    <tr key={key} onClick={() => {setSelectedTokenId(row[0]); gaEventTracker('selectedProjectTable', row[1]['ipfsURI'] )}}>
+                if (row[1]['owner'] == account) {
+                    return (
+                        <tr key={key} onClick={() => {setSelectedTokenId(row[0]); gaEventTracker('selectedProjectTable', row[1]['ipfsURI'] )}}>
 
-                        <th scope="row">{row[1]['tokenId']}</th>
-                        <td>{row[1]['projectState'] ? row[1]['projectState'] : 0}</td>
-                        <td>{row[1]['amountOfEthInNFT'] ? row[1]['amountOfEthInNFT'] : 0}</td>
-                        <td>{row[1]['projectTitle'] ? row[1]['projectTitle'] : 0}</td>
-                        <td>{row[1]['projectSkills'] ? row[1]['projectSkills'] : 0}</td>
-                        <td>{row[1]['projectDeadline'] ? row[1]['projectDeadline'].toString() : 0}</td>
-                    </tr>
-                )
+                            <th scope="row">{row[1]['tokenId']}</th>
+                            <td>{row[1]['projectState'] ? row[1]['projectState'] : 0}</td>
+                            <td>{row[1]['amountOfEthInNFT'] ? row[1]['amountOfEthInNFT'] : 0}</td>
+                            <td>{row[1]['projectTitle'] ? row[1]['projectTitle'] : 0}</td>
+                            <td>{row[1]['projectSkills'] ? row[1]['projectSkills'].join(', ') : 0}</td>
+                            <td>{row[1]['projectDeadline'] ? row[1]['projectDeadline'].toString() : 0}</td>
+                        </tr>
+                    )
+                }
             })
             setProjectTable(tmpProjectTable)
         }
 
         
 
-        // let tmpSubmissionsTable = projectSubmissions?.slice(
-        //     currentPage * pageSize,
-        //     (currentPage + 1) * pageSize
-        //   ).map((row, idx) => {
-        //     let key = "submissions-table-" + idx
-        //     let ipfsUrl = "https://block-ops.infura-ipfs.io/ipfs/" + row[1]
+        let tmpSubmissionsTable = projectSubmissions?.slice(
+            currentPage * pageSize,
+            (currentPage + 1) * pageSize
+          ).map((row, idx) => {
+            let key = "submissions-table-" + idx
+            let ipfsUrl = "https://block-ops.infura-ipfs.io/ipfs/" + row[1]
             
-        //     return (<>
-        //         <tr key={key} onClick={() => {setSelectedSubmissionId(idx + currentPage * pageSize); gaEventTracker('selectedSubmissionsTable', tokenMetadataURI)}}>
-        //             <th scope="row">{row ? idx : <p>no token id</p>}</th>
-        //             <td>{row ? shortenAddress(row[0]) : row[0]}</td>
-        //             <td>{row ? <a href={ipfsUrl} className="fw-semibold text-info text-decoration-underline">Link to Submission</a> : <></>}</td>
-        //         </tr>
-        //     </>)
-        // })
-        // setSubmissionsTable(tmpSubmissionsTable)
+            return (<>
+                <tr key={key} onClick={() => {setSelectedSubmissionId(idx + currentPage * pageSize); gaEventTracker('selectedSubmissionsTable', tokenMetadataURI)}}>
+                    <th scope="row">{row ? nftTokenId : <p>no token id</p>}</th>
+                    <td>{row ? shortenAddress(row[0]) : row[0]}</td>
+                    <td>{row ? <a href={ipfsUrl} className="fw-semibold text-info text-decoration-underline">Link to Submission</a> : <></>}</td>
+                </tr>
+            </>)
+        })
+        setSubmissionsTable(tmpSubmissionsTable)
         
-    }, [tokenMetadataById]);
+    }, [tokenMetadataById, projectSubmissions]);
 
     const convertProjectState = () => {
         if (projectState !== undefined) {
@@ -261,7 +250,7 @@ const ListProjects = () => {
                     projectDescription={projectDescription}
                     projectPriority={projectPriority}
                     projectSkills={projectSkills}
-                    projectDeadline={projectDeadline}
+                    projectDeadline={projectDeadline.toString()}
                     projectImageURI={projectImageURI}    
                 />
                 
@@ -278,7 +267,7 @@ const ListProjects = () => {
                     <option value="None"></option>
                     {projectSubmissions.map((row, idx) => {
                         let ipfsUrl = "https://block-ops.infura-ipfs.io/ipfs/" + row[1]
-                        return (<option key={idx} value={idx}>#{idx} - {ipfsUrl}</option>)
+                        return (<option key={"project-submission-row-" + idx} value={idx}>#{idx} - {ipfsUrl}</option>)
                     })}
                 </select>
                 
@@ -324,7 +313,7 @@ const ListProjects = () => {
                 </> 
                 : <></>}
             </Row>
-{/* 
+
             <Row><br /></Row>
             <Row><br /></Row>
             <Row><br /></Row>
@@ -333,7 +322,6 @@ const ListProjects = () => {
             <Row>
                 <Col sm={12} md={8}>
                     {
-                        tokenMetadata !== undefined &
                         tokenOwner !== undefined &
                         tokenMetadataURI !== undefined &
                         tokenBounty !== undefined &
@@ -367,7 +355,7 @@ const ListProjects = () => {
                 </Col>
             </Row>
 
-            <Row></Row> */}
+            <Row></Row>
         
     </Container>
         

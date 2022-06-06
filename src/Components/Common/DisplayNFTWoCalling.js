@@ -63,13 +63,7 @@ const DisplayNFTWoCalling = (args) => {
                                     <td>Required Skills</td>
                                     <td>
                                     <ul className="list-inline d-flex align-items-center g-3 text-muted fs-14 mb-0">
-                                        {projectSkills?.map((ps, i) => {
-                                            return (
-                                                <li key={i} className="list-inline-item me-3">
-                                                    {ps},
-                                                </li>
-                                            )
-                                        })}
+                                        {projectSkills.join(', ')}
                                     </ul>
                                     </td>
                                 </tr>
@@ -79,7 +73,7 @@ const DisplayNFTWoCalling = (args) => {
                                 </tr>
                                 <tr>
                                     <td>IPFS Hash</td>
-                                    <td>{ipfsMetadata}</td>
+                                    <td><a href={ipfsMetadata} className="text text-danger">{ipfsMetadata}</a></td>
                                 </tr>
                             </tbody>
                         </table>
