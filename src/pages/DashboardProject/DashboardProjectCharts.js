@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ReactApexChart from "react-apexcharts";
 import LoadTokenMetadataByMonth from '../../Components/Common/LoadTokenMetadataByMonth';
 import AllSkills from '../../Components/Common/AllSkills';
+import { useAsyncDebounce } from 'react-table';
 // import LoadTokenMetadata from '../../Components/Common/LoadTokenMetadata';
 
 
@@ -10,20 +11,57 @@ const ProjectsOverviewCharts = () => {
     const tokenMetadataByMonth = LoadTokenMetadataByMonth()
     const allSkills = AllSkills()
 
+    const [arrayOfMonths, setArrayOfMonths] = useState();
+    const [arrayOfProjectsByMonth, setArrayOfProjectsByMonth] = useState();
+    const [arrayOfSubmissionsByMonth, setArrayOfSubmissionsByMonth] = useState();
+    const [arrayOfAmountOfEthInNFTByMonth, setArrayOfAmountOfEthInNFTByMonth] = useState();
+    
+    useEffect(() => {
+        let tmpArrayOfMonths = []
+        let tmpArrayOfProjectsByMonth = []
+        let tmpArrayOfSubmissionsByMonth = []
+        let tmpArrayOfAmountOfEthInNFTByMonth = []
+        console.log("tokenMetadataByMonth: ", tokenMetadataByMonth)
+        if (Object.keys(tokenMetadataByMonth).length !== 0) {
+            console.log("inside tokenMetadataByMonth !== undefined")
+            if (
+                arrayOfMonths === undefined | 
+                arrayOfProjectsByMonth === undefined | 
+                arrayOfSubmissionsByMonth === undefined | 
+                arrayOfAmountOfEthInNFTByMonth === undefined     
+            ) {
+                for (const [key, value] of Object.entries(tokenMetadataByMonth)) {
+                    console.log("key: ", key, " value: ", value);
+                    tmpArrayOfMonths.push(key);
+                    tmpArrayOfProjectsByMonth.push(value['numberOfProjects'])
+                    tmpArrayOfSubmissionsByMonth.push(value['numberOfSubmissions'])
+                    tmpArrayOfAmountOfEthInNFTByMonth.push(value['amountOfEthInNFT'])
+                }
+                console.log("tmpArrayOfMonths: ", tmpArrayOfMonths)
+                setArrayOfMonths(tmpArrayOfMonths)
+                setArrayOfProjectsByMonth(tmpArrayOfProjectsByMonth)
+                setArrayOfSubmissionsByMonth(tmpArrayOfSubmissionsByMonth)
+                setArrayOfAmountOfEthInNFTByMonth(tmpArrayOfAmountOfEthInNFTByMonth)
+            }    
+        }
+
+    }, [tokenMetadataByMonth]);
+
+    console.log("arrayOfProjectsByMonth: ", arrayOfProjectsByMonth)
 
     const linechartcustomerColors = ["#405189", "#f7b84b", "#0ab39c"];
     const series = [{
         name: 'Number of Projects',
         type: 'bar',
-        data: [34, 65, 46, 68, 49, 61, 42, 44, 78, 52, 63, 67]
+        data: arrayOfProjectsByMonth ?? [0]
     }, {
-        name: 'Revenue',
+        name: 'Available ETH',
         type: 'area',
-        data: [89.25, 98.58, 68.74, 108.87, 77.54, 84.03, 51.24, 28.57, 92.57, 42.36, 88.51, 36.57]
+        data: arrayOfAmountOfEthInNFTByMonth ?? [0]
     }, {
-        name: 'Active Projects',
+        name: 'Project Submissions',
         type: 'bar',
-        data: [8, 12, 7, 17, 21, 11, 5, 9, 7, 29, 12, 35]
+        data: arrayOfSubmissionsByMonth ?? [0]
     }];
     var options = {
         chart: {

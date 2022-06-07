@@ -5,43 +5,37 @@ import { ProjectsOverviewCharts } from './DashboardProjectCharts';
 import CallOpsNFT from '../../Components/Common/CallOpsNFT';
 import { Icon } from '@iconify/react';
 import { utils } from 'ethers'
+import LoadTokenMetadataById from '../../Components/Common/LoadTokenMetadataById';
 
 
 const ProjectsOverview = () => {
-
-    const totalEthPaidOut = CallOpsNFT("getTotalEthPaidOut") ?? undefined
-    const totalBountyAvailable = CallOpsNFT("totalBountyAmount") ?? undefined
-    const totalSupply = CallOpsNFT("totalSupply") ?? undefined
-
-    const [getTotalEthPaidOut, setGetTotalEthPaidOut] = useState();
-    const [getTotalBountyAvailable, setGetTotalBountyAvailable] = useState();
-    const [getTotalSupply, setGetTotalSupply] = useState();
+    const tokenMetadataById = LoadTokenMetadataById()
+    
+    const tmpTotalEthPaidOut = CallOpsNFT("getTotalEthPaidOut") ?? undefined
+    const [totalBountyAmount, setTotalBountyAmount] = useState();
+    const [totalSupply, setTotalSupply] = useState();
+    const [totalEthPaidOut, setTotalEthPaidOut] = useState();
+    
 
     useEffect(() => {
 
+        if (totalBountyAmount === undefined | totalSupply === undefined) {
+            let tmpTotalBountyAmount = 0;
+            let tmpTotalSupply = 0;
 
-        if (getTotalEthPaidOut === undefined) {
-            
-            if (totalEthPaidOut !== undefined) {
-                
-                setGetTotalEthPaidOut(Number(utils.formatEther(totalEthPaidOut[0])))
+            for (const [key, value] of Object.entries(tokenMetadataById)) {
+                tmpTotalBountyAmount += value['amountOfEthInNFT']
+                tmpTotalSupply += 1
             }
+            setTotalBountyAmount(tmpTotalBountyAmount)
+            setTotalSupply(tmpTotalSupply)
         }
 
-        if (getTotalBountyAvailable === undefined) {
-            if (totalBountyAvailable !== undefined) {
-                setGetTotalBountyAvailable(Number(utils.formatEther(totalBountyAvailable[0])))
-            }
-        }
-
-        if (getTotalSupply === undefined) {
-            if (totalSupply !== undefined) {
-                setGetTotalSupply(Number(totalSupply))
-            }
+        if (totalEthPaidOut === undefined & tmpTotalEthPaidOut !== undefined) {
+            setTotalEthPaidOut(utils.formatEther(tmpTotalEthPaidOut[0]))
         }
        
-    }, [totalSupply]);
-    
+    }, [tokenMetadataById]);
     
     return (
         <React.Fragment>
@@ -73,7 +67,7 @@ const ProjectsOverview = () => {
                                         <h5 className="mb-1"><span className="counter-value" data-target="9851">
                                             <CountUp
                                                 start={0}
-                                                end={getTotalSupply}
+                                                end={totalSupply}
                                                 separator={","}
                                                 duration={4}
                                             />
@@ -86,7 +80,7 @@ const ProjectsOverview = () => {
                                         <h5 className="mb-1"><span className="counter-value">
                                             <CountUp
                                                 start={0}
-                                                end={getTotalEthPaidOut}
+                                                end={Number(totalEthPaidOut)}
                                                 separator={","}
                                                 decimals={2}
                                                 duration={4}
@@ -100,7 +94,7 @@ const ProjectsOverview = () => {
                                         <h5 className="mb-1"><span className="counter-value" data-target="228.89">
                                             <CountUp
                                                 start={0}
-                                                end={getTotalBountyAvailable}
+                                                end={totalBountyAmount}
                                                 decimals={2}
                                                 duration={4}
                                             />

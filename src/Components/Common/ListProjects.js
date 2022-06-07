@@ -1,14 +1,12 @@
 import { utils } from 'ethers'
 import { Contract } from '@ethersproject/contracts'
-import { useContractFunction, useEthers, useCalls, shortenAddress } from "@usedapp/core";
+import { useContractFunction, useEthers, shortenAddress } from "@usedapp/core";
 import map from "../../build/deployments/map.json";
 import OpsNFTKovan from "../../build/deployments/42/0x97C76c926E5bfEE1AA852F4e5986D3554eac5862.json"
 import { useState, useEffect } from 'react';
 import { AnalyticEventTracker } from './AnalyticEventTracker';
-import CallOpsNFT from "../Common/CallOpsNFT";
 import { Pagination, PaginationItem, PaginationLink, Col, Container, Row, Label } from 'reactstrap';
 import { Table } from 'reactstrap';
-import DOMPurify from "dompurify";
 import DisplayNFTWoCalling from './DisplayNFTWoCalling';
 import LoadTokenMetadataById from './LoadTokenMetadataById';
 
