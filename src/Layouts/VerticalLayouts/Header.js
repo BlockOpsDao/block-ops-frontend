@@ -13,6 +13,11 @@ import NotificationDropdown from '../../Components/Common/NotificationDropdown';
 import ProfileDropdown from '../../Components/Common/ProfileDropdown';
 import LightDark from '../../Components/Common/LightDark';
 
+const divStyle = {
+    color: '#000000',
+    backgroundColor: '#f7b84b'
+};
+
 const Header = ({ onChangeLayoutMode, layoutModeType, headerClass }) => {
     const [search, setSearch] = useState(false);
     const toogleSearch = () => {
@@ -108,22 +113,15 @@ const Header = ({ onChangeLayoutMode, layoutModeType, headerClass }) => {
                                     </Form>
                                 </DropdownMenu>
                             </Dropdown>
-
-                            {/* WebAppsDropdown */}
-                            {/* <WebAppsDropdown /> */}
-
-                            {/* Dark/Light Mode set */}
-                            {/* <LightDark
-                                layoutMode={layoutModeType}
-                                onChangeLayoutMode={onChangeLayoutMode}
-                            /> */}
-
-                            {/* NotificationDropdown */}
-                            {/* <NotificationDropdown /> */}
-
-                            {/* ProfileDropdown */}
                             <ProfileDropdown />
                         </div>
+                    </div>                    
+                    <div style={divStyle}> 
+                        <center>
+                            <p style={divStyle}>
+                                Note: We are currently live on the Kovan Testnet. <a href="https://faucets.chain.link/" className='text text-info'>For free kEth click here</a> 
+                            </p>
+                        </center>
                     </div>
                 </div>
             </header>

@@ -32,7 +32,7 @@ const ListProjects = () => {
     const [currentPage, setCurrentPage] = useState(0);
     const pageSize = 5
     const pagesCount = Object.keys(tokenMetadataById).length !== undefined ? Object.keys(tokenMetadataById).length : undefined
-    const [tokenMetadata, setTokenMetadata] = useState([]);
+
 
     const tokenOwner = Object.keys(tokenMetadataById).length > 0 ? tokenMetadataById[selectedTokenId]['owner'] : undefined
     const tokenMetadataURI = Object.keys(tokenMetadataById).length > 0 ? tokenMetadataById[selectedTokenId]['ipfsURI'] : undefined
@@ -222,24 +222,40 @@ const ListProjects = () => {
 
 
     const prepareBetterDisplay = () => {
-        return (
-            <div key={selectedTokenId}>
-                <DisplayNFTWoCalling 
-                    owner={tokenOwner} 
-                    ipfsMetadata={tokenMetadataURI} 
-                    valueInETH={tokenBounty} 
-                    tokenId={selectedTokenId}
-                    projectState={projectState}
-                    projectName={projectName}
-                    projectDescription={projectDescription}
-                    projectPriority={projectPriority}
-                    projectSkills={projectSkills}
-                    projectDeadline={projectDeadline.toString()}
-                    projectImageURI={projectImageURI}    
-                />
-                
-            </div>
-        )
+        if (
+            tokenOwner !== undefined &
+            tokenMetadataURI !== undefined &
+            tokenBounty !== undefined &
+            selectedTokenId !== undefined &
+            projectState !== undefined &
+            projectName !== undefined &
+            projectDescription !== undefined &
+            projectPriority !== undefined &
+            projectSkills !== undefined &
+            projectDeadline !== undefined &
+            projectImageURI !== undefined
+        ) {
+            return (
+                <div key={selectedTokenId}>
+                    <DisplayNFTWoCalling 
+                        owner={tokenOwner} 
+                        ipfsMetadata={tokenMetadataURI} 
+                        valueInETH={tokenBounty} 
+                        tokenId={selectedTokenId}
+                        projectState={projectState}
+                        projectName={projectName}
+                        projectDescription={projectDescription}
+                        projectPriority={projectPriority}
+                        projectSkills={projectSkills}
+                        projectDeadline={projectDeadline.toString()}
+                        projectImageURI={projectImageURI}    
+                    />
+                    
+                </div>
+            )
+        } else {
+            return (loadingIcon)
+        }
     }
 
     const submissionDropdown = () => {
@@ -286,7 +302,7 @@ const ListProjects = () => {
                                 <tbody>{projectTable}</tbody>
                         
                             </Table>
-                        </> : <></>}
+                        </> : loadingIcon}
                 </Col>
                 
                 {projectTable !== undefined ? 
@@ -310,7 +326,10 @@ const ListProjects = () => {
                         tokenMetadataURI !== undefined &
                         tokenBounty !== undefined &
                         tokenCreator !== undefined 
-                        ? <Container>{prepareBetterDisplay()}</Container> : tokenMetadata.length === 0 ? <p>You have no projects</p> : loadingIcon
+                        ? <Container>
+                            {prepareBetterDisplay()}
+                          </Container> 
+                        : loadingIcon
                     }
                 </Col>
 
@@ -323,7 +342,7 @@ const ListProjects = () => {
                         </tr></thead>
 
                         <tbody>
-                        {submissionsTable !== undefined ? submissionsTable : <></>}
+                        {submissionsTable !== undefined ? submissionsTable : loadingIcon}
                         </tbody>
                     </Table>
                     <Row>
