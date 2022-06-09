@@ -15,11 +15,12 @@ const ProjectsOverview = () => {
     const [totalBountyAmount, setTotalBountyAmount] = useState();
     const [totalSupply, setTotalSupply] = useState();
     const [totalEthPaidOut, setTotalEthPaidOut] = useState();
-    
+    const loadingIcon = <i className="mdi mdi-loading mdi-spin fs-20 align-middle me-2"></i>
+
 
     useEffect(() => {
 
-        if (totalBountyAmount === undefined | totalSupply === undefined) {
+        if (tokenMetadataById !== undefined) {
             let tmpTotalBountyAmount = 0;
             let tmpTotalSupply = 0;
 
@@ -36,7 +37,7 @@ const ProjectsOverview = () => {
         }
        
     }, [tokenMetadataById]);
-    
+
     return (
         <React.Fragment>
             <Row>
@@ -44,20 +45,6 @@ const ProjectsOverview = () => {
                     <Card>
                         <CardHeader className="border-0 align-items-center d-flex">
                             <h4 className="card-title mb-0 flex-grow-1">Projects Overview</h4>
-                            {/* <div className="d-flex gap-1">
-                                <button type="button" className="btn btn-soft-secondary btn-sm">
-                                    ALL
-                                </button>
-                                <button type="button" className="btn btn-soft-secondary btn-sm">
-                                    1M
-                                </button>
-                                <button type="button" className="btn btn-soft-secondary btn-sm">
-                                    6M
-                                </button>
-                                <button type="button" className="btn btn-soft-primary btn-sm">
-                                    1Y
-                                </button>
-                            </div> */}
                         </CardHeader>
 
                         <CardHeader className="p-0 border-0 bg-soft-light">
@@ -69,7 +56,7 @@ const ProjectsOverview = () => {
                                                 start={0}
                                                 end={totalSupply}
                                                 separator={","}
-                                                duration={4}
+                                                duration={1}
                                             />
                                         </span></h5>
                                         <p className="text-muted mb-0">Number of Projects</p>
@@ -83,7 +70,7 @@ const ProjectsOverview = () => {
                                                 end={Number(totalEthPaidOut)}
                                                 separator={","}
                                                 decimals={2}
-                                                duration={4}
+                                                duration={1}
                                             />
                                         </span><Icon icon="ph:currency-eth" width="17" /> </h5>
                                         <p className="text-muted mb-1">Total ETH Paid Out</p>
@@ -96,7 +83,7 @@ const ProjectsOverview = () => {
                                                 start={0}
                                                 end={totalBountyAmount}
                                                 decimals={2}
-                                                duration={4}
+                                                duration={1}
                                             />
                                         </span><Icon icon="ph:currency-eth" width="17" /></h5>
                                         <p className="text-muted mb-0">Total Bounty Available</p>

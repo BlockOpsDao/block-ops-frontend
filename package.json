@@ -46,6 +46,7 @@
     "list.js": "^2.3.1",
     "lord-icon-element": "^3.3.3",
     "lottie-web": "^5.8.1",
+    "moment": "^2.29.3",
     "node-sass": "^7.0.1",
     "nouislider-react": "^3.4.1",
     "prismjs": "^1.26.0",

@@ -59,7 +59,7 @@ const ListProjects = () => {
                 (currentPage + 1) * pageSize
               ).map((row, idx) => {
                 let key = "project-table-" + idx
-                if (row[1]['owner'] == account) {
+                if (row[1]['owner'] === account) {
                     return (
                         <tr key={key} onClick={() => {setSelectedTokenId(row[0]); gaEventTracker('selectedProjectTable', row[1]['ipfsURI'] )}}>
 
@@ -81,11 +81,11 @@ const ListProjects = () => {
             (currentPage + 1) * pageSize
           ).map((row, idx) => {
             let key = "submissions-table-" + idx
-            let ipfsUrl = "https://block-ops.infura-ipfs.io/ipfs/" + row[1]
+            let ipfsUrl = "https://block-ops.infura-ipfs.io/ipfs/" + row[1].replace("ipfs://", "")
             
             return (<>
                 <tr key={key} onClick={() => {setSelectedSubmissionId(idx + currentPage * pageSize); gaEventTracker('selectedSubmissionsTable', tokenMetadataURI)}}>
-                    <th scope="row">{row ? nftTokenId : <p>no token id</p>}</th>
+                    <th scope="row">{row ? idx : <p>no token id</p>}</th>
                     <td>{row ? shortenAddress(row[0]) : row[0]}</td>
                     <td>{row ? <a href={ipfsUrl} className="fw-semibold text-info text-decoration-underline">Link to Submission</a> : <></>}</td>
                 </tr>
