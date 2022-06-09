@@ -101,7 +101,7 @@ document.title ="Two Step Verification | Block Ops";
                         <Row>
                             <Col lg={12}>
                                 <div className="text-center">
-                                    <p className="mb-0">&copy; {new Date().getFullYear()} Velzon. Crafted with <i className="mdi mdi-heart text-danger"></i> by Themesbrand</p>
+                                    <p className="mb-0">&copy; {new Date().getFullYear()} BlockOpsDao. Crafted with <i className="mdi mdi-heart text-danger"></i> by BlockOpsDao</p>
                                 </div>
                             </Col>
                         </Row>

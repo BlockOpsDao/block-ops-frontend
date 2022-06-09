@@ -1,0 +1,357 @@
+{
+  "contracts": {
+    "OpenZeppelin/openzeppelin-contracts@4.6.0/Counters": "1ce946f6a4eaa185320328620ccf999b9e86db7c",
+    "OpenZeppelin/openzeppelin-contracts@4.6.0/ERC721": "790f84d8a99b4200a76a1ba4a29a5b153fe19883",
+    "OpenZeppelin/openzeppelin-contracts@4.6.0/Strings": "1ce946f6a4eaa185320328620ccf999b9e86db7c",
+    "OpsNFT": "d0a166360b7faca6c878d90a258ef5f8228eac80"
+  },
+  "tests": {
+    "tests/unit/erc721/test_approve.py": {
+      "coverage": false,
+      "isolated": [
+        "OpenZeppelin/openzeppelin-contracts@4.6.0/Counters",
+        "OpenZeppelin/openzeppelin-contracts@4.6.0/ERC721",
+        "OpsNFT"
+      ],
+      "results": "..........",
+      "sha1": "3f31b4aa359abde7ef471966cee29c00f0c5a39c",
+      "txhash": [
+        "01f077c46ffcf0b0224149a5853b3204bdb96eb8",
+        "48797d6c0929309fe2c0db797579da337f53b305",
+        "b33a69dc19ad3652d7b49442d89fde4e10c1fade",
+        "c79a253dca31b191f06c18ef6b318e07cfc49aa4"
+      ]
+    },
+    "tests/unit/erc721/test_balance_of.py": {
+      "coverage": false,
+      "isolated": [
+        "OpenZeppelin/openzeppelin-contracts@4.6.0/Counters",
+        "OpenZeppelin/openzeppelin-contracts@4.6.0/ERC721",
+        "OpsNFT"
+      ],
+      "results": "..",
+      "sha1": "dc23a9413a312598b7cf726f6c1f502234bebdbe",
+      "txhash": []
+    },
+    "tests/unit/erc721/test_mint.py": {
+      "coverage": false,
+      "isolated": [
+        "OpenZeppelin/openzeppelin-contracts@4.6.0/Counters",
+        "OpenZeppelin/openzeppelin-contracts@4.6.0/ERC721",
+        "OpsNFT"
+      ],
+      "results": "..",
+      "sha1": "03ddfe944e8ceddefda7cd58fecc4c70ef097ab9",
+      "txhash": []
+    },
+    "tests/unit/erc721/test_token_uri.py": {
+      "coverage": false,
+      "isolated": [
+        "OpenZeppelin/openzeppelin-contracts@4.6.0/Counters",
+        "OpenZeppelin/openzeppelin-contracts@4.6.0/ERC721",
+        "OpsNFT"
+      ],
+      "results": "..",
+      "sha1": "9f0310bd53f3c9ef4fbcac7a4e4fc4d9baeb65b2",
+      "txhash": []
+    },
+    "tests/unit/ops_nft/test_contract_address.py": {
+      "coverage": false,
+      "isolated": [
+        "OpenZeppelin/openzeppelin-contracts@4.6.0/Counters",
+        "OpenZeppelin/openzeppelin-contracts@4.6.0/ERC721",
+        "OpsNFT"
+      ],
+      "results": ".",
+      "sha1": "500bdd9243f3e5fc5e5cf0d1b0499f605fb25704",
+      "txhash": []
+    },
+    "tests/unit/ops_nft/test_get_amount_stored_in_nft.py": {
+      "coverage": false,
+      "isolated": [
+        "OpenZeppelin/openzeppelin-contracts@4.6.0/Counters",
+        "OpenZeppelin/openzeppelin-contracts@4.6.0/ERC721",
+        "OpsNFT"
+      ],
+      "results": ".",
+      "sha1": "be39a4c789dcebef9309da9f9efb8aa6497113df",
+      "txhash": []
+    },
+    "tests/unit/ops_nft/test_get_array_of_nfts_from_creator.py": {
+      "coverage": false,
+      "isolated": [
+        "OpenZeppelin/openzeppelin-contracts@4.6.0/Counters",
+        "OpenZeppelin/openzeppelin-contracts@4.6.0/ERC721",
+        "OpsNFT"
+      ],
+      "results": "...",
+      "sha1": "d1df20c70d536175baedf6f6d48c0604d0f4fb3d",
+      "txhash": []
+    },
+    "tests/unit/ops_nft/test_get_nft_creator.py": {
+      "coverage": false,
+      "isolated": [
+        "OpenZeppelin/openzeppelin-contracts@4.6.0/Counters",
+        "OpenZeppelin/openzeppelin-contracts@4.6.0/ERC721",
+        "OpsNFT"
+      ],
+      "results": ".",
+      "sha1": "8bfdf5b52822824d76921f6600e1aad3f82d1748",
+      "txhash": []
+    },
+    "tests/unit/ops_nft/test_nft_creation.py": {
+      "coverage": false,
+      "isolated": [
+        "OpenZeppelin/openzeppelin-contracts@4.6.0/Counters",
+        "OpenZeppelin/openzeppelin-contracts@4.6.0/ERC721",
+        "OpsNFT"
+      ],
+      "results": ".",
+      "sha1": "ce78bca0e4fc3c9f65cee5af24a3a6b5cac68c4d",
+      "txhash": []
+    },
+    "tests/unit/ops_nft/test_project_state.py": {
+      "coverage": false,
+      "isolated": [
+        "OpenZeppelin/openzeppelin-contracts@4.6.0/Counters",
+        "OpenZeppelin/openzeppelin-contracts@4.6.0/ERC721",
+        "OpsNFT"
+      ],
+      "results": "...",
+      "sha1": "11bde76dfb5ee23b3273e33700e07c67da722bf6",
+      "txhash": []
+    },
+    "tests/unit/ops_nft/test_public_variable_modifications.py": {
+      "coverage": false,
+      "isolated": [
+        "OpenZeppelin/openzeppelin-contracts@4.6.0/Counters",
+        "OpenZeppelin/openzeppelin-contracts@4.6.0/ERC721",
+        "OpsNFT"
+      ],
+      "results": "..",
+      "sha1": "7fa848fd9df9867a553a5ac76f3ed1b678af80a6",
+      "txhash": []
+    },
+    "tests/unit/ops_nft/test_redeem_eth_from_nft.py": {
+      "coverage": false,
+      "isolated": [
+        "OpenZeppelin/openzeppelin-contracts@4.6.0/Counters",
+        "OpenZeppelin/openzeppelin-contracts@4.6.0/ERC721",
+        "OpsNFT"
+      ],
+      "results": ".....",
+      "sha1": "21e93c2f3e2a1b7e0ca221a2a8c06ab35cb2c200",
+      "txhash": [
+        "7aa28e0babef23ce4dfb1b7c9afa61d9ca4f8993",
+        "7b99c77ce4e509ebdf814f129595bc8db11065a3"
+      ]
+    },
+    "tests/unit/ops_nft/test_safe_mint.py": {
+      "coverage": false,
+      "isolated": [
+        "OpenZeppelin/openzeppelin-contracts@4.6.0/Counters",
+        "OpenZeppelin/openzeppelin-contracts@4.6.0/ERC721",
+        "OpsNFT"
+      ],
+      "results": "............",
+      "sha1": "591b90d79b3963173c54dccf84863f0909556f8d",
+      "txhash": []
+    },
+    "tests/unit/ops_nft/test_submissions.py": {
+      "coverage": false,
+      "isolated": [
+        "OpenZeppelin/openzeppelin-contracts@4.6.0/Counters",
+        "OpenZeppelin/openzeppelin-contracts@4.6.0/ERC721",
+        "OpsNFT"
+      ],
+      "results": ".......",
+      "sha1": "ec080f0f90a493689688a2a4a317d3f861ba78af",
+      "txhash": [
+        "0cf7d07856a54c8f491323f7ed69251fa898372a"
+      ]
+    }
+  },
+  "tx": {
+    "01f077c46ffcf0b0224149a5853b3204bdb96eb8": {
+      "OpsNFT": {
+        "17": [
+          [],
+          [],
+          []
+        ],
+        "2": [
+          [
+            36
+          ],
+          [],
+          []
+        ]
+      }
+    },
+    "0cf7d07856a54c8f491323f7ed69251fa898372a": {
+      "OpsNFT": {
+        "17": [
+          [
+            55,
+            56,
+            64,
+            76,
+            77
+          ],
+          [
+            149
+          ],
+          [
+            148,
+            152
+          ]
+        ],
+        "2": [
+          [
+            36,
+            79,
+            106
+          ],
+          [],
+          []
+        ],
+        "7": [
+          [
+            105,
+            107
+          ],
+          [
+            181
+          ],
+          [
+            180
+          ]
+        ]
+      }
+    },
+    "48797d6c0929309fe2c0db797579da337f53b305": {
+      "OpsNFT": {
+        "12": [
+          [],
+          [],
+          []
+        ],
+        "17": [
+          [],
+          [],
+          []
+        ],
+        "2": [
+          [
+            12,
+            13,
+            33,
+            36,
+            62,
+            79,
+            85,
+            86
+          ],
+          [
+            160
+          ],
+          [
+            154,
+            161
+          ]
+        ]
+      }
+    },
+    "7aa28e0babef23ce4dfb1b7c9afa61d9ca4f8993": {
+      "OpsNFT": {
+        "17": [
+          [
+            19,
+            64,
+            76,
+            77
+          ],
+          [
+            144
+          ],
+          [
+            152
+          ]
+        ],
+        "2": [
+          [
+            36,
+            79,
+            106
+          ],
+          [],
+          []
+        ],
+        "7": [
+          [
+            105,
+            107
+          ],
+          [
+            181
+          ],
+          [
+            180
+          ]
+        ]
+      }
+    },
+    "7b99c77ce4e509ebdf814f129595bc8db11065a3": {
+      "OpsNFT": {
+        "17": [
+          [],
+          [],
+          []
+        ],
+        "2": [
+          [],
+          [],
+          []
+        ]
+      }
+    },
+    "b33a69dc19ad3652d7b49442d89fde4e10c1fade": {
+      "OpsNFT": {
+        "17": [
+          [],
+          [],
+          []
+        ],
+        "2": [
+          [
+            14,
+            36
+          ],
+          [
+            155
+          ],
+          []
+        ]
+      }
+    },
+    "c79a253dca31b191f06c18ef6b318e07cfc49aa4": {
+      "OpsNFT": {
+        "17": [
+          [],
+          [],
+          []
+        ],
+        "2": [
+          [
+            14,
+            36
+          ],
+          [
+            155
+          ],
+          []
+        ]
+      }
+    }
+  }
+}

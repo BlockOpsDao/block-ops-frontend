@@ -20,10 +20,9 @@ ReactGA.initialize(TRACKING_ID);
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <DAppProvider config={{
-    networks: [Kovan, Mainnet],
+    networks: [Kovan],
     readOnlyUrls: {
-      [Mainnet.chainId]: 'https://mainnet.infura.io/v3/a6d7ef14145a4908b1018e8d8452fffb',
-      [Kovan.chainId]: 'https://kovan.infura.io/v3/a6d7ef14145a4908b1018e8d8452fffb',
+      [Kovan.chainId]: 'https://kovan.infura.io/v3/a6d7ef14145a4908b1018e8d8452fffb'
     },
     notifications: {
       expirationPeriod: 1000,

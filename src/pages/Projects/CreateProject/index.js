@@ -1,122 +1,225 @@
-import React,{useState} from 'react';
-import { Link } from 'react-router-dom';
-import { Card, CardBody, CardHeader, Col, Container, Input, Label, Row } from 'reactstrap';
-import BreadCrumb from '../../../Components/Common/BreadCrumb';
+import React, {useState} from 'react';
+import { Card, CardBody, Col, Container, Input, Label, Row } from 'reactstrap';
 //Import Flatepicker
 import Flatpickr from "react-flatpickr";
-import Select from "react-select";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-
-import Dropzone from "react-dropzone";
-
-//Import Images
-import avatar3 from "../../../assets/images/users/avatar-3.jpg";
-import avatar4 from "../../../assets/images/users/avatar-4.jpg";
+import { utils } from 'ethers'
+import { Contract } from '@ethersproject/contracts'
+import { useContractFunction, useEthers } from "@usedapp/core";
+import map from "../../../build/deployments/map.json";
+import OpsNFTKovan from "../../../build/deployments/42/0x97C76c926E5bfEE1AA852F4e5986D3554eac5862.json"
+import { Icon } from '@iconify/react';
+import DisplayNFT from '../../../Components/Common/DisplayNFT';
+import TweetProject from '../../../Components/Common/TweetProject';
 
 const CreateProject = () => {
-    const SingleOptions = [
-        { value: 'Watches', label: 'Watches' },
-        { value: 'Headset', label: 'Headset' },
-        { value: 'Sweatshirt', label: 'Sweatshirt' },
-        { value: '20% off', label: '20% off' },
-        { value: '4 star', label: '4 star' },
-      ];
-
-    const [selectedMulti, setselectedMulti] = useState(null);
-
-    function handleMulti(selectedMulti) {
-    setselectedMulti(selectedMulti);
-    }  
-    
-    //Dropzone file upload
-    const [selectedFiles, setselectedFiles] = useState([]);
-    const [files, setFiles] = useState([]);
-  
-    function handleAcceptedFiles(files) {
-      files.map(file =>
-        Object.assign(file, {
-          preview: URL.createObjectURL(file),
-          formattedSize: formatBytes(file.size),
-        })
-      );
-      setselectedFiles(files);
-    }
-
-        /**
-     * Formats the size
-     */
-    function formatBytes(bytes, decimals = 2) {
-        if (bytes === 0) return "0 Bytes";
-        const k = 1024;
-        const dm = decimals < 0 ? 0 : decimals;
-        const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
-
-        const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
-    }
 
 document.title="Create Project | Block Ops";
+
+    const { chainId } = useEthers();
+    const [projectTitle, setProjectTitle] = useState("");
+    const [projectDescription, setProjectDescription] = useState("");
+    const [projectPriority, setProjectPriority] = useState("");
+    const [projectDeadline, setProjectDeadline] = useState("");
+    const [projectSkill, setProjectSkill] = useState("");
+    const [projectSkills, setProjectSkills] = useState([]);
+    const [projectImage, setProjectImage] = useState(null);
+    const [ipfsResponse, setIpfsResponse] = useState(null);
+    const [ethAmount, setEthAmount] = useState();
+
+    const [nftMintedOwner, setNftMintedOwner] = useState();
+    const [nftMintedMetadata, setNftMintedMetadata] = useState();
+    const [nftMintedValue, setNftMintedValue] = useState();
+    const [nftMintedTokenId, setNftMintedTokenId] = useState(null);
+    const [eventTableFinished, setEventTableFinished] = useState(false);
+
+    const [loading, setLoading] = useState(false);
+
+    const ipfsDefined = ipfsResponse !== null
+    const projectImageDefined = projectImage !== null
+
+    const abi = OpsNFTKovan['abi']
+    const opsNFTContractAddress = map[chainId]["OpsNFT"][0]
+    const opsNFTInterface = new utils.Interface(abi);
+    const contract = new Contract(opsNFTContractAddress, opsNFTInterface);
+    const { state, send, events, resetState } = useContractFunction(contract, 'safeMint')
+    const { status, receipt } = state
+    const loadingIcon = <i className="mdi mdi-loading mdi-spin fs-20 align-middle me-2"></i>
+
+
+
+    const callSafeMint = (tokenMetadataURI) => {
+        let ethAmountWithFees = Number(ethAmount) * (100/99)
+        void send(tokenMetadataURI, { 
+            value: utils.parseEther(String(ethAmountWithFees)) 
+        })
+    }
+
+    const handleEnter = (event) => {
+        if (event.key === 'Enter') {
+            setProjectSkills(oldArray => [...oldArray, projectSkill]);
+            document.getElementById('required-skills-input').value = '';
+        }
+    }
+
+    const uploadToIPFS = (ipfsData) => {
+        const header = {
+            "Authorization": "Bearer " + process.env.REACT_APP_NFT_STORAGE_KEY
+        }
+        fetch('https://api.nft.storage/store', {
+            method: 'POST',
+            body: ipfsData,
+            headers: {
+                "Authorization": "Bearer " + process.env.REACT_APP_NFT_STORAGE_KEY
+            }
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.ok) {
+                setIpfsResponse(data);
+                callSafeMint(data.value.url);
+            }
+        })
+    }
+
+
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        
+        const jsonData = {
+            "name": projectTitle,
+            "description": projectDescription,
+            "image": undefined,
+            "properties": {
+                "skills": projectSkills,
+                "priority": projectPriority,
+                "deadline": projectDeadline,
+                "videoClip": undefined
+            }
+        }
+        
+        let ipfsData = new FormData();
+        ipfsData.set("meta", JSON.stringify(jsonData))
+        if (projectImageDefined) {
+            ipfsData.set("image", projectImage)
+        } 
+        uploadToIPFS(ipfsData)
+    }
+
+    const eventsTable = () => {
+        events.map((e) => { 
+            if (e.name === "NFTMinted" & nftMintedMetadata === undefined) {
+                setNftMintedOwner(e.args[0])
+                setNftMintedMetadata(e.args[1])
+                setNftMintedValue(utils.formatEther(e.args[2]))
+                setNftMintedTokenId(e.args._tokenId.toNumber())
+                setEventTableFinished(true);
+            }
+        } ) 
+    }
+
+
+    const submitButton = () => {
+        if (state.status === undefined | state.status === 'None') {
+            return (
+                <button className="btn btn-primary" onClick={handleSubmit}>
+                    Create Project
+                </button>
+            )
+        } else if (state.status === "Mining" | state.status === "PendingSignature") {
+            return (
+                <button className="btn btn-info" onClick={handleSubmit}>
+                    Creating Project... {loadingIcon}
+                </button>
+            )
+        } else if (state.status === "Success") {
+            return (
+                <button className="btn btn-success" onClick={handleSubmit}>
+                    Project Created!
+                </button>
+            )
+        } else {
+            <button className="btn btn-danger" onClick={resetState()}>
+                Failed to Close Project
+            </button>
+
+        }
+        if (state.status === "Success" | state.status === "Failed") {
+            setTimeout(3000)
+            resetState()
+        }
+    }
+
+    const tweetOutProject = () => {
+        if (
+            projectSkills !== undefined & 
+            nftMintedTokenId !== undefined &
+            projectSkills !== null & 
+            nftMintedTokenId !== null 
+        ) {
+            return (
+                <TweetProject projectId={nftMintedTokenId} projectSkills={projectSkills} />
+            )
+        }
+    }
 
     return (
         <React.Fragment>
             <div className="page-content">
                 <Container fluid>
-                    <BreadCrumb title="Create Project" pageTitle="Projects" />
                     <Row>
-                        <Col lg={8}>
+                        <Col lg={12}>
                             <Card>
                                 <CardBody>
                                     <div className="mb-3">
                                         <Label className="form-label" htmlFor="project-title-input">Project Title</Label>
                                         <Input type="text" className="form-control" id="project-title-input"
-                                            placeholder="Enter project title" />
+                                            placeholder="Enter project title" value={projectTitle} onChange={(e) => setProjectTitle(e.target.value)} />
                                     </div>
 
                                     <div className="mb-3">
-                                        <Label className="form-label" htmlFor="project-thumbnail-img">Thumbnail Image</Label>
-                                        <Input className="form-control" id="project-thumbnail-img" type="file" accept="image/png, image/gif, image/jpeg" />
+                                        <Label className="form-label" htmlFor="project-thumbnail-img">NFT Image</Label>
+                                        <Input 
+                                            className="form-control" id="project-thumbnail-img" 
+                                            type="file" 
+                                            accept="image/png, image/gif, image/jpeg" 
+                                            onChange={(event) => {
+                                                setProjectImage(event.target.files[0]);
+                                            }}
+                                        />
                                     </div>
 
                                     <div className="mb-3">
                                         <Label className="form-label">Project Description</Label>
                                         <CKEditor
+                                            id='project-description-ckeditor'
                                             editor={ClassicEditor}
-                                            data="<p>Hello from CKEditor 5!</p>"
-                                            onReady={(editor) => {
-                                                // You can store the "editor" and use when it is needed.
-                                                
-                                            }}
-                                            onChange={(editor) => {
-                                                editor.getData();
-                                            }}
+                                            placeholder="<p>Enter a project description here.</p>"
+                                            onChange={ ( event, editor ) => {
+                                                const data = editor.getData();
+                                                setProjectDescription(data);
+                                            } }
+                        
                                             />
                                     </div>
 
                                     <Row>
-                                        <Col lg={4}>
+                                        <Col lg={6}>
                                             <div className="mb-3 mb-lg-0">
                                                 <Label htmlFor="choices-priority-input" className="form-label">Priority</Label>
                                                 <select className="form-select" data-choices data-choices-search-false
-                                                    id="choices-priority-input">
-                                                    <option defaultValue="High">High</option>
-                                                    <option value="Medium">Medium</option>
+                                                    id="choices-priority-input" onChange={(e) => setProjectPriority(e.target.value)}>
+                                                    <option value="None"></option>
                                                     <option value="Low">Low</option>
+                                                    <option value="Medium">Medium</option>
+                                                    <option value="High">High</option>
                                                 </select>
                                             </div>
                                         </Col>
-                                        <Col lg={4}>
+                                        <Col lg={6}>
                                             <div className="mb-3 mb-lg-0">
-                                                <Label htmlFor="choices-status-input" className="form-label">Status</Label>
-                                                <select className="form-select" data-choices data-choices-search-false
-                                                    id="choices-status-input">
-                                                    <option defaultValue="Inprogress">Inprogress</option>
-                                                    <option value="Completed">Completed</option>
-                                                </select>
-                                            </div>
-                                        </Col>
-                                        <Col lg={4}>
-                                            <div>
                                                 <Label htmlFor="datepicker-deadline-input" className="form-label">Deadline</Label>
                                                 <Flatpickr
                                                     className="form-control"
@@ -124,184 +227,81 @@ document.title="Create Project | Block Ops";
                                                     dateFormat: "d M, Y"
                                                     }}
                                                     placeholder="Selact Date"
+                                                    onChange={(e) => setProjectDeadline(e[0])}
                                                 />
+                                            </div>
+                                        </Col>
+                                        <Col lg={6}>
+                                            <div className="mb-3">
+                                                <br />
+                                                <Label className="form-label" >Bounty Amount <Icon icon="ph:currency-eth" width="17" /></Label>
+                                                <Input type="text" className="form-control"
+                                                    placeholder="Enter bounty amount in ETH" value={ethAmount} onChange={(e) => setEthAmount(e.target.value)} />
+                                            </div>
+                                        
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col>
+                                
+                                            <div className='mb-3 mb-lg-0'>
+                                                <Label htmlFor="required-skills-input" className="form-label">Required Skills</Label>
+                                                <Input type="text" className="form-control" id="required-skills-input"
+                                                placeholder="Press 'Enter' to add more skills" onChange={(e) => setProjectSkill(e.target.value)} onKeyPress={(e) => handleEnter(e)} />
+                                                <br />
+
+                                            <table className="table table-nowrap">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Skills</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    
+
+                                            {projectSkills?.map((f) => { return (
+                                                <tr key={f + "-skill" + "-"+Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5) }>
+                                                    <th className="fw-semibold">{f}</th>
+                                                </tr>
+                                            ) } ) }
+                                                </tbody>
+                                            </table>
+                                                
                                             </div>
                                         </Col>
                                     </Row>
                                 </CardBody>
                             </Card>
-                            <Card>
-                                <CardHeader >
-                                    <h5 className="card-title mb-0">Attached files</h5>
-                                </CardHeader>
-                                <CardBody>
-                                    <div>
-                                        <p className="text-muted">Add Attached files here.</p>
 
-                                        <Dropzone
-                                            onDrop={acceptedFiles => {
-                                            handleAcceptedFiles(acceptedFiles);
-                                            }}
-                                        >
-                                            {({ getRootProps, getInputProps }) => (
-                                            <div className="dropzone dz-clickable">
-                                                <div
-                                                className="dz-message needsclick"
-                                                {...getRootProps()}
-                                                >
-                                                <div className="mb-3">
-                                                    <i className="display-4 text-muted ri-upload-cloud-2-fill" />
-                                                </div>
-                                                <h4>Drop files here or click to upload.</h4>
-                                                </div>
-                                            </div>
-                                            )}
-                                        </Dropzone>
-
-                                        <ul className="list-unstyled mb-0" id="dropzone-preview">
-                                        
-                                        {selectedFiles.map((f, i) => {
-                                            return (
-                                                <Card
-                                                className="mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete"
-                                                key={i + "-file"}
-                                                >
-                                                <div className="p-2">
-                                                    <Row className="align-items-center">
-                                                    <Col className="col-auto">
-                                                        <img
-                                                        data-dz-thumbnail=""
-                                                        height="80"
-                                                        className="avatar-sm rounded bg-light"
-                                                        alt={f.name}
-                                                        src={f.preview}
-                                                        />
-                                                    </Col>
-                                                    <Col>
-                                                        <Link
-                                                        to="#"
-                                                        className="text-muted font-weight-bold"
-                                                        >
-                                                        {f.name}
-                                                        </Link>
-                                                        <p className="mb-0">
-                                                        <strong>{f.formattedSize}</strong>
-                                                        </p>
-                                                    </Col>
-                                                    </Row>
-                                                </div>
-                                                </Card>
-                                            );
-                                            })}
-                                        </ul>
-
+                            <Row>
+                                <Col md={3} sm={12}></Col>
+                                <Col md={3} sm={12}>
+                                    <div className='text-end mb-4'>
+                                        {tweetOutProject()}
                                     </div>
-                                </CardBody>
-                            </Card>
+                                </Col>
+
+                                <Col md={3} sm={12}></Col>
+                                <Col md={3} sm={12}>
+                                    <div className="text-end mb-4">
+                                        {submitButton()}
+                                    </div>
+                                </Col>
+                            
+                            </Row>
 
                             <div className="text-end mb-4">
-                                <button type="submit" className="btn btn-danger w-sm me-1">Delete</button>
-                                <button type="submit" className="btn btn-secondary w-sm me-1">Draft</button>
-                                <button type="submit" className="btn btn-success w-sm">Create</button>
+                                {receipt !== undefined ? eventsTable() : <></>}
+                                {eventTableFinished ? 
+                                <DisplayNFT 
+                                    owner={nftMintedOwner} 
+                                    ipfsMetadata={nftMintedMetadata} 
+                                    valueInETH={nftMintedValue} 
+                                    tokenId={nftMintedTokenId} 
+                                /> : <></>}
                             </div>
-                        </Col>
-
-                        <Col lg={4}>
-                            <div className="card">
-                                <div className="card-header">
-                                    <h5 className="card-title mb-0">Privacy</h5>
-                                </div>
-                                <CardBody>
-                                    <div>
-                                        <Label htmlFor="choices-privacy-status-input" className="form-label">Status</Label>
-                                        <select className="form-select" data-choices data-choices-search-false
-                                            id="choices-privacy-status-input">
-                                            <option defaultValue="Private">Private</option>
-                                            <option value="Team">Team</option>
-                                            <option value="Public">Public</option>
-                                        </select>
-                                    </div>
-                                </CardBody>
-                            </div>
-
-                            <div className="card">
-                                <div className="card-header">
-                                    <h5 className="card-title mb-0">Tags</h5>
-                                </div>
-                                <CardBody>
-                                    <div className="mb-3">
-                                        <Label htmlFor="choices-categories-input" className="form-label">Categories</Label>
-                                        <select className="form-select" data-choices data-choices-search-false
-                                            id="choices-categories-input">
-                                            <option defaultValue="Designing">Designing</option>
-                                            <option value="Development">Development</option>
-                                        </select>
-                                    </div>
-
-                                    <div>
-                                        <Label htmlFor="choices-text-input" className="form-label">Skills</Label>
-                                        <Select
-                                            value={selectedMulti}
-                                            isMulti={true}                                                            
-                                            onChange={() => {
-                                                handleMulti();
-                                            }}
-                                            options={SingleOptions}
-                                        />
-                                    </div>
-                                </CardBody>
-                            </div>
-
-                            <Card>
-                                <CardHeader>
-                                    <h5 className="card-title mb-0">Members</h5>
-                                </CardHeader>
-                                <CardBody>
-                                    <div className="mb-3">
-                                        <Label htmlFor="choices-lead-input" className="form-label">Team Lead</Label>
-                                        <select className="form-select" data-choices data-choices-search-false
-                                            id="choices-lead-input">
-                                            <option defaultValue="Brent Gonzalez">Brent Gonzalez</option>
-                                            <option value="Darline Williams">Darline Williams</option>
-                                            <option value="Sylvia Wright">Sylvia Wright</option>
-                                            <option value="Ellen Smith">Ellen Smith</option>
-                                            <option value="Jeffrey Salazar">Jeffrey Salazar</option>
-                                            <option value="Mark Williams">Mark Williams</option>
-                                        </select>
-                                    </div>
-
-                                    <div>
-                                        <Label className="form-label">Team Members</Label>
-                                        <div className="avatar-group">
-                                            <Link to="#" className="avatar-group-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Brent Gonzalez">
-                                                <div className="avatar-xs">
-                                                    <img src={avatar3} alt="" className="rounded-circle img-fluid" />
-                                                </div>
-                                            </Link>
-                                            <Link to="#" className="avatar-group-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Sylvia Wright">
-                                                <div className="avatar-xs">
-                                                    <div className="avatar-title rounded-circle bg-secondary">
-                                                        S
-                                                    </div>
-                                                </div>
-                                            </Link>
-                                            <Link to="#" className="avatar-group-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Ellen Smith">
-                                                <div className="avatar-xs">
-                                                    <img src={avatar4} alt="" className="rounded-circle img-fluid" />
-                                                </div>
-                                            </Link>
-                                            <Link to="#" className="avatar-group-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Add Members">
-                                                <div className="avatar-xs" data-bs-toggle="modal" data-bs-target="#inviteMembersModal">
-                                                    <div className="avatar-title fs-16 rounded-circle bg-light border-dashed border text-primary">
-                                                        +
-                                                    </div>
-                                                </div>
-                                            </Link>
-                                        </div>
-                                    </div>
-                                </CardBody>
-                            </Card>
-                        </Col>
+                            
+                        </Col>                        
                     </Row>
                 </Container>
             </div>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Dropdown, DropdownMenu, DropdownToggle, Form } from 'reactstrap';
+import { AnalyticEventTracker } from '../../Components/Common/AnalyticEventTracker';
 
 //import images
 import imagelogo from "../../assets/images/svg/block-ops/block-ops-icon-2048.svg";
@@ -13,7 +14,15 @@ import NotificationDropdown from '../../Components/Common/NotificationDropdown';
 import ProfileDropdown from '../../Components/Common/ProfileDropdown';
 import LightDark from '../../Components/Common/LightDark';
 
+import AddTokenToBrowserWallet from '../../Components/Common/AddTokenToBrowserWallet';
+
+const divStyle = {
+    color: '#000000',
+    backgroundColor: '#f7b84b'
+};
+
 const Header = ({ onChangeLayoutMode, layoutModeType, headerClass }) => {
+    const gaEventTracker = AnalyticEventTracker('Header');
     const [search, setSearch] = useState(false);
     const toogleSearch = () => {
         setSearch(!search);
@@ -87,7 +96,6 @@ const Header = ({ onChangeLayoutMode, layoutModeType, headerClass }) => {
                                     <span></span>
                                 </span>
                             </button>
-                            <SearchOption />
                         </div>
 
                         <div className="d-flex align-items-center">
@@ -109,25 +117,25 @@ const Header = ({ onChangeLayoutMode, layoutModeType, headerClass }) => {
                                     </Form>
                                 </DropdownMenu>
                             </Dropdown>
-
-                            {/* WebAppsDropdown */}
-                            {/* <WebAppsDropdown /> */}
-
-                            {/* Dark/Light Mode set */}
-                            {/* <LightDark
-                                layoutMode={layoutModeType}
-                                onChangeLayoutMode={onChangeLayoutMode}
-                            /> */}
-
-                            {/* NotificationDropdown */}
-                            {/* <NotificationDropdown /> */}
-
-                            {/* ProfileDropdown */}
                             <ProfileDropdown />
                         </div>
+                    </div>                    
+                    <div style={divStyle}> 
+                        <center>
+                            <p style={divStyle}>
+                                Note: We are currently live on the Kovan Testnet. 
+                                <a 
+                                    href="https://faucets.chain.link/" 
+                                    className='text text-info'
+                                    onClick={() => {gaEventTracker('chainlink_faucet')}}
+                                    target="_blank"
+                                > For free kEth click here</a> 
+                            </p>
+                        </center>
                     </div>
                 </div>
             </header>
+            <br /><br />
         </React.Fragment>
     );
 };

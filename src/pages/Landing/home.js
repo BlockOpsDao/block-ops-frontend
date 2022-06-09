@@ -41,6 +41,7 @@ const Home = () => {
                                     <Web3Wallet />
                                     <EnterApp />
                                 </div>
+                                
                             </div>
 
                             <div className='mt-4 mt-sm-5 pt-sm-5 mb-sm-n5 demo-carousel'>
