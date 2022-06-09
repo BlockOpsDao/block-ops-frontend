@@ -9,6 +9,7 @@ const Navdata = () => {
     const [isSubmitSolutionPage, setIsSubmitSolutionPage] = useState(false);
     const [isYourSubmissionsPage, setIsYourSubmissionsPage] = useState(false);
     const [isAllProjectsPage, setIsAllProjectsPage] = useState(false);
+    const [isInformationPage, setIsInformationPage] = useState(false);
 
     const [isApps, setIsApps] = useState(false);
     const [isAuth, setIsAuth] = useState(false);
@@ -54,6 +55,9 @@ const Navdata = () => {
         }
         if (iscurrentState !== 'AllProjectsPage') {
             setIsAllProjectsPage(false);
+        }
+        if (iscurrentState !== 'InformationPage') {
+            setIsInformationPage(false)
         }
         if (iscurrentState !== 'Apps') {
             setIsApps(false);
@@ -106,6 +110,7 @@ const Navdata = () => {
         isSubmitSolutionPage,
         isYourSubmissionsPage,
         isAllProjectsPage,
+        isInformationPage,
         isApps,
         isCreateProject,
         isAuth,
@@ -210,6 +215,23 @@ const Navdata = () => {
                 updateIconSidebar(e);
             },
             stateVariables: isYourSubmissionsPage,
+        },
+        {
+            label: "Information",
+            isHeader: true,
+        },
+        {
+            id: "informationpage",
+            label: "More Info",
+            icon: "ri-file-info-fill",
+            link: "/info",
+            click: function (e) {
+                e.preventDefault();
+                setIsAuth(!isInformationPage);
+                setIscurrentState('InformationPage');
+                updateIconSidebar(e);
+            },
+            stateVariables: isInformationPage,
         },
     ];
     return <React.Fragment>{menuItems}</React.Fragment>;

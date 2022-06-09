@@ -4,10 +4,10 @@ import { Redirect } from "react-router-dom";
 import DashboardProject from "../pages/DashboardProject";
 import CreateProject from "../pages/Projects/CreateProject";
 import YourSubmissions from "../pages/Projects/YourSubmissions";
-import ComingSoon from '../pages/Pages/ComingSoon/ComingSoon';
 import ListProjectsPage from "../pages/Pages/ListProjectsPage/ListProjectsPage";
 import SubmitSolution from "../pages/Projects/SubmitSolution";
 import AllProjects from "../pages/DashboardProject/AllProjects";
+import Information from "../Components/Common/Information";
 import Index from "../pages/Landing";
 
 const authProtectedRoutes = [
@@ -17,6 +17,7 @@ const authProtectedRoutes = [
   { path: "/submit-solution", component: SubmitSolution},
   { path: "/your-submissions", component: YourSubmissions},
   { path: "/all-projects", component: AllProjects },
+  { path: "/info", component: Information },
 
   // this route should be at the end of all other routes
   // eslint-disable-next-line react/display-name
@@ -29,7 +30,6 @@ const authProtectedRoutes = [
 
 const publicRoutes = [
 
-  { path: "/coming-soon", component: ComingSoon },
   { path: "/landing", component: Index },
 
 ];

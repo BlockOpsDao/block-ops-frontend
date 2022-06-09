@@ -11,12 +11,13 @@ import OpsNFTKovan from "../../../build/deployments/42/0x97C76c926E5bfEE1AA852F4
 import DisplayNFTWoCalling from '../../../Components/Common/DisplayNFTWoCalling';
 import TweetSubmission from '../../../Components/Common/TweetSubmission';
 import LoadTokenMetadataById from '../../../Components/Common/LoadTokenMetadataById';
-
+import { AnalyticEventTracker } from '../../../Components/Common/AnalyticEventTracker';
 
 const SubmitSolution = () => {
 
 document.title="Submit Solution | Block Ops";
 
+    const gaEventTracker = AnalyticEventTracker("SubmitSolution")
     const tokenMetadataById = LoadTokenMetadataById()
    
     const { account, chainId } = useEthers();
@@ -123,27 +124,33 @@ document.title="Submit Solution | Block Ops";
 
     const submitButton = () => {
         if (status === undefined | status === "None") {
+            
             return (
                 <button className="btn btn-primary" onClick={handleSubmit}>
                     Submit
                 </button>
             )
         } else if (status === "Mining" | status === "PendingSignature") {
+            gaEventTracker('SubmittingSolution', account)
             return (
                 <button className="btn btn-info" onClick={handleSubmit}>
                     Submitting... {loadingIcon}
                 </button>
             )
         } else if (status === "Success") {
+            gaEventTracker('SubmittedSolution', account)
             return (
                 <button className="btn btn-success" onClick={handleSubmit}>
                     Submission Created!
                 </button>
             )
         } else {
-            <button className="btn btn-danger" onClick={handleSubmit}>
-                Failed to Create Submission
-            </button>
+            gaEventTracker('FailedSubmittingSolution', account)
+            return (
+                <button className="btn btn-danger" onClick={handleSubmit}>
+                    Failed to Create Submission
+                </button>
+            )
 
         }
         if (status === "Success" | status === "Failed" | status === "Fail") {
@@ -153,7 +160,7 @@ document.title="Submit Solution | Block Ops";
     }
 
     const tweetOutSubmission = () => {
-
+        
         if (ipfsResponse !== undefined & ipfsResponse !== null) {
                 return (
                     <TweetSubmission 

@@ -6,8 +6,7 @@ import { Contract } from '@ethersproject/contracts'
 import { useContractFunction, useEthers } from "@usedapp/core";
 import map from "../../../build/deployments/map.json";
 import OpsNFTKovan from "../../../build/deployments/42/0x97C76c926E5bfEE1AA852F4e5986D3554eac5862.json"
-
-
+import { AnalyticEventTracker } from '../../../Components/Common/AnalyticEventTracker';
 import LoadTokenMetadataById from '../../../Components/Common/LoadTokenMetadataById';
 import { Icon } from '@iconify/react';
 
@@ -15,7 +14,7 @@ import { Icon } from '@iconify/react';
 const YourSubmissions = () => {
 
 document.title="Your Submissions | Block Ops";
-    
+    const gaEventTracker = AnalyticEventTracker("YourSubmissions")
     const tokenMetadataById = LoadTokenMetadataById()
     const { account, chainId } = useEthers();
     const abi = OpsNFTKovan['abi']
@@ -159,26 +158,37 @@ document.title="Your Submissions | Block Ops";
     }
 
     const redemptionButton = () => {
-        if (RedeemState.status === "Success" | tokenMetadataById[selectedTokenId]['amountOfEthInNFT'] === 0) {
+        if (tokenMetadataById[selectedTokenId]['amountOfEthInNFT'] === 0) {
+            gaEventTracker("RewardAlreadyRedeemed", selectedTokenId)
             return (
                 <button className="btn btn-success" onClick={() => {alert("Reward already redeemed for this token.")}}>
+                    Reward Already Redeemed!
+                </button>
+            )
+        } else if (RedeemState.status === "Success") {
+            gaEventTracker("SucceededRedeemingReward", selectedTokenId)
+            return (
+                <button className="btn btn-success">
                     Reward Redeemed!
                 </button>
             )
 
         } else if (RedeemState.status === undefined | RedeemState.status === "None") {
+            gaEventTracker("RedeemReward", selectedTokenId)
             return (
                 <button className="btn btn-primary" onClick={() => {callRedeemEth()}}>
                     Redeem Reward
                 </button>
             )
         } else if (RedeemState.status === "Mining" | RedeemState.status === "PendingSignature") {
+            gaEventTracker("RedeemingReward", selectedTokenId)
             return (
                 <button className="btn btn-info" onClick={() => {callRedeemEth()}}>
                     Redeeming Reward... {loadingIcon}
                 </button>
             )
         } else {
+            gaEventTracker("FailedRedeemingReward", selectedTokenId)
             return (
                 <button className="btn btn-danger" onClick={callRedeemEth()}>
                     Failed to Redeem Reward
