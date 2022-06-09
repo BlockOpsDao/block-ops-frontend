@@ -8,21 +8,8 @@ import "swiper/css";
 import "swiper/css/effect-fade";
 import "swiper/css/pagination";
 
-import { EffectFade, Autoplay } from "swiper";
-import { Swiper, SwiperSlide } from "swiper/react";
-
-
 // Import Images
 import imgpattern from "../../assets/images/landing/img-pattern.png";
-
-import defaultDemo from "../../assets/images/demos/default.png";
-import saasDemo from "../../assets/images/demos/saas.png";
-import materialDemo from "../../assets/images/demos/material.png";
-import minimalDemo from "../../assets/images/demos/minimal.png";
-import creativeDemo from "../../assets/images/demos/creative.png";
-import modernDemo from "../../assets/images/demos/modern.png";
-import interactiveDemo from "../../assets/images/demos/interactive.png";
-
 
 const Home = () => {
     return (
@@ -39,7 +26,8 @@ const Home = () => {
 
                                 <div className="d-flex gap-2 justify-content-center mt-4">
                                     <Web3Wallet />
-                                    <EnterApp />
+                                    
+                                    <EnterApp /><br /><br />
                                 </div>
                                 
                             </div>
@@ -54,39 +42,7 @@ const Home = () => {
                                 <br />
                                 <br />
                                 <br />
-                                {/* <Swiper
-                                    spaceBetween={30}
-                                    effect={"fade"}
-                                    loop={true}
-                                    pagination={{
-                                        clickable: true,
-                                    }}
-                                    autoplay={{ delay: 2000, disableOnInteraction: false }}
-                                    modules={[EffectFade, Autoplay]}
-                                    className="mySwiper" >
 
-                                    <SwiperSlide className="carousel-inner shadow-lg p-2 bg-white rounded">
-                                        <img src={defaultDemo} className="d-block w-100" alt="..." />
-                                    </SwiperSlide>
-                                    <SwiperSlide className="carousel-inner shadow-lg p-2 bg-white rounded">
-                                        <img src={saasDemo} className="d-block w-100" alt="..." />
-                                    </SwiperSlide>
-                                    <SwiperSlide className="carousel-inner shadow-lg p-2 bg-white rounded">
-                                        <img src={materialDemo} className="d-block w-100" alt="..." />
-                                    </SwiperSlide>
-                                    <SwiperSlide className="carousel-inner shadow-lg p-2 bg-white rounded">
-                                        <img src={minimalDemo} className="d-block w-100" alt="..." />
-                                    </SwiperSlide>
-                                    <SwiperSlide className="carousel-inner shadow-lg p-2 bg-white rounded">
-                                        <img src={creativeDemo} className="d-block w-100" alt="..." />
-                                    </SwiperSlide>
-                                    <SwiperSlide className="carousel-inner shadow-lg p-2 bg-white rounded">
-                                        <img src={modernDemo} className="d-block w-100" alt="..." />
-                                    </SwiperSlide>
-                                    <SwiperSlide className="carousel-inner shadow-lg p-2 bg-white rounded">
-                                        <img src={interactiveDemo} className="d-block w-100" alt="..." />
-                                    </SwiperSlide>
-                                </Swiper> */}
                             </div>
                         </Col>
                     </Row>
