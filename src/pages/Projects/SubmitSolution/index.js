@@ -153,10 +153,6 @@ document.title="Submit Solution | Block Ops";
             )
 
         }
-        if (status === "Success" | status === "Failed" | status === "Fail") {
-            setTimeout(3000)
-            resetState()
-        }
     }
 
     const tweetOutSubmission = () => {
