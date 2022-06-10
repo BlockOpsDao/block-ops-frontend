@@ -25,7 +25,7 @@ const Home = () => {
                                 <p className="lead text-muted lh-base">Block-Ops changes the way developers work by allowing everyone to contribute and rewarding those with the best solution.</p>
 
                                 <div className="d-flex gap-2 justify-content-center mt-4">
-                                    <Web3Wallet />
+                                    <Web3Wallet /><br /><br />
                                     
                                     <EnterApp /><br /><br />
                                 </div>
