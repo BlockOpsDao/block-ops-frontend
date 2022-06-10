@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardBody, Col, Container, Input, Label, Row } from 'reactstrap';
 //Import Flatepicker
 import { CKEditor } from "@ckeditor/ckeditor5-react";
@@ -31,8 +31,9 @@ document.title="Submit Solution | Block Ops";
     const opsNFTInterface = new utils.Interface(abi);
     const contract = new Contract(opsNFTContractAddress, opsNFTInterface);
     const { state, send, resetState } = useContractFunction(contract, 'makeSubmission')
-    const { status } = state
+    // const { status } = state
     const [selectedTokenId, setSelectedTokenId] = useState(0);
+    const [creatingNFT, setCreatingNFT] = useState(false);
 
     const tokenOwner = Object.keys(tokenMetadataById).length > 0 ? tokenMetadataById[selectedTokenId]['owner'] : undefined
     const tokenMetadataURI = Object.keys(tokenMetadataById).length > 0 ? tokenMetadataById[selectedTokenId]['ipfsURI'] : undefined
@@ -47,11 +48,21 @@ document.title="Submit Solution | Block Ops";
     const projectSkills = Object.keys(tokenMetadataById).length > 0 ? tokenMetadataById[selectedTokenId]['projectSkills'] : undefined
     const projectDeadline = Object.keys(tokenMetadataById).length > 0 ? tokenMetadataById[selectedTokenId]['projectDeadline'] : undefined
     const projectImageURI = Object.keys(tokenMetadataById).length > 0 ? tokenMetadataById[selectedTokenId]['ipfsImageURI'] : undefined
+    const [displayErrorMessage, setDisplayErrorMessage] = useState();
 
     const loadingIcon = <i className="mdi mdi-loading mdi-spin fs-20 align-middle me-2"></i>
 
+    useEffect(() => {
+        if (state.status === "Exception") {
+            setDisplayErrorMessage(<p className='text text-danger'>{state.errorMessage}</p>)
+            setCreatingNFT(false)
+        }
+       }, [state]);
+       
+
     const callMakeSubmission = (tokenMetadataURI) => {
         void send(Number(selectedTokenId), String(tokenMetadataURI))
+        setCreatingNFT(false)
     }
 
     const uploadToIPFS = (ipfsData) => {
@@ -69,7 +80,7 @@ document.title="Submit Solution | Block Ops";
             if (data.ok) {
                 setIpfsResponse(data.value.url);
                 callMakeSubmission(data.value.url);
-            }
+            } 
         })
     }
 
@@ -123,32 +134,44 @@ document.title="Submit Solution | Block Ops";
     }
 
     const submitButton = () => {
-        if (status === undefined | status === "None") {
-            
+        if (creatingNFT) {
             return (
-                <button className="btn btn-primary" onClick={handleSubmit}>
-                    Submit
-                </button>
-            )
-        } else if (status === "Mining" | status === "PendingSignature") {
-            gaEventTracker('SubmittingSolution', account)
-            return (
-                <button className="btn btn-info" onClick={handleSubmit}>
+                <button className="btn btn-info">
                     Submitting... {loadingIcon}
                 </button>
             )
-        } else if (status === "Success") {
+        } else if (state.status === undefined | state.status === "None") {
+            return (
+                <button className="btn btn-primary" onClick={(e) => {setCreatingNFT(true); handleSubmit(e)}}>
+                    Submit
+                </button>
+            )
+        } else if (state.status === "Mining" | state.status === "PendingSignature") {
+            gaEventTracker('SubmittingSolution', account)
+            return (
+                <button className="btn btn-info">
+                    Submitting... {loadingIcon}
+                </button>
+            )
+        } else if (state.status === "Success") {
             gaEventTracker('SubmittedSolution', account)
             return (
-                <button className="btn btn-success" onClick={handleSubmit}>
+                <button className="btn btn-success" onClick={() => {resetState()}}>
                     Submission Created!
+                </button>
+            )
+        } else if (state.status === "Exception") {
+            gaEventTracker('FailedSubmittingSolution', account)
+            return (
+                <button className="btn btn-danger" onClick={() => {resetState()}}>
+                    Failed
                 </button>
             )
         } else {
             gaEventTracker('FailedSubmittingSolution', account)
             return (
-                <button className="btn btn-danger" onClick={handleSubmit}>
-                    Failed to Create Submission
+                <button className="btn btn-danger" onClick={() => {resetState()}}>
+                    Failed
                 </button>
             )
 
@@ -157,7 +180,7 @@ document.title="Submit Solution | Block Ops";
 
     const tweetOutSubmission = () => {
         
-        if (ipfsResponse !== undefined & ipfsResponse !== null) {
+        if (ipfsResponse !== undefined & ipfsResponse !== null & state.status === "Success") {
                 return (
                     <TweetSubmission 
                         projectId={nftTokenId} 
@@ -244,6 +267,7 @@ document.title="Submit Solution | Block Ops";
                                 <Col md={3} sm={12}></Col>
                                 <Col md={3} sm={12}>
                                     <div className="text-end mb-4">
+                                        {displayErrorMessage !== undefined ? displayErrorMessage : <></>}
                                         {submitButton()}
                                     </div>
                                 </Col>
@@ -253,7 +277,7 @@ document.title="Submit Solution | Block Ops";
                             <Row>
                                 <Col sm={12}>
                                     <div className="text-end mb-4">
-                                        {status === "Success" ? prepareBetterDisplay() : <></> }
+                                        {state.status === "Success" ? prepareBetterDisplay() : <></> }
                                     </div>
                                 </Col>
                             </Row>
