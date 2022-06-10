@@ -6,7 +6,7 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { utils } from 'ethers'
 import { Contract } from '@ethersproject/contracts'
-import { useContractFunction, useEthers } from "@usedapp/core";
+import { useContractFunction, useEthers, useEtherBalance } from "@usedapp/core";
 import map from "../../../build/deployments/map.json";
 import OpsNFTKovan from "../../../build/deployments/42/0x97C76c926E5bfEE1AA852F4e5986D3554eac5862.json"
 import { Icon } from '@iconify/react';
@@ -17,7 +17,9 @@ const CreateProject = () => {
 
 document.title="Create Project | Block Ops";
 
-    const { chainId } = useEthers();
+    const { chainId, account } = useEthers();
+    const etherBalance = useEtherBalance(account)
+
     const [projectTitle, setProjectTitle] = useState("");
     const [projectDescription, setProjectDescription] = useState("");
     const [projectPriority, setProjectPriority] = useState("");
@@ -27,16 +29,14 @@ document.title="Create Project | Block Ops";
     const [projectImage, setProjectImage] = useState(null);
     const [ipfsResponse, setIpfsResponse] = useState(null);
     const [ethAmount, setEthAmount] = useState();
+    const [creatingNFT, setCreatingNFT] = useState(false);
+    const [displayErrorMessage, setDisplayErrorMessage] = useState();
 
     const [nftMintedOwner, setNftMintedOwner] = useState();
     const [nftMintedMetadata, setNftMintedMetadata] = useState();
     const [nftMintedValue, setNftMintedValue] = useState();
     const [nftMintedTokenId, setNftMintedTokenId] = useState(null);
     const [eventTableFinished, setEventTableFinished] = useState(false);
-
-    const [loading, setLoading] = useState(false);
-
-    const ipfsDefined = ipfsResponse !== null
     const projectImageDefined = projectImage !== null
 
     const abi = OpsNFTKovan['abi']
@@ -44,16 +44,25 @@ document.title="Create Project | Block Ops";
     const opsNFTInterface = new utils.Interface(abi);
     const contract = new Contract(opsNFTContractAddress, opsNFTInterface);
     const { state, send, events, resetState } = useContractFunction(contract, 'safeMint')
-    const { status, receipt } = state
+    const { receipt } = state
     const loadingIcon = <i className="mdi mdi-loading mdi-spin fs-20 align-middle me-2"></i>
 
 
 
     const callSafeMint = (tokenMetadataURI) => {
         let ethAmountWithFees = Number(ethAmount) * (100/99)
-        void send(tokenMetadataURI, { 
-            value: utils.parseEther(String(ethAmountWithFees)) 
-        })
+        if (etherBalance.toNumber() < ethAmountWithFees) {
+            setDisplayErrorMessage(<>
+                <p className="text text-danger" key="error-line-0">Insufficient balance to create this project</p>
+                <p className="text text-danger" key="error-line-1">Your Balance: {String(etherBalance.toNumber())} ETH</p>
+                <p className="text text-danger" key="error-line-2">Bounty Amount: {String(ethAmountWithFees)} ETH</p>
+            </>)
+            setCreatingNFT(false)
+        } else {
+            void send(tokenMetadataURI, { 
+                value: utils.parseEther(String(ethAmountWithFees)) 
+            })
+        }
     }
 
     const handleEnter = (event) => {
@@ -122,33 +131,47 @@ document.title="Create Project | Block Ops";
 
 
     const submitButton = () => {
-        if (state.status === undefined | state.status === 'None') {
+        if (creatingNFT) {
             return (
-                <button className="btn btn-primary" onClick={handleSubmit}>
+                <button className="btn btn-primary">
+                    Creating Project... {loadingIcon}
+                </button>
+            )
+        } else if (state.status === undefined | state.status === 'None') {
+            return (
+                <button className="btn btn-primary" onClick={(e) => {setCreatingNFT(true); handleSubmit(e)}}>
                     Create Project
                 </button>
             )
         } else if (state.status === "Mining" | state.status === "PendingSignature") {
             return (
-                <button className="btn btn-info" onClick={handleSubmit}>
+                <button className="btn btn-info">
                     Creating Project... {loadingIcon}
                 </button>
             )
         } else if (state.status === "Success") {
+            setCreatingNFT(false)
             return (
-                <button className="btn btn-success" onClick={handleSubmit}>
+                <button className="btn btn-success" onClick={() => {resetState()}}>
                     Project Created!
                 </button>
             )
+        } else if (state.status === "Exception") {
+            setCreatingNFT(false)
+            return (<>
+                <p>{state.errorMessage}</p>
+                <button className="btn btn-danger" onClick={() => {resetState()}}>
+                    Failed
+                </button>
+            </>)
         } else {
-            <button className="btn btn-danger" onClick={resetState()}>
-                Failed to Close Project
-            </button>
+            setCreatingNFT(false)
+            return (
+                <button className="btn btn-danger" onClick={() => {resetState()}}>
+                    Failed
+                </button>
+            )
 
-        }
-        if (state.status === "Success" | state.status === "Failed") {
-            setTimeout(3000)
-            resetState()
         }
     }
 
@@ -284,6 +307,7 @@ document.title="Create Project | Block Ops";
                                 <Col md={3} sm={12}></Col>
                                 <Col md={3} sm={12}>
                                     <div className="text-end mb-4">
+                                        {displayErrorMessage !== undefined ? displayErrorMessage : <></>}
                                         {submitButton()}
                                     </div>
                                 </Col>
