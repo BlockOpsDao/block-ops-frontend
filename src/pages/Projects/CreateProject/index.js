@@ -4,7 +4,7 @@ import { Card, CardBody, Col, Container, Input, Label, Row } from 'reactstrap';
 import Flatpickr from "react-flatpickr";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { utils } from 'ethers'
+import { BigNumber, utils } from 'ethers'
 import { Contract } from '@ethersproject/contracts'
 import { useContractFunction, useEthers, useEtherBalance } from "@usedapp/core";
 import map from "../../../build/deployments/map.json";
@@ -50,14 +50,15 @@ document.title="Create Project | Block Ops";
 
 
     const callSafeMint = (tokenMetadataURI) => {
-        let ethAmountWithFees = Number(ethAmount) * (100/99)
-        if (etherBalance.toNumber() < ethAmountWithFees) {
+        let tmpEthAmount = utils.parseEther(String(ethAmount))
+        let ethAmountWithFees = tmpEthAmount.mul(100).div(99)
+        if (etherBalance.lte(ethAmountWithFees)) {
+            setCreatingNFT(false)
             setDisplayErrorMessage(<>
                 <p className="text text-danger" key="error-line-0">Insufficient balance to create this project</p>
-                <p className="text text-danger" key="error-line-1">Your Balance: {String(etherBalance.toNumber())} ETH</p>
-                <p className="text text-danger" key="error-line-2">Bounty Amount: {String(ethAmountWithFees)} ETH</p>
+                <p className="text text-danger" key="error-line-1">Your Balance: {utils.formatEther(etherBalance)} ETH</p>
+                <p className="text text-danger" key="error-line-2">Bounty Amount: {utils.formatEther(ethAmountWithFees)} ETH</p>
             </>)
-            setCreatingNFT(false)
         } else {
             void send(tokenMetadataURI, { 
                 value: utils.parseEther(String(ethAmountWithFees)) 
