@@ -1,70 +1,79 @@
 import React, { useState, useEffect } from 'react';
 import ReactApexChart from "react-apexcharts";
-import LoadTokenMetadataByMonth from '../../Components/Common/LoadTokenMetadataByMonth';
+import LoadTokenMetadataByDate from '../../Components/Common/LoadTokenMetadataByDate';
+import Moment from 'moment';
+
 const loadingIcon = <i className="mdi mdi-loading mdi-spin fs-20 align-middle me-2"></i>
 
 
 const ProjectsOverviewCharts = () => {
 
-    const tokenMetadataByMonth = LoadTokenMetadataByMonth()
-    const [arrayOfMonths, setArrayOfMonths] = useState();
-    const [arrayOfProjectsByMonth, setArrayOfProjectsByMonth] = useState();
-    const [arrayOfSubmissionsByMonth, setArrayOfSubmissionsByMonth] = useState();
-    const [arrayOfAmountOfEthInNFTByMonth, setArrayOfAmountOfEthInNFTByMonth] = useState();
+    const tokenMetadataByDate = LoadTokenMetadataByDate()
+    const [items, setItems] = useState();
+    const [projectsMax, setProjectsMax] = useState();
+    const [submissionsMax, setSubmissionsMax] = useState();
+    const [amountMax, setAmountMax] = useState();
 
-    const [projectsMax, setProjectsMax] = useState(1);
-    const [submissionsMax, setSubmissionsMax] = useState(1);
-    const [amountMax, setAmountMax] = useState(1);
-    
+    const tmpProjectDict = {}
     useEffect(() => {
-        let tmpArrayOfMonths = []
-        let tmpArrayOfProjectsByMonth = []
-        let tmpArrayOfSubmissionsByMonth = []
-        let tmpArrayOfAmountOfEthInNFTByMonth = []
 
-        if (Object.keys(tokenMetadataByMonth).length !== 0) {
+        if (Object.keys(tokenMetadataByDate).length !== 0) {
 
-            if (
-                arrayOfMonths === undefined | 
-                arrayOfProjectsByMonth === undefined | 
-                arrayOfSubmissionsByMonth === undefined | 
-                arrayOfAmountOfEthInNFTByMonth === undefined     
-            ) {
-                for (const [key, value] of Object.entries(tokenMetadataByMonth)) {
+            if (items === undefined) {
+                for (const [key, value] of Object.entries(tokenMetadataByDate)) {
+                    let dateKey = Date.parse(key)
+                    let monthKey = Moment(dateKey).format('MMM-YY')
+                    if (!(monthKey in tmpProjectDict)) {
+                        tmpProjectDict[monthKey] = {
+                            "monthKey": monthKey,
+                            "numberOfProjects": value['numberOfProjects'],
+                            "numberOfSubmissions": value['numberOfSubmissions'],
+                            "amountOfEthInNFT": value['amountOfEthInNFT'],
+                            "dateKey": dateKey
+                        }
+                    } else {
+                        tmpProjectDict[monthKey]['numberOfProjects'] += value['numberOfProjects']
+                        tmpProjectDict[monthKey]['numberOfSubmissions'] += value['numberOfSubmissions']
+                        tmpProjectDict[monthKey]['amountOfEthInNFT'] += value['amountOfEthInNFT']
+                    }
 
-                    tmpArrayOfMonths.push(key);
-                    tmpArrayOfProjectsByMonth.push(value['numberOfProjects'])
-                    tmpArrayOfSubmissionsByMonth.push(value['numberOfSubmissions'])
-                    tmpArrayOfAmountOfEthInNFTByMonth.push(value['amountOfEthInNFT'])
                 }
 
-                setArrayOfMonths(tmpArrayOfMonths)
-                setArrayOfProjectsByMonth(tmpArrayOfProjectsByMonth)
-                setArrayOfSubmissionsByMonth(tmpArrayOfSubmissionsByMonth)
-                setArrayOfAmountOfEthInNFTByMonth(tmpArrayOfAmountOfEthInNFTByMonth)
-                
-                setProjectsMax(Math.ceil(Math.max(...tmpArrayOfProjectsByMonth)*1.75))
-                setSubmissionsMax(Math.ceil(Math.max(...tmpArrayOfSubmissionsByMonth)*1.75))
-                setAmountMax(Math.ceil(Math.max(...tmpArrayOfAmountOfEthInNFTByMonth)*1.75))
+                if (Object.entries(tmpProjectDict).length > 0)
+                    setItems(Object.keys(tmpProjectDict).map(function(key) {
+                        return [key, tmpProjectDict[key]];
+                    }).sort(function(first, second) {
+                        return first[1]['dateKey'] - second[1]['dateKey'];
+                    }))
+
             }
         }
 
-    }, [tokenMetadataByMonth]);
+    }, [tokenMetadataByDate]);
 
+    if (items !== undefined & projectsMax === undefined & submissionsMax === undefined & amountMax === undefined) {
+
+        let tmpArrayOfProjectsByMonth = items.map(x => x[1]['numberOfProjects'])
+        let tmpArrayOfSubmissionsByMonth = items.map(x => x[1]['numberOfSubmissions'])
+        let tmpArrayOfAmountOfEthInNFTByMonth = items.map(x => x[1]['amountOfEthInNFT'])
+        setProjectsMax(Math.ceil(Math.max(...tmpArrayOfProjectsByMonth)*1.75))
+        setSubmissionsMax(Math.ceil(Math.max(...tmpArrayOfSubmissionsByMonth)*1.75))
+        setAmountMax(Math.ceil(Math.max(...tmpArrayOfAmountOfEthInNFTByMonth)*1.75))
+    }
 
     const linechartcustomerColors = ["#405189", "#0ab39c", "#f7b84b"];
     const series = [{
         name: 'Number of Projects',
         type: 'bar',
-        data: arrayOfProjectsByMonth ?? [0]
+        data: items ? items.map(x => x[1]['numberOfProjects']) : undefined ?? [0]
     }, {
         name: 'Project Submissions',
         type: 'bar',
-        data: arrayOfSubmissionsByMonth ?? [0]
+        data: items ? items.map(x => x[1]['numberOfSubmissions']) : undefined ?? [0]
     }, {
         name: 'Available ETH',
         type: 'area',
-        data: arrayOfAmountOfEthInNFTByMonth ?? [1]
+        data: items ? items.map(x => x[1]['amountOfEthInNFT']) : undefined ?? [1]
     }];
     var options = {
         chart: {
@@ -90,7 +99,7 @@ const ProjectsOverviewCharts = () => {
             }
         },
         xaxis: {
-            categories: arrayOfMonths !== undefined ? arrayOfMonths.slice(-12) : ['Loading'],
+            categories: items !== undefined ? items.map(x => x[1]['monthKey']).slice(-12) : ['Loading'],
             axisTicks: {
                 show: false
             },
@@ -124,7 +133,7 @@ const ProjectsOverviewCharts = () => {
                     }
                 },
                 min: 0,
-                max: projectsMax > submissionsMax ? projectsMax : submissionsMax,
+                max: projectsMax ? submissionsMax ?  projectsMax > submissionsMax ? projectsMax : submissionsMax : 1 : 1,
 
             
             },
@@ -162,7 +171,7 @@ const ProjectsOverviewCharts = () => {
                     }
                 },
                 min: 0,
-                max: amountMax
+                max: amountMax ? amountMax : 1
             },
         ],
         grid: {
@@ -235,7 +244,7 @@ const ProjectsOverviewCharts = () => {
             }]
         }
     };
-    if (arrayOfProjectsByMonth !== undefined & arrayOfAmountOfEthInNFTByMonth !== undefined) {
+    if (items !== undefined) {
         return (
             <React.Fragment>
                 <ReactApexChart
@@ -299,7 +308,7 @@ const TeamMembersCharts = ({ seriesData, chartsColor }) => {
 
 const ProjectStateMetrics = () => {
     
-    const tokenMetadataByMonth = LoadTokenMetadataByMonth()
+    const tokenMetadataByDate = LoadTokenMetadataByDate()
     const [newProjects, setNewProjects] = useState();
     const [activeProjects, setActiveProjects] = useState();
     const [closedProjects, setClosedProjects] = useState();
@@ -310,9 +319,9 @@ const ProjectStateMetrics = () => {
         let tmpActiveProjects = 0
         let tmpClosedProjects = 0
 
-        if (Object.keys(tokenMetadataByMonth).length !== 0) {
+        if (Object.keys(tokenMetadataByDate).length !== 0) {
             if (newProjects === undefined | activeProjects === undefined | closedProjects === undefined) {
-                for (const [idx, metadata] of Object.entries(tokenMetadataByMonth)) {
+                for (const [idx, metadata] of Object.entries(tokenMetadataByDate)) {
                     tmpNewProjects += metadata['projectState']['New']
                     tmpActiveProjects += metadata['projectState']['Active']
                     tmpClosedProjects += metadata['projectState']['Closed']
@@ -323,7 +332,7 @@ const ProjectStateMetrics = () => {
             setClosedProjects(tmpClosedProjects)
         }
         
-    }, [tokenMetadataByMonth]);
+    }, [tokenMetadataByDate]);
 
     if (newProjects !== undefined & activeProjects !== undefined & closedProjects !== undefined) {
         return {
