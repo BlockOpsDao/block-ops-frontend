@@ -23,6 +23,9 @@ const Home = () => {
                                 <h1 className="display-6 fw-semibold mb-3 lh-base">Providing a marketplace for trustless work with  <span
                                     className="text-success">Block-Ops </span></h1>
                                 <p className="lead text-muted lh-base">Block-Ops changes the way developers work by allowing everyone to contribute and rewarding those with the best solution.</p>
+                                <br />
+                                <br />
+                                <br />
 
                                 <div className="d-flex gap-2 justify-content-center mt-4">
                                     <Web3Wallet /><br /><br />
