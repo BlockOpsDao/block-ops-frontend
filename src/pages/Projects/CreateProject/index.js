@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { Card, CardBody, Col, Container, Input, Label, Row } from 'reactstrap';
 //Import Flatepicker
 import Flatpickr from "react-flatpickr";
@@ -12,6 +12,7 @@ import OpsNFTKovan from "../../../build/deployments/42/0x97C76c926E5bfEE1AA852F4
 import { Icon } from '@iconify/react';
 import DisplayNFT from '../../../Components/Common/DisplayNFT';
 import TweetProject from '../../../Components/Common/TweetProject';
+const { error } = useEthers()
 
 const CreateProject = () => {
 
@@ -52,6 +53,13 @@ document.title="Create Project | Block Ops";
     const createdProjectButton = <button className="btn btn-success" onClick={() => {resetState()}}>Project Created!</button>
     const failedProjectButton = <><p>{state.errorMessage}</p><button className="btn btn-danger" onClick={() => {resetState()}}>Failed</button></>
 
+    useEffect(() => {
+        if (error) {
+          setActivateError(error.message)
+          console.log("error: ", error)
+        }
+      }, [error])
+      
     const callSafeMint = (tokenMetadataURI) => {
         setCreatingNFT(true)
         let tmpEthAmount = utils.parseEther(String(ethAmount))
