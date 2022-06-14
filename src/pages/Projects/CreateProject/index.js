@@ -47,11 +47,16 @@ document.title="Create Project | Block Ops";
     const { receipt } = state
     const loadingIcon = <i className="mdi mdi-loading mdi-spin fs-20 align-middle me-2"></i>
 
-
+    const createProjectButton = <button className="btn btn-primary" onClick={(e) => {handleSubmit(e)}}>Create Project</button>
+    const creatingProjectButton = <button className="btn btn-info">Creating Project... {loadingIcon}</button>
+    const createdProjectButton = <button className="btn btn-success" onClick={() => {resetState()}}>Project Created!</button>
+    const failedProjectButton = <><p>{state.errorMessage}</p><button className="btn btn-danger" onClick={() => {resetState()}}>Failed</button></>
 
     const callSafeMint = (tokenMetadataURI) => {
+        setCreatingNFT(true)
         let tmpEthAmount = utils.parseEther(String(ethAmount))
         let ethAmountWithFees = tmpEthAmount.mul(100).div(99)
+        
         if (etherBalance.lte(ethAmountWithFees)) {
             setCreatingNFT(false)
             setDisplayErrorMessage(<>
@@ -60,9 +65,11 @@ document.title="Create Project | Block Ops";
                 <p className="text text-danger" key="error-line-2">Bounty Amount: {utils.formatEther(ethAmountWithFees)} ETH</p>
             </>)
         } else {
+
             void send(tokenMetadataURI, { 
-                value: utils.parseEther(String(ethAmountWithFees)) 
+                value: ethAmountWithFees.toString()
             })
+            setCreatingNFT(false)
         }
     }
 
@@ -130,15 +137,21 @@ document.title="Create Project | Block Ops";
         } ) 
     }
 
+    const submitButtonTwo = () => {
+        if (creatingNFT) {
+            return creatingNFT
+        } else if (state.status === "Exception") {
+            return failedProjectButton
+        } else if (state.status === "Success") {
+            return createdProjectButton
+        } else {
+            return createProjectButton
+        }
+        
+    }
 
     const submitButton = () => {
-        if (creatingNFT) {
-            return (
-                <button className="btn btn-primary">
-                    Creating Project... {loadingIcon}
-                </button>
-            )
-        } else if (state.status === undefined | state.status === 'None') {
+        if (state.status === undefined | state.status === 'None') {
             return (
                 <button className="btn btn-primary" onClick={(e) => {setCreatingNFT(true); handleSubmit(e)}}>
                     Create Project
@@ -151,14 +164,13 @@ document.title="Create Project | Block Ops";
                 </button>
             )
         } else if (state.status === "Success") {
-            setCreatingNFT(false)
             return (
                 <button className="btn btn-success" onClick={() => {resetState()}}>
                     Project Created!
                 </button>
             )
         } else if (state.status === "Exception") {
-            setCreatingNFT(false)
+  
             return (<>
                 <p>{state.errorMessage}</p>
                 <button className="btn btn-danger" onClick={() => {resetState()}}>
@@ -166,7 +178,6 @@ document.title="Create Project | Block Ops";
                 </button>
             </>)
         } else {
-            setCreatingNFT(false)
             return (
                 <button className="btn btn-danger" onClick={() => {resetState()}}>
                     Failed
@@ -308,8 +319,10 @@ document.title="Create Project | Block Ops";
                                 <Col md={3} sm={12}></Col>
                                 <Col md={3} sm={12}>
                                     <div className="text-end mb-4">
-                                        {displayErrorMessage !== undefined ? displayErrorMessage : <></>}
                                         {submitButton()}
+                                    </div>
+                                    <div className='text-end mb-4'>
+                                        {displayErrorMessage !== undefined ? displayErrorMessage : <></>}
                                     </div>
                                 </Col>
                             
