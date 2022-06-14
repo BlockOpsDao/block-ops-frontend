@@ -192,7 +192,8 @@ document.title="Create Project | Block Ops";
             projectSkills !== undefined & 
             nftMintedTokenId !== undefined &
             projectSkills !== null & 
-            nftMintedTokenId !== null 
+            nftMintedTokenId !== null & 
+            state.status === "Success"
         ) {
             return (
                 <TweetProject projectId={nftMintedTokenId} projectSkills={projectSkills} />
