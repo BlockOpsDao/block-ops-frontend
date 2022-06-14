@@ -26,7 +26,7 @@ root.render(
     },
     notifications: {
       expirationPeriod: 1000,
-      checkInterval: 1000
+      checkInterval: 250
     }
   }}>
     <Provider store={configureStore({})}>

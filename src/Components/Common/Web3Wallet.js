@@ -25,6 +25,7 @@ const Web3Wallet = () => {
     useEffect(() => {
       if (error) {
         setActivateError(error.message)
+        console.log("error: ", error)
       }
     }, [error])
   
@@ -32,7 +33,7 @@ const Web3Wallet = () => {
         injected: {
           display: {
             name: 'Metamask',
-            description: 'Connect with the provider in your Browser',
+            description: 'Connect with the provider in yourBrowser ',
           },
           package: null,
         },
@@ -70,6 +71,7 @@ const Web3Wallet = () => {
             setChainId(network.chainId);      
         } catch (error) {
             setActivateError(error.message)
+            console.log("error: ", error)
         }
     }
 
