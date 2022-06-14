@@ -12,13 +12,12 @@ import OpsNFTKovan from "../../../build/deployments/42/0x97C76c926E5bfEE1AA852F4
 import { Icon } from '@iconify/react';
 import DisplayNFT from '../../../Components/Common/DisplayNFT';
 import TweetProject from '../../../Components/Common/TweetProject';
-const { error } = useEthers()
 
 const CreateProject = () => {
 
 document.title="Create Project | Block Ops";
 
-    const { chainId, account } = useEthers();
+    const { chainId, account, error } = useEthers();
     const etherBalance = useEtherBalance(account)
 
     const [projectTitle, setProjectTitle] = useState("");
@@ -55,11 +54,10 @@ document.title="Create Project | Block Ops";
 
     useEffect(() => {
         if (error) {
-          setActivateError(error.message)
           console.log("error: ", error)
         }
       }, [error])
-      
+
     const callSafeMint = (tokenMetadataURI) => {
         setCreatingNFT(true)
         let tmpEthAmount = utils.parseEther(String(ethAmount))
