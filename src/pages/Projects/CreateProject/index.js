@@ -28,7 +28,7 @@ document.title="Create Project | Block Ops";
     const [projectSkills, setProjectSkills] = useState([]);
     const [projectImage, setProjectImage] = useState(null);
     const [ipfsResponse, setIpfsResponse] = useState(null);
-    const [ethAmount, setEthAmount] = useState();
+    const [ethAmount, setEthAmount] = useState(1);
     const [creatingNFT, setCreatingNFT] = useState(false);
     const [displayErrorMessage, setDisplayErrorMessage] = useState();
 
